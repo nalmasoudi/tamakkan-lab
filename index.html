@@ -399,6 +399,53 @@ svg.topo [data-dev]{touch-action:none}
 .prof-b{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.prof-b .btn{padding:6px 10px;min-height:36px;font-size:.85rem}
 .prof-m{margin:6px 0 0;font-size:.85rem}.prof textarea{margin-top:8px;font-size:12px}
 .prof-f2{display:grid;gap:8px;margin-top:8px}.prof-f2 input{font:16px var(--font-mono);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);direction:ltr;min-height:42px;min-width:0}
+
+/* ubuntu desktop */
+.ub0{height:100%;display:flex;flex-direction:column;position:relative;background:linear-gradient(135deg,#2c001e 0%,#5e2750 45%,#e95420 120%);color:#fff;font-family:"Ubuntu","Segoe UI",system-ui,sans-serif}
+.ubtop{flex:none;height:26px;background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:12px}.ubtop a{color:#fff;cursor:pointer;padding:2px 6px;border-radius:10px}.ubtop a:active{background:#444}
+.ubmain{flex:1;min-height:0;display:flex}
+.ubdock{flex:none;width:46px;background:rgba(30,10,25,.88);display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0}
+.ubdi{position:relative;width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;cursor:pointer;background:rgba(255,255,255,.1)}.ubdi i{font-style:normal}.ubdi.on{background:rgba(255,255,255,.3)}.ubdi u{position:absolute;left:-4px;top:17px;width:4px;height:4px;border-radius:50%;background:#e95420}.ubdi.ubapps{margin-top:auto;background:none;font-size:18px}
+.ubarea{flex:1;min-width:0;min-height:0;padding:5px;display:flex}
+.ubhint{margin:auto;font-size:20px;opacity:.55}
+.ubwin{flex:1;min-width:0;min-height:0;background:#fff;color:#222;border-radius:7px 7px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.ubwt{flex:none;display:flex;align-items:center;justify-content:space-between;background:#2b2b2b;color:#fff;padding:3px 8px;font-size:12px}.ubwt b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px}.ubwm a{color:#ddd;padding:2px 7px;cursor:pointer}
+.ubwb{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.ubw-t{background:#300a24}.ubtm{display:flex;flex-direction:column;flex:1;min-height:0;background:#300a24}.ubtm .wpso{background:#300a24;color:#eee}.ubtm .wpsc,.ubtm .wpsf{background:#2b0a20}.ubtm .wpsf input{background:#3d1030;border-color:#6b3a5e}.ubtm .wpsc a{border-color:#7a4a6c}
+.ubov{position:absolute;inset:26px 0 0 46px;background:rgba(20,5,16,.92);z-index:6;display:flex;align-items:center;justify-content:center}.ubgrid{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}.ubgrid a{width:90px;text-align:center;color:#fff;cursor:pointer}.ubgrid i{display:block;font-style:normal;font-size:38px}.ubgrid span{font-size:12px}
+.ubpm{position:absolute;right:6px;top:28px;z-index:7;background:#222;border:1px solid #555;border-radius:8px;min-width:160px}.ubpm a{display:block;padding:11px 14px;color:#fff;font-size:13px;cursor:pointer;border-bottom:1px solid #333}
+.ubfs,.ubst,.ubed{display:flex;flex-direction:column;flex:1;min-height:0;background:#fff}.ubfs .wsplit,.ubst .wsplit{flex:1;min-height:0}
+.ubfp{flex:none;padding:5px 8px;font:12px var(--font-mono);background:#f1f1f1;border-bottom:1px solid #ddd;color:#333}
+.ubnav{background:#f6f5f4;width:32%;min-width:86px}.ubpl{display:block;padding:9px 8px;font-size:12.5px;cursor:pointer;color:#222;border-bottom:1px solid #eee}.ubpl.on{background:#e8d0c8;font-weight:600}
+.ubfr{display:flex;align-items:center;gap:6px;padding:6px 6px;border-bottom:1px solid #eee;font-size:13px}.ubfr.on{background:#fbe3d9}.ubfr .ubfn{flex:1;min-width:0;color:#222;cursor:pointer;display:flex;gap:6px;align-items:center;word-break:break-all}.ubfr i{font-style:normal}.ubfr small{color:#777;white-space:nowrap}.ubfm{color:#555;padding:0 8px;cursor:pointer;font-weight:700}
+.ubed{padding:6px}.ubta{flex:1;min-height:80px;width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:4px;padding:6px;font:16px var(--font-mono);resize:none}
+.ubst .wmain h4,.ubst h4{margin:4px 0 6px}
+.ubsu{background:#f6f5f4;color:#222;min-height:100%;padding:12px;box-sizing:border-box;position:relative}.ubsh{font-size:18px;font-weight:600;margin-bottom:8px}
+.ubstp{display:flex;gap:4px;margin-bottom:10px}.ubstp i{flex:1;height:4px;background:#ccc;border-radius:2px}.ubstp i.on{background:#e95420}
+.ubl{border:1px solid #ccc;background:#fff;border-radius:4px}.ubli{padding:7px 10px;font-size:13px}.ubli.on{background:#e95420;color:#fff}
+.ubprog{height:10px;background:#ddd;border-radius:5px;margin:14px 0}.ubprog i{display:block;height:100%;width:100%;background:#e95420;border-radius:5px}
+.ublock{min-height:100%;padding:18px;box-sizing:border-box;text-align:center;color:#fff;display:flex;flex-direction:column;align-items:center}.ublock .wf{width:100%;max-width:260px;text-align:left}.ublock .wf span{color:#fff}.ubav{width:60px;height:60px;border-radius:50%;background:#e95420;font-size:28px;display:flex;align-items:center;justify-content:center;margin:20px 0 6px}.ublock .wnote{color:#ddd}.ublock .werr{max-width:260px}
+.ubsu .wc span,.ubsu p{color:#222}.ubsu .wnote{color:#555}
+.ublock{background:linear-gradient(135deg,#2c001e,#5e2750 60%,#8a3a2a)}
+.ub0 .wdlg,.ub0 .wdlg .wtitle,.ub0 .wdlg p{color:#222}.ub0 .wprops td{color:#222}
+.wpso{word-break:normal!important;overflow-wrap:anywhere}
+#wui.kb .wpad{display:none}#wui.kb .wmv{overflow:hidden!important}
+#wui.full{background:#23272c}#wui.kb .wmz{height:var(--kbh,56%)}
+.wkb{position:fixed;left:0;right:0;top:0;z-index:95;background:#0f3a5f;color:#fff;padding:8px;display:flex;gap:6px;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.5)}.wkb[hidden]{display:none}
+.wkb label{font:12px var(--font-mono);max-width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+.wkb input,.wkb textarea{flex:1;min-width:0;font:16px var(--font-mono);padding:9px;border-radius:6px;border:1px solid #6aa;background:#fff;color:#111;direction:ltr}.wkb input[hidden],.wkb textarea[hidden]{display:none}
+.wkb button{border:0;border-radius:6px;background:#1c6bb5;color:#fff;padding:10px 14px;font-size:16px}
+.kbon{outline:2px solid #4aa3ff!important;box-shadow:0 0 0 3px rgba(74,163,255,.35)!important}
+.wpil{display:block!important;position:relative;background:none!important;padding:0!important;margin:0;word-break:break-all}.wpil label{display:inline!important;max-width:none!important;color:#f2d96b;font:inherit;white-space:pre-wrap;overflow:visible!important}.wpt{white-space:pre-wrap;word-break:break-all}
+.wpcur{display:inline-block;width:.55em;height:1.1em;background:#eee;vertical-align:text-bottom;animation:wpb 1s steps(1) infinite}@keyframes wpb{50%{opacity:0}}
+.wpil input.wpgh{position:absolute!important;left:0;top:0;width:1px!important;height:1px!important;min-height:0!important;opacity:0;pointer-events:none;border:0!important;padding:0!important}
+html,body,#wui,#wui *{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important}
+.wpil,.wpil label,.wpil .wpt{font:12.5px/1.45 var(--font-mono)!important}
+.wpsc a.wpen{background:#1c6bb5;border-color:#4aa3ff;color:#fff;font-weight:700;position:sticky;left:0}
+.wnf{display:flex;flex-direction:column;height:100%;background:#23272c}.wnf>.wtop{flex:none}
+.wnfv{flex:1;min-height:0;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;padding:3px}
+.fixterm .wmode #miniWrap,.wmode #miniWrap{display:none!important}
+.fixterm .wmode .wui:not(.full){flex:1 1 0;min-height:250px}
 </style>
 
 <div class="wrap" id="app">
@@ -1001,7 +1048,7 @@ function doPing(lab, d, ip) {
   var fw = trace(lab, d, ip, s);
   if (!fw.ok) return { ok: false, why: fw.why, fwd: fw };
   if (fw.dest === d.name) return { ok: true, dest: fw.dest, fwd: fw };
-  if (typeof wsIcmpBlocked === 'function' && lab.devs[fw.dest] && lab.devs[fw.dest].win && wsIcmpBlocked(lab.devs[fw.dest])) return { ok: false, why: 'timeout', fwd: fw };
+  if (typeof wsIcmpBlocked === 'function' && lab.devs[fw.dest] && lab.devs[fw.dest].win && lab.devs[fw.dest].win.kind !== 'ubuntu' && wsIcmpBlocked(lab.devs[fw.dest])) return { ok: false, why: 'timeout', fwd: fw };
   var back; RETFLOW = true; try { back = trace(lab, lab.devs[fw.dest], fw.src, fw.dstIp || ip, s); } finally { RETFLOW = false; }
   var ok = back.ok && back.dest === d.name;
   return { ok: ok, why: ok ? '' : (back.why || 'noreply'), dest: fw.dest, fwd: fw };
@@ -2619,7 +2666,8 @@ function lxInit(d) {
   F('/home/student/Desktop/test.txt', 'Printer test page\nLine 2\n', 'student', 'student', 420);
   ['sshd_config'].forEach(function () { });
   lxSvcSync(d);
-  if (o.install) { d.lx.inst = { i: 0, v: {} }; d.lx.host = 'ubuntu'; }
+  if (o.desktop) ubInit(d, o);
+  else if (o.install) { d.lx.inst = { i: 0, v: {} }; d.lx.host = 'ubuntu'; }
 }
 /* package-created files/services */
 function lxSvcSync(d) {
@@ -3579,6 +3627,8 @@ function lxCheck(l, d, c) {
   switch (c.t) {
     case 'inst': return !!L.installed || (!!L.inst && L.inst.i >= c.n);
     case 'installed': return !!L.installed;
+    case 'ubi': return !!d.win && d.win.kind === 'ubuntu' && (!!L.installed || (d.win.stage === 'install' && d.win.inst.i >= c.n));
+    case 'ubdesk': return !!d.win && d.win.kind === 'ubuntu' && d.win.stage === 'desktop' && !!L.installed;
     case 'dir': { var n = L.fs[c.p]; return !!n && n.t === 'd' && (c.m === undefined || (n.m & 511) === c.m); }
     case 'mode': { var n2 = L.fs[c.p]; return !!n2 && (n2.m & 511) === c.m; }
     case 'owner': { var n3 = L.fs[c.p]; return !!n3 && (!c.o || n3.o === c.o) && (!c.g || n3.g === c.g); }
@@ -4507,17 +4557,18 @@ function wuiRender(d) {
   var W = d.win, g = W.g, h = '';
   if (W.stage === 'desktop' && W.kind === 'server' && !g.init) { g.init = true; g.scr = 'sm'; g.wins = ['sm']; g.nav = g.nav || 'dash'; }
   g.wins = g.wins || [];
-  var top = '<div class="wtop"><b>' + (W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + (W.stage === 'desktop' && W.sess ? ' · ' + esc((W.sess.domain || '') + '\\' + W.sess.user) : '') + '</span>' +
+  var top = '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + (W.stage === 'desktop' && W.sess ? ' · ' + esc((W.sess.domain || '') + '\\' + W.sess.user) : '') + '</span>' +
     '<a class="wtb2" data-wa="drawer">☰ المهام</a>' + (W.full === false ? '<a class="wtb2" data-wa="fullon">⛶</a>' : '<a class="wtb2" data-wa="fullx">✕ خروج</a>') + '</div>';
-  var full = W.full !== false, tp = full ? '' : top;
-  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' : '';
-  var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">لوحة اللمس · حرّك إصبعك = مؤشر · نقرة = ضغط · إصبعان = تمرير</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : inner + extra; };
+  var full = W.full !== false, tp = '';
+  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' : '';
+  var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">لوحة اللمس · حرّك إصبعك = مؤشر · نقرة = ضغط · إصبعان = تمرير</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : '<div class="wnf">' + top + '<div class="wnfv" id="wnfv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '</div><div class="wled"></div></div></div></div>' + extra + '</div>'; };
   if (W.bootUntil && Date.now() < W.bootUntil) return wrapMon('<div class="wx0">' + tp + '<div class="wboot"><div class="wspin"></div><p>Restarting…</p></div></div>', '');
-  if (W.stage === 'install') h = wuiSetup(d);
+  if (W.kind === 'ubuntu') h = ubScreen(d);
+  else if (W.stage === 'install') h = wuiSetup(d);
   else if (W.stage === 'login') h = wuiLogin(d);
   else if (W.kind === 'server') h = wuiServer(d);
   else h = wuiClient(d);
-  return wrapMon('<div class="wx0">' + tp + '<div class="wscr">' + h + '</div>' + (W.stage === 'desktop' ? wuiTaskbar(d) : '') + (g.dlg ? wuiDlg(d) : '') + (full ? '' : (g.drawer ? wuiDrawer(d) : '')) + '</div>', full && g.drawer ? wuiDrawer(d) : '');
+  return wrapMon('<div class="wx0">' + tp + '<div class="wscr">' + h + '</div>' + (W.stage === 'desktop' && W.kind !== 'ubuntu' ? wuiTaskbar(d) : '') + (g.dlg && W.kind !== 'ubuntu' ? wuiDlg(d) : '') + (full ? '' : (g.drawer ? wuiDrawer(d) : '')) + '</div>', full && g.drawer ? wuiDrawer(d) : '');
 }
 function wuiTaskbar(d) {
   var W = d.win, g = W.g;
@@ -4538,16 +4589,18 @@ function wuiDrawer(d) {
 function wuiDeskIcons(d, list) {
   return '<div class="wicons">' + list.map(function (a) { return '<a class="wicon" data-wa="' + a[0] + '" data-arg="' + a[1] + '"><i>' + a[2] + '</i><span>' + a[3] + '</span></a>'; }).join('') + '</div>';
 }
+function wpsLine(pr, hid, v) {
+  return '<form class="wpsf wpil" data-ps="1"><label>' + esc(pr) + '</label><span class="wpt" id="wpsTx">' + (hid ? '' : esc(v)) + '</span><i class="wpcur"></i><input class="wpgh" data-f="psin" id="wpsIn" type="' + (hid ? 'password' : 'text') + '" value="' + ea(v) + '" dir="ltr" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="send"><button type="submit" hidden></button></form>';
+}
 function wuiPs(d) {
   var W = d.win, g = W.g, ex = d.out.slice(-250).map(function (l) {
     var t = l[0], c = l[1] || '';
     if (c === 'cmd') { var k = t.indexOf('\u0001'); return '<div class="cmd"><b>' + esc(t.slice(0, k)) + '</b>' + esc(t.slice(k + 1)) + '</div>'; }
     return '<div class="' + c + '">' + esc(t) + '</div>';
   }).join('');
-  var pr = pendPrompt(d), hid = pendHide(d), chips = ['ipconfig', 'hostname', 'Get-Help', 'ping ', 'Get-WindowsFeature'];
-  return '<div class="wapp wpsw"><div class="wtitle app"><b>' + (W.kind === 'server' ? 'Administrator: Windows PowerShell' : 'Command Prompt') + '</b><span><a class="wx" data-wa="min">—</a><a class="wx" data-wa="appclose">✕</a></span></div><div class="wpso" id="wpso">' + ex + '</div><div class="wpsc">' +
-    chips.map(function (c) { return '<a data-wa="pschip" data-arg="' + ea(c) + '">' + esc(c.trim()) + '</a>'; }).join('') + '<a data-wa="pshist">↑</a></div>' +
-    '<form class="wpsf" data-ps="1"><label>' + esc(pr) + '</label><input data-f="psin" id="wpsIn" type="' + (hid ? 'password' : 'text') + '" value="' + ea(g.psIn || '') + '" dir="ltr" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="send"><button type="submit" class="wb pri sm">⏎</button></form></div>';
+  var pr = pendPrompt(d), hid = !!d.pending && pendHide(d), chips = ['ipconfig', 'hostname', 'Get-Help', 'ping ', 'Get-WindowsFeature'];
+  return '<div class="wapp wpsw"><div class="wtitle app"><b>' + (W.kind === 'server' ? 'Administrator: Windows PowerShell' : 'Command Prompt') + '</b><span><a class="wx" data-wa="min">—</a><a class="wx" data-wa="appclose">✕</a></span></div><div class="wpso" id="wpso">' + ex + wpsLine(pr, hid, g.psIn || '') + '</div><div class="wpsc"><a class="wpen" data-wa="psenter">⏎</a>' +
+    chips.map(function (c) { return '<a data-wa="pschip" data-arg="' + ea(c) + '">' + esc(c.trim()) + '</a>'; }).join('') + '<a data-wa="pshist">↑</a></div>' + '</div>';
 }
 function wuiLogin(d) {
   var W = d.win, g = W.g, dom = W.ad ? W.ad.nb : (W.joinedAd ? '' : '');
@@ -4816,6 +4869,7 @@ function wuiDlg(d) {
 function wuiMsg(d, title, text) { d.win.g.dlg = { id: 'msg', title: title, text: text }; }
 function wuiAct(d, act, arg, vals) {
   var W = d.win, g = W.g, D = g.dlg, ad = W.ad;
+  if (W.kind === 'ubuntu') { if (ubAct(d, act, arg, vals)) return; return; }
   if (W.stage === 'install') return wuiSetupAct(d, act, arg, vals);
   if (D && D.id !== 'msg' && D.id !== 'rs') { D.d = D.d || {}; Object.keys(vals).forEach(function (k) { D.d[k] = vals[k]; }); if (D.id === 'roles') { D.d.sel = D.d.sel || {}; WS_ROLES.forEach(function (r) { if (vals.hasOwnProperty('r_' + r.id)) D.d.sel[r.id] = !!vals['r_' + r.id]; }); } }
   if (act !== 'menu' && act !== 'dclose') g.menu = null; if (act !== 'start') g.start = false; g.msg = '';
@@ -4951,6 +5005,259 @@ function wuiScopeChk(d, v) {
   var s = (v.start || '').trim(), e = (v.end || '').trim(), m = (v.mask || '').trim();
   if (!wsOk(s) || !wsOk(e)) return 'The start and end addresses must be valid IPv4 addresses.'; if (!wsMaskOk(m)) return 'The subnet mask is not valid.';
   if (!wsSameNet(s, e, m)) return 'The start and end addresses are not in the same subnet.'; if (wsIp2n(s) > wsIp2n(e)) return 'The start address must be lower than the end address.'; return '';
+}
+
+/* ===== Ubuntu Desktop 22.04 GUI (course 252). Shell state lives in d.win (kind 'ubuntu'); the OS itself is d.lx ===== */
+var UB_APPS = [['term', 'Terminal', '▣'], ['files', 'Files', '🗂'], ['edit', 'Text Editor', '📝'], ['set', 'Settings', '⚙']];
+var UB_TITLE = { term: 'Terminal', files: 'Files', edit: 'Text Editor', set: 'Settings' };
+var UB_STEPS = ['lang', 'kbd', 'upd', 'type', 'tz', 'user', 'done'];
+
+function ubInit(d, o) {
+  var L = d.lx;
+  d.win = { kind: 'ubuntu', stage: o.install ? 'install' : 'desktop', name: L.host, full: true, zoom: 1, clock: { time: '21:30' }, sess: { user: 'student' }, inst: { i: 0, v: {} }, restarts: 0,
+    g: { wins: [], scr: null, fpath: '/home/student', fsel: '', dlg: null, set: 'net', init: false } };
+}
+function ubClock(W) { return 'Oct 24  ' + W.clock.time; }
+
+/* ---------- top level ---------- */
+function ubScreen(d) {
+  var W = d.win;
+  if (W.stage === 'install') return ubSetup(d);
+  if (W.stage === 'login') return ubLogin(d);
+  return ubDesktop(d);
+}
+
+/* ---------- installer (Ubiquity) ---------- */
+function ubSetup(d) {
+  var W = d.win, I = W.inst, v = I.v, s = UB_STEPS[I.i], err = I.err ? '<div class="werr">' + esc(I.err) + '</div>' : '';
+  var hd = '<div class="ubsu"><div class="ubsh">' + ({ lang: 'Welcome', kbd: 'Keyboard layout', upd: 'Updates and other software', type: 'Installation type', tz: 'Where are you?', user: 'Who are you?', done: 'Installation Complete' })[s] + '</div>';
+  var step = '<div class="ubstp">' + UB_STEPS.map(function (x, k) { return '<i class="' + (k <= I.i ? 'on' : '') + '"></i>'; }).join('') + '</div>';
+  var btn = function (l, a, cls) { return WX.btn(l, a || 'ubnext', '', cls || 'pri'); };
+  var back = I.i > 0 && s !== 'done' ? WX.btn('Back', 'ubback', '', '') : '';
+  if (s === 'lang') return hd + step + '<p>Language</p><div class="ubl"><div class="ubli">Español</div><div class="ubli on">English</div><div class="ubli">Français</div><div class="ubli">Deutsch</div></div><p class="wnote">Choose your language, then click <b>Install Ubuntu</b>.</p>' + err + '<div class="wbtns">' + WX.btn('Try Ubuntu', 'ubtry', '', '') + btn('Install Ubuntu') + '</div></div>';
+  if (s === 'kbd') return hd + step + '<p>Choose your keyboard layout:</p>' + WX.sel('Layout', 'kbd', ['English (US)', 'English (UK)', 'Arabic', 'French'], v.kbd || 'English (US)') + err + '<div class="wbtns">' + back + btn('Continue') + '</div></div>';
+  if (s === 'upd') return hd + step + '<p>What apps would you like to install to start with?</p>' + WX.rad('inst', 'normal', '<b>Normal installation</b> — web browser, utilities, office software, games, and media players.', v.inst) + WX.rad('inst', 'minimal', '<b>Minimal installation</b> — web browser and basic utilities.', v.inst) + '<p>Other options</p>' + WX.chk('Download updates while installing Ubuntu', 'upd', v.upd) + WX.chk('Install third-party software for graphics and Wi-Fi hardware and additional media formats', 'third', v.third) + err + '<div class="wbtns">' + back + btn('Continue') + '</div></div>';
+  if (s === 'type') return hd + step + '<p>This computer currently has no detected operating systems. What would you like to do?</p>' + WX.rad('itype', 'erase', '<b>Erase disk and install Ubuntu</b> — Warning: this will delete all your programs, documents, photos, music, and any other files.', v.itype) + WX.rad('itype', 'other', '<b>Something else</b> — create or resize partitions yourself.', v.itype) + err + '<div class="wbtns">' + back + btn('Install Now') + '</div>' +
+    (I.confirm ? '<div class="wmodal"><div class="wdlg"><div class="wtitle"><b>Write the changes to disks?</b></div><div class="wbody"><p>If you continue, the changes listed below will be written to the disks.</p><p class="wnote">New partition #1 (ESP) · New partition #2 (ext4) · Disk 0: 25 GB</p></div><div class="wbtns">' + WX.btn('Go Back', 'ubcanc', '', '') + WX.btn('Continue', 'ubconf', '', 'pri') + '</div></div></div>' : '') + '</div>';
+  if (s === 'tz') return hd + step + '<p>Select your location (type a city):</p>' + WX.fld('Location', 'city', v.city === undefined ? 'Riyadh' : v.city) + '<p class="wnote">The map selects the time zone. For Saudi Arabia use <b>Riyadh</b>.</p>' + err + '<div class="wbtns">' + back + btn('Continue') + '</div></div>';
+  if (s === 'user') return hd + step + WX.fld('Your name', 'name', v.name || '') + WX.fld("Your computer's name", 'host', v.host || '') + WX.fld('Pick a username', 'user', v.user || '') + WX.fld('Choose a password', 'pw', '', { type: 'password' }) + WX.fld('Confirm your password', 'pw2', '', { type: 'password' }) + WX.rad('login', 'auto', 'Log in automatically', v.login || 'pw') + WX.rad('login', 'pw', 'Require my password to log in', v.login || 'pw') + err + '<div class="wbtns">' + back + btn('Continue') + '</div></div>';
+  return hd + '<div class="ubprog"><i></i></div><p>Installation has finished. You need to restart the computer in order to use the new installation.</p><div class="wbtns">' + WX.btn('Continue Testing', 'ubcanc', '', '') + btn('Restart Now', 'ubrestart') + '</div></div>';
+}
+function ubSetupAct(d, act, arg, vals) {
+  var W = d.win, I = W.inst, v = I.v, s = UB_STEPS[I.i]; I.err = '';
+  if (act === 'ubcanc') { I.confirm = false; return; }
+  if (act === 'ubback') { I.i = Math.max(0, I.i - 1); return; }
+  if (act === 'ubtry') { I.err = 'Choose “Install Ubuntu” to continue with this lab.'; return; }
+  if (act === 'ubrestart') { ubFinish(d); return; }
+  if (act === 'ubconf') { I.confirm = false; I.i++; return; }
+  if (act !== 'ubnext') return;
+  if (s === 'lang') { I.i++; return; }
+  if (s === 'kbd') { v.kbd = vals.kbd || 'English (US)'; I.i++; return; }
+  if (s === 'upd') { v.inst = vals.inst; v.upd = !!vals.upd; v.third = !!vals.third; if (!v.inst) { I.err = 'Select the type of installation.'; return; } I.i++; return; }
+  if (s === 'type') { v.itype = vals.itype; if (!v.itype) { I.err = 'Select an installation type.'; return; } if (v.itype !== 'erase') { I.err = 'For this lab choose “Erase disk and install Ubuntu” (the disk is empty).'; return; } I.confirm = true; return; }
+  if (s === 'tz') { v.city = (vals.city || '').trim(); if (!/^riyadh$/i.test(v.city)) { I.err = 'Choose Riyadh (Saudi Arabia) as your location.'; return; } I.i++; return; }
+  if (s === 'user') {
+    v.name = (vals.name || '').trim(); v.host = (vals.host || '').trim(); v.user = (vals.user || '').trim(); v.login = vals.login || 'pw';
+    if (!v.name) { I.err = 'Please enter your name.'; return; }
+    if (!v.host) { I.err = 'Please enter a name for this computer.'; return; }
+    if (v.host !== 'ubuntu-desktop') { I.err = 'Use the computer name ubuntu-desktop, as in the lab table.'; return; }
+    if (v.user !== 'student') { I.err = 'Use the username student: the rest of the course depends on it.'; return; }
+    if (!vals.pw) { I.err = 'The password cannot be empty.'; return; }
+    if (vals.pw !== vals.pw2) { I.err = 'The passwords do not match.'; return; }
+    v.pw = vals.pw; I.i++; return;
+  }
+}
+function ubFinish(d) {
+  var W = d.win, L = d.lx, v = W.inst.v;
+  L.host = v.host; L.fs['/etc/hostname'].c = v.host + '\n'; L.fs['/etc/hosts'].c = '127.0.0.1 localhost\n127.0.1.1 ' + v.host + '\n';
+  L.users.student.pw = v.pw; L.users.student.gecos = v.name; L.installed = true; L.inst = null;
+  W.name = v.host; W.stage = 'login'; W.g.wins = []; W.g.init = false; W.restarts++; W.bootUntil = Date.now() + 1500; W.loginAuto = v.login === 'auto';
+}
+
+/* ---------- login (GDM) ---------- */
+function ubLogin(d) {
+  var W = d.win, L = d.lx, g = W.g, u = L.users.student;
+  return '<div class="ublock"><div class="ubav">' + esc((u.gecos || 'S').charAt(0).toUpperCase()) + '</div><b>' + esc(u.gecos || 'student') + '</b>' + WX.fld('Password', 'pw', '', { type: 'password' }) + '<div class="werr" ' + (g.lerr ? '' : 'hidden') + '>' + esc(g.lerr || '') + '</div>' + WX.btn('Sign In', 'ublogin', '', 'pri') + '<p class="wnote">User: student</p></div>';
+}
+function ubLoginAct(d, vals) {
+  var W = d.win, L = d.lx, g = W.g;
+  if (vals.pw === L.users.student.pw) { g.lerr = ''; W.stage = 'desktop'; W.sess = { user: 'student' }; g.wins = []; g.init = false; return; }
+  g.lerr = "Sorry, that didn't work. Please try again.";
+}
+
+/* ---------- desktop ---------- */
+function ubDesktop(d) {
+  var W = d.win, g = W.g, L = d.lx;
+  if (!g.init) { g.init = true; g.wins = ['term']; g.scr = 'term'; }
+  g.wins = g.wins || [];
+  var dock = UB_APPS.map(function (a) { var run = g.wins.indexOf(a[0]) >= 0; return '<a class="ubdi' + (g.scr === a[0] ? ' on' : '') + '" data-wa="ubopen" data-arg="' + a[0] + '"><i>' + a[2] + '</i>' + (run ? '<u></u>' : '') + '</a>'; }).join('') + '<a class="ubdi ubapps" data-wa="ubact"><i>⁞⁞</i></a>';
+  var win = g.scr ? ubWin(d, g.scr) : '<div class="ubhint">Ubuntu 22.04.3 LTS</div>';
+  var ov = '';
+  if (g.act) ov = '<div class="ubov" data-wa="ubact"><div class="ubgrid">' + UB_APPS.map(function (a) { return '<a data-wa="ubopen" data-arg="' + a[0] + '"><i>' + a[2] + '</i><span>' + a[1] + '</span></a>'; }).join('') + '</div></div>';
+  if (g.pow) ov += '<div class="ubpm"><a data-wa="ubpow2" data-arg="restart">↻ Restart…</a><a data-wa="ubpow2" data-arg="logout">⎋ Log Out…</a></div>';
+  return '<div class="ub0"><div class="ubtop"><a data-wa="ubact">Activities</a><span>' + esc(ubClock(W)) + '</span><a data-wa="ubpow">🖧 🔊 ⏻ ▾</a></div><div class="ubmain"><div class="ubdock">' + dock + '</div><div class="ubarea">' + win + '</div></div>' + ov + (g.dlg ? ubDlg(d) : '') + '</div>';
+}
+function ubWin(d, id) {
+  var body = id === 'term' ? ubTerm(d) : id === 'files' ? ubFiles(d) : id === 'edit' ? ubEdit(d) : ubSet(d);
+  var t = UB_TITLE[id];
+  if (id === 'term') { var S = lxSess(d), L = d.lx; t = S.user + '@' + L.host + ': ' + S.cwd.replace(L.users[S.user] ? L.users[S.user].home : '', '~'); }
+  return '<div class="ubwin' + (id === 'term' ? ' ubw-t' : '') + '"><div class="ubwt"><span class="ubwm"><a data-wa="ubmin">—</a></span><b>' + esc(t) + '</b><span class="ubwm"><a data-wa="ubclose" data-arg="' + id + '">✕</a></span></div><div class="ubwb">' + body + '</div></div>';
+}
+function ubTerm(d) {
+  var g = d.win.g, ex = d.out.slice(-250).map(function (l) {
+    var t = l[0], c = l[1] || '';
+    if (c === 'cmd') { var k = t.indexOf('\u0001'); return '<div class="cmd"><b>' + esc(t.slice(0, k)) + '</b>' + esc(t.slice(k + 1)) + '</div>'; }
+    return '<div class="' + c + '">' + esc(t) + '</div>';
+  }).join('');
+  var pr = pendPrompt(d), hid = !!d.pending && pendHide(d), chips = ['ls -l', 'pwd', 'ip a', 'sudo ', 'cat ', 'mkdir ', 'chmod ', 'cd '];
+  return '<div class="ubtm"><div class="wpso" id="wpso">' + ex + wpsLine(pr, hid, g.psIn || '') + '</div><div class="wpsc"><a class="wpen" data-wa="psenter">⏎</a>' + chips.map(function (c) { return '<a data-wa="pschip" data-arg="' + ea(c) + '">' + esc(c.trim()) + '</a>'; }).join('') + '<a data-wa="pshist">↑</a></div>' + '</div>';
+}
+
+/* ---------- Files ---------- */
+function ubSize(n) { if (n.t === 'd') return '--'; var s = (n.c || '').length; return s < 1000 ? s + ' bytes' : (s / 1000).toFixed(1) + ' kB'; }
+function ubPerm(n) { return lxModeStr ? lxModeStr(n) : ''; }
+function ubFiles(d) {
+  var g = d.win.g, L = d.lx, p = g.fpath;
+  if (!L.fs[p] || L.fs[p].t !== 'd') p = g.fpath = '/home/student';
+  var places = [['Home', '/home/student', '⌂'], ['Desktop', '/home/student/Desktop', '▭'], ['Documents', '/home/student/Documents', '▤'], ['Downloads', '/home/student/Downloads', '⇩'], ['Computer', '/', '⛁']];
+  var nav = places.map(function (x) { return '<a class="ubpl' + (x[1] === p ? ' on' : '') + '" data-wa="ubcd" data-arg="' + ea(x[1]) + '">' + x[2] + ' ' + x[0] + '</a>'; }).join('');
+  var kids = lxKids(L, p).filter(function (k) { return lxBase(k).charAt(0) !== '.'; }).sort(function (a, b) { var da = L.fs[a].t === 'd' ? 0 : 1, db = L.fs[b].t === 'd' ? 0 : 1; return da - db || (lxBase(a) < lxBase(b) ? -1 : 1); });
+  var rows = kids.length ? kids.map(function (k) {
+    var n = L.fs[k], dir = n.t === 'd';
+    return '<div class="ubfr' + (g.fsel === k ? ' on' : '') + '"><a class="ubfn" data-wa="' + (dir ? 'ubcd' : 'ubsel') + '" data-arg="' + ea(k) + '"><i>' + (dir ? '📁' : '📄') + '</i>' + esc(lxBase(k)) + '</a><small>' + esc(ubSize(n)) + '</small><a class="ubfm" data-wa="ubsel" data-arg="' + ea(k) + '">⋯</a></div>';
+  }).join('') : '<p class="wnone">Folder is Empty</p>';
+  var sel = g.fsel && L.fs[g.fsel] ? g.fsel : '', sn = sel ? L.fs[sel] : null;
+  var tools = WX.btn('↑ Up', 'ubup', '', 'sm', p === '/') + WX.btn('+ New Folder', 'ubnewf', '', 'sm') + (sel ? WX.btn('Properties', 'ubprop', sel, 'sm') + (sn.t === 'f' ? WX.btn('Open in Text Editor', 'ubedit', sel, 'sm') : '') + WX.btn('Delete', 'ubdel', sel, 'sm') : '');
+  return '<div class="ubfs"><div class="ubfp">' + esc(p) + '</div><div class="wtools">' + tools + '</div><div class="wsplit"><div class="wnav ubnav">' + nav + '</div><div class="wmain">' + rows + '</div></div></div>';
+}
+function ubOwnerOk(d, n) { var u = d.win.sess.user; return u === 'root' || n.o === u; }
+function ubDlg(d) {
+  var g = d.win.g, D = g.dlg, L = d.lx, v = D.d || {}, E = D.err, cancel = WX.btn('Cancel', 'ubdc', '', '');
+  var wrap = function (title, body, btns) { return WX.dlg(title, body, btns, E).replace('data-wa="dclose"', 'data-wa="ubdc"'); };
+  if (D.id === 'newf') return wrap('New Folder', WX.fld('Folder name', 'fname', v.fname === undefined ? 'Untitled Folder' : v.fname), cancel + WX.btn('Create', 'ubdok', '', 'pri'));
+  if (D.id === 'del') return wrap('Delete', '<p>Are you sure you want to permanently delete “' + esc(lxBase(D.p)) + '”?</p>', cancel + WX.btn('Delete', 'ubdok', '', 'pri'));
+  if (D.id === 'msg') return wrap(esc(D.title || 'Message'), '<p>' + esc(D.text) + '</p>', WX.btn('OK', 'ubdc', '', 'pri'));
+  if (D.id === 'prop') {
+    var n = L.fs[D.p], m = n.m, bits = function (sh) { return (m >> sh) & 7; };
+    var opts = n.t === 'd' ? [[0, 'None'], [4, 'List files only'], [5, 'Access files'], [7, 'Create and delete files']] : [[0, 'None'], [4, 'Read-only'], [6, 'Read and write'], [7, 'Read, write and execute']];
+    var cur = function (sh) { var b = bits(sh); var ok = opts.some(function (o) { return o[0] === b; }); return ok ? b : (opts.concat([[b, 'Custom (' + b + ')']]), b); };
+    var sel = function (l, k, sh) { var b = bits(sh), oo = opts.slice(); if (!oo.some(function (o) { return o[0] === b; })) oo.push([b, 'Custom']); return WX.sel(l, k, oo, v[k] !== undefined ? v[k] : b); };
+    return wrap('Properties — ' + esc(lxBase(D.p)), '<table class="wprops"><tr><td class="k">Type</td><td>' + (n.t === 'd' ? 'Folder' : 'Text file') + '</td></tr><tr><td class="k">Size</td><td>' + esc(ubSize(n)) + '</td></tr><tr><td class="k">Owner</td><td>' + esc(n.o) + '</td></tr><tr><td class="k">Group</td><td>' + esc(n.g) + '</td></tr><tr><td class="k">Permissions</td><td class="mono">' + esc(lxModeStr(n)) + ' (' + (m & 511).toString(8) + ')</td></tr></table>' + sel('Owner access', 'po', 6) + sel('Group access', 'pg', 3) + sel('Others access', 'pt', 0), WX.btn('Close', 'ubdc', '', '') + WX.btn('Apply', 'ubdok', '', 'pri'));
+  }
+  return '';
+}
+
+/* ---------- Text editor ---------- */
+function ubEdit(d) {
+  var g = d.win.g, e = g.edit = g.edit || { path: '', text: '', msg: '' };
+  return '<div class="ubed"><div class="wtools">' + WX.btn('Save', 'ubsave', '', 'sm pri') + '</div><label class="wf"><span>File path</span><input data-f="epath" value="' + ea(e.path) + '" dir="ltr" placeholder="/home/student/Documents/new.txt" autocomplete="off" autocapitalize="none" spellcheck="false"></label>' +
+    '<textarea data-f="etext" class="ubta" dir="auto" spellcheck="false">' + esc(e.text) + '</textarea>' + (e.msg ? '<div class="wtoast">' + esc(e.msg) + '</div>' : '') + '</div>';
+}
+
+/* ---------- Settings ---------- */
+function ubSet(d) {
+  var g = d.win.g, L = d.lx, f = d.ifaces.FastEthernet0, s = g.set || 'net', nav = [['net', 'Network'], ['users', 'Users'], ['about', 'About']].map(function (x) { return '<a class="ubpl' + (s === x[0] ? ' on' : '') + '" data-wa="ubset" data-arg="' + x[0] + '">' + x[1] + '</a>'; }).join(''), body = '', m = g.smsg ? '<div class="wtoast">' + esc(g.smsg) + '</div>' : '';
+  if (s === 'net') body = '<h4>Wired</h4><p class="wnote">Connection: ' + (f.ip ? '<span class="wok">Connected</span> 1000 Mb/s' : 'No IP address configured') + '</p>' + WX.fld('IPv4 Address', 'sip', f.ip) + WX.fld('Netmask', 'smask', f.mask) + WX.fld('Gateway', 'sgw', f.gw) + WX.fld('DNS', 'sdns', f.dns || '') + WX.btn('Apply', 'ubnet', '', 'pri') + m;
+  else if (s === 'users') {
+    var us = Object.keys(L.users).filter(function (n) { return L.users[n].uid >= 1000 && L.users[n].uid < 60000; });
+    body = '<h4>Users</h4>' + us.map(function (n) { return '<div class="ubfr"><span class="ubfn"><i>👤</i>' + esc(L.users[n].gecos || n) + ' (' + esc(n) + ')</span><small>' + (lxIsAdmin(L, n) ? 'Administrator' : 'Standard') + '</small></div>'; }).join('') +
+      '<h4>Add User…</h4>' + WX.fld('Full Name', 'ufull', '') + WX.fld('Username', 'uname', '') + WX.fld('Password', 'upw', '', { type: 'password' }) + WX.chk('Administrator (member of sudo)', 'uadm', false) + WX.btn('Add', 'ubuser', '', 'pri') + m;
+  } else body = '<h4>About</h4>' + WX.fld('Device name', 'hname', L.host) + WX.btn('Rename', 'ubhost', '', 'pri') + '<table class="wprops"><tr><td class="k">OS Name</td><td>Ubuntu 22.04.3 LTS</td></tr><tr><td class="k">OS Type</td><td>64-bit</td></tr><tr><td class="k">GNOME Version</td><td>42.9</td></tr><tr><td class="k">Memory</td><td>4.0 GiB</td></tr><tr><td class="k">Disk</td><td>25.0 GB</td></tr></table>' + m;
+  return '<div class="ubst"><div class="wsplit"><div class="wnav ubnav">' + nav + '</div><div class="wmain">' + body + '</div></div></div>';
+}
+
+/* ---------- actions (returns true when handled) ---------- */
+function ubAct(d, act, arg, vals) {
+  var W = d.win, g = W.g, L = d.lx;
+  if (act === 'zoom') { var z = W.zoom || 1; W.zoom = arg === '+' ? Math.min(4, z * 1.3) : arg === '-' ? Math.max(0.5, z / 1.3) : 1; return true; }
+  if (act === 'drawer') { g.drawer = !g.drawer; return true; }
+  if (act === 'hint') { g.hint = g.hint === +arg ? -1 : +arg; return true; }
+  if (act === 'fullx') { W.full = false; return true; }
+  if (act === 'fullon') { W.full = true; return true; }
+  if (act === 'pschip') { g.psIn = (vals.psin || '') + arg; return true; }
+  if (act === 'pshist') { var hh = d.hist || []; g.psHi = g.psHi === undefined ? hh.length : g.psHi; g.psHi = Math.max(0, g.psHi - 1); g.psIn = hh[g.psHi] || ''; return true; }
+  if (act === 'envreset') return false;
+  if (W.stage === 'install') { if (/^ub/.test(act)) { ubSetupAct(d, act, arg, vals); return true; } return false; }
+  if (act === 'ublogin') { ubLoginAct(d, vals); return true; }
+  if (!/^ub|^pschip|^pshist/.test(act)) return false;
+  if (vals.etext !== undefined && g.edit) g.edit.text = vals.etext;
+  if (vals.epath !== undefined && g.edit) g.edit.path = vals.epath;
+  if (act !== 'ubpow') g.pow = false;
+  var D = g.dlg;
+  switch (act) {
+    case 'ubact': g.act = !g.act; return true;
+    case 'ubpow': g.pow = !g.pow; g.act = false; return true;
+    case 'ubpow2': g.pow = false; if (arg === 'restart') { W.stage = 'login'; W.restarts++; W.bootUntil = Date.now() + 1500; } else W.stage = 'login'; g.wins = []; g.init = false; g.scr = null; return true;
+    case 'ubopen': g.act = false; if (g.wins.indexOf(arg) < 0) g.wins.push(arg); g.scr = (g.scr === arg && false) ? null : arg; return true;
+    case 'ubmin': g.scr = null; return true;
+    case 'ubclose': g.wins = g.wins.filter(function (x) { return x !== arg; }); if (g.scr === arg) g.scr = g.wins[g.wins.length - 1] || null; return true;
+    case 'ubcd': g.fpath = arg; g.fsel = ''; return true;
+    case 'ubup': g.fpath = lxDir(g.fpath); g.fsel = ''; return true;
+    case 'ubsel': g.fsel = g.fsel === arg ? '' : arg; return true;
+    case 'ubnewf': g.dlg = { id: 'newf', d: {} }; return true;
+    case 'ubdel': g.dlg = { id: 'del', p: arg }; return true;
+    case 'ubprop': g.dlg = { id: 'prop', p: arg, d: {} }; return true;
+    case 'ubedit': { var n = L.fs[arg]; g.edit = { path: arg, text: n.c !== undefined ? n.c : '', msg: '' }; if (g.wins.indexOf('edit') < 0) g.wins.push('edit'); g.scr = 'edit'; return true; }
+    case 'ubdc': g.dlg = null; return true;
+    case 'dclose': g.dlg = null; return true;
+    case 'ubdok': {
+      if (!D) return true; D.err = '';
+      var u = W.sess.user;
+      if (D.id === 'newf') {
+        var nm = (vals.fname || '').trim(); D.d = { fname: vals.fname };
+        if (!nm || /\//.test(nm)) { D.err = 'The name “' + nm + '” is not valid. Folder names cannot contain “/”.'; return true; }
+        var pth = (g.fpath === '/' ? '' : g.fpath) + '/' + nm;
+        if (L.fs[pth]) { D.err = 'The name “' + nm + '” is already used in this folder. Please use a different name.'; return true; }
+        var par = L.fs[g.fpath]; if (!ubOwnerOk(d, par) && !((par.m & 2) && true)) { D.err = 'Error creating directory: Permission denied.'; return true; }
+        L.fs[pth] = { t: 'd', o: u, g: lxPrimary(L, u), m: 493, mt: 'Oct 24 21:30' }; g.dlg = null; return true;
+      }
+      if (D.id === 'del') {
+        var nd = L.fs[D.p]; if (!ubOwnerOk(d, nd)) { D.err = 'Cannot delete: Permission denied.'; return true; }
+        Object.keys(L.fs).forEach(function (k) { if (k === D.p || k.indexOf(D.p + '/') === 0) delete L.fs[k]; }); g.fsel = ''; g.dlg = null; return true;
+      }
+      if (D.id === 'prop') {
+        var nn = L.fs[D.p]; D.d = vals;
+        if (!ubOwnerOk(d, nn)) { D.err = 'Permission denied: only the owner can change permissions.'; return true; }
+        nn.m = (nn.m & ~511) | ((+vals.po) << 6) | ((+vals.pg) << 3) | (+vals.pt); g.dlg = null; return true;
+      }
+      g.dlg = null; return true;
+    }
+    case 'ubsave': {
+      var e = g.edit = g.edit || { path: '', text: '', msg: '' }, p = (e.path || '').trim();
+      if (!p || p.charAt(0) !== '/') { e.msg = 'Enter a full file path starting with /, e.g. /home/student/Documents/new.txt'; return true; }
+      var dir = lxDir(p); if (!L.fs[dir] || L.fs[dir].t !== 'd') { e.msg = 'The folder ' + dir + ' does not exist.'; return true; }
+      if (L.fs[p] && L.fs[p].t === 'd') { e.msg = p + ' is a folder.'; return true; }
+      var u2 = W.sess.user, ex = L.fs[p];
+      if (ex && !(u2 === 'root' || (ex.o === u2 && (ex.m & 128)) || (ex.m & 2))) { e.msg = 'Could not save the file: Permission denied.'; return true; }
+      if (!ex && !(u2 === 'root' || L.fs[dir].o === u2 || (L.fs[dir].m & 2))) { e.msg = 'Could not create the file: Permission denied.'; return true; }
+      var tx = e.text; if (tx && tx.slice(-1) !== '\n') tx += '\n';
+      if (ex) { ex.c = tx; } else L.fs[p] = { t: 'f', o: u2, g: lxPrimary(L, u2), m: 420, c: tx, mt: 'Oct 24 21:30' };
+      e.msg = 'Saved ' + p; return true;
+    }
+    case 'ubset': g.set = arg; g.smsg = ''; return true;
+    case 'ubnet': {
+      var f = d.ifaces.FastEthernet0; g.smsg = '';
+      if (!okIp(vals.sip || '')) { g.smsg = 'Invalid IPv4 address.'; return true; }
+      if (!okMask(vals.smask || '')) { g.smsg = 'Invalid netmask.'; return true; }
+      if (vals.sgw && !okIp(vals.sgw)) { g.smsg = 'Invalid gateway.'; return true; }
+      f.ip = vals.sip; f.mask = vals.smask; f.gw = vals.sgw || ''; f.dns = vals.sdns || ''; g.smsg = 'Network settings applied.'; return true;
+    }
+    case 'ubuser': {
+      var nm2 = (vals.uname || '').trim(); g.smsg = '';
+      if (!/^[a-z_][a-z0-9_-]*$/.test(nm2)) { g.smsg = 'Invalid username (lowercase letters, digits, - and _).'; return true; }
+      if (L.users[nm2]) { g.smsg = 'The username already exists.'; return true; }
+      if (!vals.upw) { g.smsg = 'Enter a password.'; return true; }
+      var uid = L.nextUid++, gid = uid; while (Object.keys(L.groups).some(function (x) { return L.groups[x].gid === gid; })) gid++;
+      L.groups[nm2] = { gid: gid, m: [] }; var us = L.users[nm2] = { uid: uid, gid: gid, home: '/home/' + nm2, sh: '/bin/bash', pw: vals.upw, gecos: (vals.ufull || '').trim(), lock: false };
+      if (vals.uadm && L.groups.sudo) L.groups.sudo.m.push(nm2);
+      lxMkHome(L, nm2, us); g.smsg = 'User ' + nm2 + ' created.'; return true;
+    }
+    case 'ubhost': {
+      var h = (vals.hname || '').trim(); if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*$/.test(h)) { g.smsg = 'Invalid device name.'; return true; }
+      L.host = h; L.fs['/etc/hostname'].c = h + '\n'; L.fs['/etc/hosts'].c = '127.0.0.1 localhost\n127.0.1.1 ' + h + '\n'; W.name = h; g.smsg = 'Device name changed.'; return true;
+    }
+  }
+  return true;
 }
 
 if (typeof SK === 'undefined') { var SK = function (k) { return k; }; var WHO = ''; }
@@ -5382,18 +5689,20 @@ var LABS = [
     ])
   },
   {
-    id: 'linux-install', course: 'os-252', title: 'تنصيب نظام أوبنتو سيرفر', level: 'مبتدئ', min: 20, qn: 'السؤال 1 (تنصيب النظام)',
-    desc: 'معالج تنصيب موجّه: اللغة والشبكة اليدوية وتقسيم القرص وإنشاء المستخدم، ثم الدخول للنظام.',
-    obj: ['ينصّب نظام التشغيل أوبنتو سيرفر.', 'يضبط الشبكة وتقسيم القرص والمستخدم أثناء التنصيب.'],
-    info: ['اللغة English ، لوحة المفاتيح أي خيار', 'الشبكة يدوية: 192.168.10.10/24 والبوابة 192.168.10.1', 'تقسيم القرص تلقائي (Use an entire disk) مع تأكيد yes', 'اسم الخادم ubuntu-server ، المستخدم student ، كلمة السر student', 'المحاكاة معالج موجّه وليست إقلاعاً حقيقياً من ISO.'],
-    devs: [['Server', 'pc', { os: 'linux', host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', install: true }]],
+    id: 'linux-install', course: 'os-252', title: 'تنصيب أوبنتو سطح المكتب (Ubuntu Desktop 22.04)', level: 'مبتدئ', min: 20, qn: 'السؤال 1 (تنصيب النظام)',
+    desc: 'معالج التنصيب الرسومي لأوبنتو سطح المكتب: اللغة والتخطيط والتنصيب العادي ومسح القرص والموقع والمستخدم، ثم إعادة التشغيل وتسجيل الدخول وفتح الطرفية.',
+    obj: ['ينصّب أوبنتو سطح المكتب بالمعالج الرسومي.', 'ينشئ المستخدم ويسمّي الجهاز أثناء التنصيب.', 'يسجّل الدخول ويستخدم سطح المكتب والطرفية.'],
+    info: ['اللغة English ، لوحة المفاتيح English (US)', 'Normal installation مع Download updates', 'Erase disk and install Ubuntu ثم Install Now ثم Continue', 'الموقع Riyadh', 'اسمك أي اسم ، اسم الجهاز ubuntu-desktop ، المستخدم student ، كلمة السر student', 'المحاكاة معالج رسومي موجّه وليست إقلاعاً حقيقياً من ISO.'],
+    devs: [['Server', 'pc', { os: 'linux', desktop: true, host: 'ubuntu-desktop', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', install: true }]],
     links: [], pos: { 'Server': [200, 90] },
     tasks: [
-      T('Server', 'اختر اللغة (1: English) ولوحة المفاتيح ونوع التنصيب', ['1', '1', '1'], [{ k: 'lx', d: 'Server', t: 'inst', n: 3 }]),
-      T('Server', 'اضبط الشبكة يدوياً: 192.168.10.10/24 والبوابة 192.168.10.1 (DHCP مرفوض)', ['2', '192.168.10.10/24', '192.168.10.1'], [{ k: 'lx', d: 'Server', t: 'inst', n: 6 }]),
-      T('Server', 'قسّم القرص تلقائياً وأكّد المسح بكتابة yes', ['1', 'yes'], [{ k: 'lx', d: 'Server', t: 'inst', n: 8 }]),
-      T('Server', 'الملف الشخصي: الاسم، اسم الخادم ubuntu-server، المستخدم student، كلمة السر student', ['Student User', 'ubuntu-server', 'student', 'student', 'student'], [{ k: 'lx', d: 'Server', t: 'inst', n: 9 }]),
-      T('Server', 'أنهِ التنصيب (OpenSSH ثم تخطي الحزم ثم إعادة التشغيل) وادخل النظام', ['1', '', ''], [{ k: 'lx', d: 'Server', t: 'installed' }])
+      T('Server', '(واجهة رسومية) اللغة English ثم اضغط Install Ubuntu، واختر لوحة المفاتيح English (US)', ['Install Ubuntu', 'English (US)', 'Continue'], [{ k: 'lx', d: 'Server', t: 'ubi', n: 2 }]),
+      T('Server', '(واجهة رسومية) Normal installation مع تحديد Download updates', ['Normal installation', 'Download updates while installing Ubuntu', 'Continue'], [{ k: 'lx', d: 'Server', t: 'ubi', n: 3 }]),
+      T('Server', '(واجهة رسومية) Erase disk and install Ubuntu ثم Install Now ثم Continue لتأكيد كتابة الأقسام', ['Erase disk and install Ubuntu', 'Install Now', 'Continue'], [{ k: 'lx', d: 'Server', t: 'ubi', n: 4 }]),
+      T('Server', '(واجهة رسومية) اختر الموقع Riyadh ثم Continue', ['Riyadh', 'Continue'], [{ k: 'lx', d: 'Server', t: 'ubi', n: 5 }]),
+      T('Server', '(واجهة رسومية) أنشئ المستخدم: اسم الجهاز ubuntu-desktop ، المستخدم student ، كلمة السر student', ['Your name: Student User', "computer's name: ubuntu-desktop", 'username: student', 'password: student'], [{ k: 'lx', d: 'Server', t: 'ubi', n: 6 }]),
+      T('Server', '(واجهة رسومية) اضغط Restart Now ثم سجّل الدخول بكلمة السر student', ['Restart Now', 'Password: student', 'Sign In'], [{ k: 'lx', d: 'Server', t: 'ubdesk' }]),
+      T('Server', 'من الطرفية Terminal: اعرض إصدار النظام واسم الجهاز', ['cat /etc/os-release', 'hostname'], [{ k: 'lx', d: 'Server', t: 'ran', c: 'os-release' }])
     ]
   },
   {
@@ -5401,7 +5710,7 @@ var LABS = [
     desc: 'على خادم أوبنتو: أنشئ مجلداً بصلاحيات كاملة وشاركه مع الشبكة، وأنشئ مستخدماً بصلاحيات الجذر، وأعدّ طابعة الشبكة، ثم اجعل المجلد للقراءة فقط.',
     obj: ['يدير الملفات والمجلدات وصلاحياتها.', 'ينشئ المستخدمين ويمنحهم الصلاحيات.', 'يشارك الملفات والطابعات عبر الشبكة.'],
     info: ['Server (أوبنتو): 192.168.10.10/24 ، المستخدم student وكلمة السر student (يملك sudo)', 'Client (أوبنتو): 192.168.10.20/24 ، المستخدم student وكلمة السر student', 'Printer: طابعة شبكية 192.168.10.50/24', 'المجلد: ShareFolder على سطح المكتب Desktop بصلاحيات rwx للجميع', 'المستخدم: user1 كلمة السر userpass بصلاحيات الجذر (sudo) وبوصول عن بعد (SSH)', 'التنصيب في تجربة مستقلة: «تنصيب أوبنتو سيرفر». هنا الأجهزة منصّبة وجاهزة.'],
-    devs: [['Server', 'pc', { os: 'linux', host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1' }], ['Client', 'pc', { os: 'linux', host: 'ubuntu-client', ip: '192.168.10.20', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['smbclient'] }], ['Printer', 'pc', { os: 'printer', ip: '192.168.10.50', mask: '255.255.255.0' }], S('SW1', ['F0/1', 'F0/2', 'F0/3'])],
+    devs: [['Server', 'pc', { os: 'linux', desktop: true, host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1' }], ['Client', 'pc', { os: 'linux', desktop: true, host: 'ubuntu-client', ip: '192.168.10.20', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['smbclient'] }], ['Printer', 'pc', { os: 'printer', ip: '192.168.10.50', mask: '255.255.255.0' }], S('SW1', ['F0/1', 'F0/2', 'F0/3'])],
     links: [L('SW1', 'F0/1', 'Server', 'Fa0'), L('SW1', 'F0/2', 'Client', 'Fa0'), L('SW1', 'F0/3', 'Printer', 'Fa0')],
     pos: { 'Server': [120, 70], 'SW1': [330, 150], 'Client': [540, 70], 'Printer': [330, 260] },
     tasks: [
@@ -6293,6 +6602,7 @@ function startLab(lab) {
 }
 function greet(n) {
   var d = CUR.lab.devs[n];
+  if (d.win && d.win.kind === 'ubuntu') return;
   if (d.win) { EMIT(d, 'Windows PowerShell', ''); EMIT(d, 'Copyright (C) Microsoft Corporation. All rights reserved.', ''); EMIT(d, '', ''); return; }
   if (d.os) { lxGreet(d); return; }
   if (d.type === 'pc') { EMIT(d, d.name + ' - Command Prompt', 'dim'); EMIT(d, 'مثال: ip 192.168.1.10 255.255.255.0 192.168.1.1' + (CUR.lab.def.id === 'asa-vpn' ? '   |   VPN: vpn connect <IP> <group> <key> <user> <password>' : ''), 'dim'); EMIT(d, '', ''); return; }
@@ -6388,7 +6698,7 @@ var CHIPS = {
   lx: [['ls -l'], ['sudo '], ['cd '], ['mkdir '], ['chmod '], ['systemctl status '], ['ip a'], ['ping ']]
 };
 function renderChips() {
-  var d = CUR.dev, list = (d.pending || (window.EX && EX.active) ? [] : (d.win ? [['gui'], ['ipconfig'], ['hostname'], ['Get-Help ', 'pc'], ['ping ']] : d.os === 'printer' ? [['status'], ['show ip']] : d.lx && d.lx.inst ? [['1'], ['2'], ['yes']] : CHIPS[d.mode] || [])).filter(function (c) { return !c[1] || c[1] === d.type; });
+  var d = CUR.dev, list = (d.pending || (window.EX && EX.active) ? [] : (d.win && d.win.kind !== 'ubuntu' ? [['gui'], ['ipconfig'], ['hostname'], ['Get-Help ', 'pc'], ['ping ']] : d.os === 'printer' ? [['status'], ['show ip']] : d.lx && d.lx.inst ? [['1'], ['2'], ['yes']] : CHIPS[d.mode] || [])).filter(function (c) { return !c[1] || c[1] === d.type; });
   var h = '<button class="k" data-k="tab">Tab</button><button class="k" data-k="help">?</button><button class="k" data-k="up">↑</button>';
   h += list.map(function (c) { return '<button data-t="' + esc(c[0]) + '">' + esc(c[0].trim()) + '</button>'; }).join('');
   $('#chips').innerHTML = h;
@@ -6431,11 +6741,12 @@ function wuiPaint() {
   var sc = box.querySelector('.wscr'), st = sc ? sc.scrollTop : 0, bd = box.querySelector('.wbody,.wmain'), bt = bd ? bd.scrollTop : 0, drw = box.querySelector('.wdrw'), dt = drw ? drw.scrollTop : 0;
   box.innerHTML = wuiRender(d);
   wuiFit();
-  var mv2 = box.querySelector('#wmv'); if (mv2) { mv2.scrollTop = mvt; mv2.scrollLeft = mvl; }
+  var mv2 = box.querySelector('#wmv'); if (mv2 && !box.classList.contains('kb')) { mv2.scrollTop = mvt; mv2.scrollLeft = mvl; }
   var sc2 = box.querySelector('.wscr'); if (sc2 && st) sc2.scrollTop = st;
   var bd2 = box.querySelector('.wbody,.wmain'); if (bd2 && bt) bd2.scrollTop = bt;
   var d2 = box.querySelector('.wdrw'); if (d2 && dt) d2.scrollTop = dt;
-  var po = box.querySelector('#wpso'); if (po) po.scrollTop = po.scrollHeight;
+  wpsBottom(); setTimeout(wpsBottom, 60);
+  kbSync();
   if (keep.f) { var ne = box.querySelector('[data-f="' + keep.f + '"]'); if (ne && ne.type !== 'checkbox' && ne.type !== 'radio') { try { ne.focus({ preventScroll: true }); if (keep.s != null) ne.setSelectionRange(keep.s, keep.s); } catch (x) { } } }
   if (W2.bootUntil && Date.now() < W2.bootUntil) { clearTimeout(wuiPaint._t); wuiPaint._t = setTimeout(function () { refresh(); }, W2.bootUntil - Date.now() + 30); }
 }
@@ -6443,8 +6754,12 @@ function wuiFit() {
   var box = $('#wui'); if (!box || box.hidden) return;
   if (box.classList.contains('full')) {
     var vv = window.visualViewport;
-    box.style.top = (vv ? vv.offsetTop : 0) + 'px'; box.style.setProperty('height', (vv ? vv.height : window.innerHeight) + 'px', 'important');
+    var hh = vv ? vv.height : window.innerHeight, kbo = !!vv && vv.height < window.innerHeight - 100;
+    if (!kbo && window.WKBF) { kbo = true; box.style.setProperty('--kbh', Math.round(window.innerHeight * 0.56) + 'px'); } else if (kbo) box.style.setProperty('--kbh', Math.round(hh) + 'px');
+    box.classList.toggle('kb', kbo);
+    box.style.top = (vv ? vv.offsetTop : 0) + 'px'; box.style.setProperty('height', hh + 'px', 'important');
     var mv = box.querySelector('#wmv'), sz = box.querySelector('#wsz'), mon = box.querySelector('#wmon');
+    if (mv && box.classList.contains('kb')) { mv.scrollTop = 0; mv.scrollLeft = 0; }
     if (mv && sz && mon) {
       var VW = 640 + 20, zoom = (CUR.dev && CUR.dev.win && CUR.dev.win.zoom) || 1;
       var aw = mv.clientWidth - 12, ah = mv.clientHeight - 12;
@@ -6455,9 +6770,63 @@ function wuiFit() {
       sz.style.width = Math.round(VW * s) + 'px'; sz.style.height = Math.round(VH * s) + 'px';
       mon.style.transform = 'scale(' + s + ')'; window.WMON.s = s;
     }
-  } else { box.style.top = ''; box.style.removeProperty('height'); }
+  } else {
+    box.style.top = ''; box.style.removeProperty('height');
+    var nv = box.querySelector('#wnfv'), nz = box.querySelector('#wsz'), nm = box.querySelector('#wmon');
+    if (nv && nz && nm) {
+      var NW = 660, na = nv.clientWidth - 6, nh = nv.clientHeight - 6; if (na > 0 && nh > 0) {
+        var ns = na / NW, nsh = Math.round(Math.max(300, Math.min(720, nh / ns - 28)));
+        var s2 = Math.min(ns, nh / (nsh + 28)); var scn = box.querySelector('.wscreen'); if (scn) scn.style.height = nsh + 'px';
+        nz.style.width = Math.round(NW * s2) + 'px'; nz.style.height = Math.round((nsh + 28) * s2) + 'px'; nm.style.transform = 'scale(' + s2 + ')';
+      }
+    }
+  }
+  if (typeof wpsBottom === 'function') wpsBottom();
 }
 window.addEventListener('resize', function () { setTimeout(wuiFit, 60); });
+var KB = { name: null }, KBA = null, KBT = null;
+function kbAnchor(ta) {
+  var id = ta ? 'wkat' : 'wkai', e = document.getElementById(id);
+  if (!e) {
+    e = document.createElement(ta ? 'textarea' : 'input'); e.id = id; e.setAttribute('autocomplete', 'off'); e.setAttribute('autocapitalize', 'none'); e.setAttribute('autocorrect', 'off'); e.setAttribute('spellcheck', 'false'); e.setAttribute('dir', 'ltr'); e.setAttribute('aria-hidden', 'true'); e.tabIndex = -1;
+    e.style.cssText = 'position:fixed;left:0;top:0;width:40px;height:30px;opacity:0.02;z-index:-1;font-size:16px;border:0;padding:0;margin:0;background:transparent;color:transparent;caret-color:transparent;pointer-events:none';
+    if (!ta) e.setAttribute('enterkeyhint', 'send');
+    document.body.appendChild(e);
+    e.addEventListener('input', function () { var el = kbReal(); if (el) { el.value = e.value; el.dispatchEvent(new Event('input', { bubbles: true })); } });
+    e.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Enter' || ta) return; ev.preventDefault();
+      var el = kbReal(), f = el && el.closest('form[data-ps]');
+      if (f) { f.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); e.value = ''; setTimeout(kbSync, 30); } else e.blur();
+    });
+    e.addEventListener('blur', function () { setTimeout(function () { if (document.activeElement !== e) kbClose(); }, 300); });
+  }
+  return e;
+}
+function kbReal() { return KB.name ? document.querySelector('#wui [data-f="' + KB.name + '"]') : null; }
+function kbSync() {
+  if (!KB.name) return; var el = kbReal(), a = KBA; if (!el) { if (a) a.blur(); return; }
+  if (a && el.value !== a.value) a.value = el.value;
+  el.classList.add('kbon');
+}
+function kbOpen(el) {
+  var ta = el.tagName === 'TEXTAREA';
+  KB.name = el.getAttribute('data-f'); KBT = ta; KBA = kbAnchor(ta); KBA.value = el.value; if (!ta) KBA.type = el.type === 'password' ? 'password' : 'text';
+  window.WKBF = true; wuiFit();
+  try { KBA.focus({ preventScroll: true }); } catch (x) { KBA.focus(); }
+  try { KBA.setSelectionRange(KBA.value.length, KBA.value.length); } catch (x) { }
+  kbSync(); window.scrollTo(0, 0); wpsBottom(); setTimeout(wpsBottom, 120); setTimeout(wpsBottom, 400);
+}
+function kbClose() { if (!window.WKBF) return; window.WKBF = false; KB.name = null; var r = document.querySelector('#wui .kbon'); if (r) r.classList.remove('kbon'); wuiFit(); setTimeout(function () { wuiFit(); wpsBottom(); }, 150); }
+function kbFocus(el) { kbOpen(el); }
+window.addEventListener('scroll', function () { if (window.WKBF && (window.scrollY || document.documentElement.scrollTop)) window.scrollTo(0, 0); }, { passive: true });
+(function () {
+  var b = document.getElementById('wui'), t;
+  b.addEventListener('touchstart', function (e) {
+    var el = e.target; if (!el || !/^(INPUT|TEXTAREA)$/.test(el.tagName) || /checkbox|radio|button|submit/.test(el.type || '') || document.activeElement === el || !b.classList.contains('full') || e.touches.length !== 1) return;
+    e.preventDefault(); kbOpen(el);
+  }, { passive: false });
+  function refit() { wuiFit(); [80, 300, 700].forEach(function (ms) { setTimeout(function () { wuiFit(); }, ms); }); }
+})();
 if (window.visualViewport) { window.visualViewport.addEventListener('resize', function () { wuiFit(); }); window.visualViewport.addEventListener('scroll', function () { wuiFit(); }); }
 (function () {
   var box = $('#wui'), pd = null, last2 = null;
@@ -6475,11 +6844,13 @@ if (window.visualViewport) { window.visualViewport.addEventListener('resize', fu
     var el = document.elementFromPoint(x, y); if (c) c.style.display = '';
     return el;
   }
+  var padBtn = false;
   function clickAt() {
     var el = under(); if (!el || !box.contains(el)) return;
     var t = el.closest('input,select,textarea,a,button,label,[data-wa]') || el;
     if (t.tagName === 'SELECT') { try { t.focus(); if (t.showPicker) t.showPicker(); } catch (x) { } return; }
-    if ((t.tagName === 'INPUT' && /text|password|search|number|email|tel|url/.test(t.type || 'text')) || t.tagName === 'TEXTAREA') { try { t.focus(); } catch (x) { } return; }
+    if ((t.tagName === 'INPUT' && /text|password|search|number|email|tel|url/.test(t.type || 'text')) || t.tagName === 'TEXTAREA') { kbFocus(t); return; }
+    if (el.closest('.wpso') && !t.closest('a,button')) { var pi = document.getElementById('wpsIn'); if (pi) { kbFocus(pi); return; } }
     t.click();
   }
   function scrollUnder(dy, dx) {
@@ -6488,7 +6859,7 @@ if (window.visualViewport) { window.visualViewport.addEventListener('resize', fu
   box.addEventListener('touchstart', function (e) {
     var p = e.target.closest && e.target.closest('#wpad'); if (!p) return;
     var b = e.target.closest('[data-pad]');
-    if (b) { e.preventDefault(); clickAt(); return; }
+    if (b) { pd = null; return; }
     var a = e.touches; pd = { n: a.length, x: a[0].clientX, y: a[0].clientY, x0: a[0].clientX, y0: a[0].clientY, t: Date.now(), moved: false, my: a.length > 1 ? (a[0].clientY + a[1].clientY) / 2 : 0 };
   }, { passive: false });
   box.addEventListener('touchmove', function (e) {
@@ -6499,8 +6870,9 @@ if (window.visualViewport) { window.visualViewport.addEventListener('resize', fu
     curMove(dx, dy);
   }, { passive: false });
   box.addEventListener('touchend', function (e) {
-    if (pd && !e.touches.length) { if (!pd.moved && pd.n === 1 && Date.now() - pd.t < 350) clickAt(); pd = null; }
+    if (pd && !e.touches.length) pd = null;
   }, { passive: true });
+  box.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('#wpad')) { e.preventDefault(); clickAt(); } });
 })();
 (function () {
   var box = $('#wui'), p0 = null, z0 = 1;
@@ -6530,6 +6902,15 @@ if (window.visualViewport) { window.visualViewport.addEventListener('resize', fu
     pan.mv.scrollLeft = pan.l - (x - pan.x); pan.mv.scrollTop = pan.t - (y - pan.y);
   }, { passive: false });
   box.addEventListener('touchend', function (e) { if (e.touches.length < 2) p0 = null; if (!e.touches.length) pan = null; }, { passive: true });
+  var ds = null;
+  function scr(el) { while (el && el !== box) { var cs = getComputedStyle(el); if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 2) return el; el = el.parentElement; } return null; }
+  box.addEventListener('touchstart', function (e) { if (e.touches.length !== 1 || !e.target.closest || !e.target.closest('.wscreen') || e.target.closest('#wpad')) { ds = null; return; } var t = scr(e.target); ds = t ? { el: t, y: e.touches[0].clientY, st: t.scrollTop, m: false } : null; }, { passive: true });
+  box.addEventListener('touchmove', function (e) {
+    if (!ds || e.touches.length !== 1) return; var dy = e.touches[0].clientY - ds.y, k = (window.WMON && window.WMON.s) || 1;
+    if (!ds.m && Math.abs(dy) < 6) return; ds.m = true; e.preventDefault(); ds.el.scrollTop = ds.st - dy / k;
+  }, { passive: false });
+  box.addEventListener('touchend', function () { ds = null; }, { passive: true });
+
 })();
 function wuiVals() {
   var v = {};
@@ -6543,6 +6924,7 @@ $('#wui').addEventListener('click', function (e) {
   var a = e.target.closest('[data-wa]'); if (!a || !CUR.dev || !CUR.dev.win) return;
   if (a.tagName === 'BUTTON' && a.disabled) return;
   var d = CUR.dev, act = a.getAttribute('data-wa');
+  if (act === 'psenter') { var pf = document.querySelector('#wui form[data-ps]'); if (pf) { var pi = pf.querySelector('input'); if (KBA && KBA.value !== pi.value && window.WKBF) pi.value = KBA.value; pf.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); if (KBA) KBA.value = ''; setTimeout(kbSync, 40); } return; }
   if (act === 'dev') { var nd = CUR.lab.devs[a.getAttribute('data-arg')]; if (nd) { d.win.g.drawer = false; CUR.dev = nd; if (nd.win) nd.win.g.drawer = false; renderDevTabs(); renderTerm(); refresh(); } return; }
   try { wuiAct(d, a.getAttribute('data-wa'), a.getAttribute('data-arg') || '', wuiVals()); } catch (err) { d.win.g.dlg = { id: 'msg', title: 'Error', text: String(err && err.message || err) }; }
   refresh();
@@ -6551,9 +6933,11 @@ $('#wui').addEventListener('submit', function (e) {
   var f = e.target.closest('form[data-ps]'); if (!f) return; e.preventDefault();
   var d = CUR.dev, inp = f.querySelector('input'), v = inp.value; d.win.g.psIn = ''; d.win.g.psHi = undefined;
   var m = $('#cmd'); m.value = v; $('#form').requestSubmit();
-  setTimeout(function () { var n = $('#wpsIn'); if (n) { try { n.focus(); } catch (x) { } } }, 30);
+  setTimeout(function () { if (window.WKBF) { kbSync(); return; } var n = $('#wpsIn'); if (n) { try { n.focus(); } catch (x) { } } }, 30);
 });
-$('#wui').addEventListener('input', function (e) { var t = e.target; if (t.getAttribute && t.getAttribute('data-f') === 'psin' && CUR.dev && CUR.dev.win) CUR.dev.win.g.psIn = t.value; });
+function wpsBottom() { var o = document.getElementById('wpso'); if (o) o.scrollTop = o.scrollHeight; }
+$('#wui').addEventListener('input', function (e) { var t = e.target; if (t.getAttribute && t.getAttribute('data-f') === 'psin' && CUR.dev && CUR.dev.win) { CUR.dev.win.g.psIn = t.value; var x = document.getElementById('wpsTx'); if (x && t.type !== 'password') x.textContent = t.value; wpsBottom(); } });
+$('#wui').addEventListener('click', function (e) { var o = e.target.closest && e.target.closest('.wpso'); if (!o || e.target.closest('a,button')) return; var n = document.getElementById('wpsIn'); if (n && !(window.getSelection && String(window.getSelection()))) kbOpen(n); });
 $('#wui').addEventListener('focusin', function (e) { if (!$('#wui').classList.contains('full') && e.target.tagName === 'INPUT' && !/checkbox|radio/.test(e.target.type)) document.body.classList.add('lab-kb'); var t = e.target; setTimeout(function () { window.scrollTo(0, 0); try { t.scrollIntoView({ block: 'center' }); window.scrollTo(0, 0); } catch (x) { } }, 350); });
 $('#wui').addEventListener('focusout', function () { setTimeout(function () { var ae = document.activeElement; if (!ae || ae.tagName !== 'INPUT' || /checkbox|radio/.test(ae.type)) { document.body.classList.remove('lab-kb'); try { applyFix(); } catch (x) { } } }, 250); });
 $('#wui').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox' && e.target.type !== 'radio') { var b = $('#wui').querySelector('.wbtns .wb.pri, .wlock .wb.pri'); if (b) b.click(); } });
@@ -6625,7 +7009,7 @@ $('#form').addEventListener('submit', function (e) {
   if (window.EXLOG) EXLOG(d, v, wasPend);
   if (d.pending && d.pending.prompt !== undefined) {
     EMIT(d, d.pending.prompt + (d.pending.hide ? '' : v), '');
-    try { if (d.win) wsExec(d, v, CUR.lab); else lxExec(d, v, CUR.lab); } catch (err) { EMIT(d, 'error: ' + err.message, 'err'); }
+    try { if (d.win && d.win.kind !== 'ubuntu') wsExec(d, v, CUR.lab); else lxExec(d, v, CUR.lab); } catch (err) { EMIT(d, 'error: ' + err.message, 'err'); }
   } else if (d.pending) {
     EMIT(d, 'Password:', '');
     d.pending = null;
