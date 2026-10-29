@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f3a5f"><meta name="apple-mobile-web-app-capable" content="yes"></head><body>
-<title>تمكّن لاب – المختبر الذكي</title>
+<title>تمكّن | منصة التدريب التقني التفاعلي</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Readex+Pro:wght@500;600;700&display=swap">
 <style>
@@ -570,46 +570,210 @@ body.exam #repBtn{display:none}.prog{display:flex;align-items:center;gap:8px}#re
 body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font-size:12px}
 .rp-p{margin:4px 0;font-size:13px;line-height:1.6}.rp-ul{margin:4px 0;padding-inline-start:20px;font-size:13px;line-height:1.7}
 .rp-task{border:1px solid #c9d2da;border-radius:6px;margin:8px 0;break-inside:avoid;overflow:hidden}.rp-th{display:flex;align-items:center;gap:8px;background:#eef2f6;padding:7px 8px}.rp-n{flex:none;width:26px;height:26px;border-radius:50%;background:#0f3a5f;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.rp-tt{flex:1;font-size:13px;line-height:1.5}.rp-tm{flex:none;font-size:12px;font-weight:700;color:#0f3a5f}.rp-cb{flex:none;font-size:20px;line-height:1}.rp-st{padding:6px 8px;font-size:12px}.rp-st pre{margin-top:4px}
+
+/* ============================================================
+   تمكّن — Unified original interface skin (2026-10-29)
+   Presentation-only overrides. Core simulator & data unchanged.
+   ============================================================ */
+:root {
+  --bg:#F2F5F6; --surface:#FFFFFF; --fg:#1B3442;
+  --muted:#647C89; --line:#D7E3E8;
+  --accent:#328875; --accent-fg:#FFFFFF; --ok:#16875E;
+  --warn:#A97317; --bad:#B04A43;
+  --term-bg:#0D2131; --term-fg:#DBEDE9;
+  --term-dim:#93AAB8; --term-prompt:#82CEAD;
+  --term-err:#FF8B83; --term-sys:#9BD3D9;
+  --font-body:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+  --font-display:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+:root[data-theme="dark"] {
+  --bg:#101C25; --surface:#182A35; --fg:#ECF5F6;
+  --muted:#AAC2CC; --line:#36515E; --accent:#4AB59F;
+  --accent-fg:#06201D; --term-bg:#071521;
+}
+@media (prefers-color-scheme: dark) {
+ :root:not([data-theme="light"]) {
+  --bg:#101C25; --surface:#182A35; --fg:#ECF5F6;
+  --muted:#AAC2CC; --line:#36515E; --accent:#4AB59F;
+  --accent-fg:#06201D; --term-bg:#071521;
+ }
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-size:15px;line-height:1.6;color:var(--fg)}
+.wrap{max-width:1080px;margin-inline:auto}
+/* Classic Tamakkan brand */
+.top{
+  color:#F8FBFC;background:#182C3D;
+  margin-inline:-16px;padding:14px 18px;min-height:84px;
+  border-bottom:3px solid #2F776E;
+  border-radius:0;
+  box-shadow:0 2px 9px rgba(18,42,53,.10);
+}
+.brand{gap:11px;align-items:center}
+.brand svg{width:32px;height:32px;color:#ADD7D5}
+.brand b{font-family:var(--font-display);font-size:clamp(1.35rem,5.3vw,1.8rem);font-weight:800;letter-spacing:-.02em}
+.brand small{color:#D1E1E9;font-size:.76rem;line-height:1.45;margin-top:2px}
+.top .btn{background:transparent;color:#E1F0F1;border-color:#617885;font-size:.83rem;min-height:38px;white-space:nowrap;padding-inline:12px}
+.top .btn:hover{background:#28485B}
+/* Intro / choices */
+.intro{padding:20px 2px 14px;max-width:none}
+.intro h1{font-family:var(--font-display);font-size:clamp(1.5rem,6vw,2rem);color:var(--fg);margin-bottom:6px}
+.intro p{font-size:.94rem;line-height:1.75}
+.modes{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.mode{border-color:var(--line);background:var(--surface);border-radius:17px;padding:18px;gap:9px;min-height:154px;transition:border-color .15s,transform .12s,box-shadow .15s}
+.mode:hover{border-color:#82B9AE;box-shadow:0 6px 20px rgba(27,65,81,.08);transform:translateY(-1px)}
+.mode .mi{width:44px;height:44px;border-radius:12px;background:#E7F4F0;display:flex;align-items:center;justify-content:center;color:#257966}
+.mode b{font-size:1.17rem;color:var(--fg)}
+.mode span:not(.mi){font-size:.86rem;color:var(--muted);line-height:1.6}
+.how{display:none!important}
+/* Sign in surface (keep functional but less intrusive) */
+.prof{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:14px 16px;margin:16px 0 4px;box-shadow:none}
+.prof h3,.prof b{color:var(--fg)}
+.prof .note,.prof p{color:var(--muted)}
+.prof input,.prof select{border-radius:10px;background:var(--bg);border-color:var(--line);color:var(--fg)}
+/* Program/course cards */
+.labhead{padding-block:15px 12px}
+.labhead h2{font-size:1.32rem;color:var(--fg)}
+.labs{gap:12px}
+.lab-card{border-radius:16px;background:var(--surface);padding:18px;box-shadow:0 2px 8px rgba(28,63,80,.035);border:1px solid var(--line);gap:10px}
+.lab-card h2{font-size:1.08rem;line-height:1.5}
+.lab-card p{font-size:.87rem;line-height:1.7}
+.lab-card .meta{font-size:.77rem}
+.lab-card .meta .chip{background:#ECF6F3;border-color:#C3E0D8;color:#287666}
+.btn{border-radius:10px;border-color:var(--line);background:var(--surface);color:var(--fg);font-weight:600;transition:filter .1s,border-color .15s}
+.btn:hover{border-color:#88B8AF}
+.btn.pri{color:#fff;background:var(--accent);border-color:var(--accent);font-weight:700}
+.lab-card .btn.pri{margin-top:auto}
+.panel,.lesson{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.course>h3{font-size:1.15rem}
+.info summary{color:#2F826F}
+/* Lab title, actions and modest tab-bar */
+#lab .labhead{padding-block:4px 12px}
+#labTitle{font-size:clamp(1.08rem,4.2vw,1.36rem);font-weight:750}
+#lab .prog{gap:7px}
+#lab .prog .btn{border-radius:9px;border-color:var(--line);padding:7px 11px;min-height:36px}
+#lab #repBtn{background:#348774;border-color:#348774;color:#fff;font-size:.82rem}
+#lab #progTxt{font-size:.78rem}
+#lab .bar{background:#DCE8EB;border-radius:4px}
+#lab .bar i{background:#42A58B}
+.seg{background:#E6EDF0;border-color:#D7E3E8;border-radius:12px;padding:4px;gap:5px}
+.seg button{color:#456474;border-radius:9px;font-weight:600;font-size:.9rem}
+.seg button[aria-selected="true"]{background:#FFFFFF;color:#226F60;box-shadow:0 1px 3px rgba(0,0,0,.075)}
+/* device navigation: keep for accessibility and non-Cisco devices */
+.devtabs{padding-block:4px 3px;gap:6px;scrollbar-width:none}
+.devtabs button{background:#F5FAFB;color:#2D5263;border-color:#CFE0E6;border-radius:10px;padding:6px 12px;min-height:37px}
+.devtabs button[aria-selected="true"]{background:#E2F4EC;color:#176D57;border-color:#4F9C85;box-shadow:inset 0 -2px 0 #4F9C85;font-weight:700}
+/* interactive topology + original diagram */
+.mini{background:#F8FBFC;border:1px solid var(--line);border-radius:14px}
+.mini svg,.mini img{border-radius:8px}
+.zctl{gap:6px}
+.zctl button{min-height:33px!important;border-color:var(--line)!important;color:#2B5565!important;background:#fff!important;border-radius:8px!important}
+#topoTip{display:none!important}
+.orig .imgbox{border-color:var(--line);padding:10px;background:#fff;border-radius:12px}
+.orig h3,.panel h3{font-size:1rem;color:var(--fg)}
+.orig button{background:#fff;border-color:var(--line);color:var(--fg)}
+.legend{color:var(--muted)}
+/* terminal preserved: old Tamakkan navy face */
+.term{background:#0D2131;color:#D8ECE4;border-radius:15px 15px 0 0;border:1px solid #2F4857;border-bottom:0;font-size:13px;line-height:1.55}
+.term .cmd b,.term .live b{color:#A1DFC1}
+.chips{background:#10293B;border-color:#355366;padding:8px;gap:7px}
+.chips button{background:#1D3B4B;color:#D9F3EA;border:1px solid #3A6170;border-radius:8px;min-height:35px}
+.chips button.k{background:#315D66;color:#E8FFF2;border-color:#568D85}
+.inrow{background:#0D2131}
+.inrow input{background:#17354A;border-color:#436274;color:#E2F0ED}
+.inrow button{background:#348774;color:white}
+/* Tasks/directions from the original sources remain accessible under tasks/guide */
+.tasks{gap:8px}.task{padding:4px 0;border-bottom:1px solid var(--line)}
+.task p{color:var(--fg);font-size:.91rem}
+.chk{border-color:#BDD0D8}
+.hintbtn{color:#247C70}
+.hint{border-color:var(--line)}
+.wstools .btn{border-radius:9px}
+.cv{border-color:var(--line);border-radius:14px}
+.wsinfo{color:var(--muted)}
+/* Non-Cisco simulators keep their own colors and dimensions. */
+#rep,#zoom,#wui.full{z-index:100}
+/* compact responsive student-first layout */
+@media(max-width:959px){
+  body{padding-inline:16px}
+  .top{margin-inline:-16px;min-height:78px;padding:12px 15px}
+  .brand svg{display:none}
+  .brand small{font-size:.7rem;max-width:250px}
+  .labhead{gap:8px}
+  #lab .labhead{align-items:flex-start}
+  #lab .prog{flex-wrap:wrap;justify-content:flex-start}
+  #lab .prog .bar{width:55px}
+  #lab #repBtn{min-height:36px}
+  .mode{min-height:128px}
+  .lab-card{padding:15px}
+  .fixterm .top{min-height:56px;padding-block:6px}
+  .fixterm #lab .labhead h2{font-size:1.05rem}
+  .fixterm .seg{margin-bottom:6px}
+  .fixterm .mini{border-radius:10px}
+  .fixterm .term{border-radius:12px 12px 0 0}
+  .fixterm .devtabs button{min-height:32px;padding:4px 9px;font-size:12px}
+}
+@media(min-width:960px){
+  .top{margin-inline:0;border-radius:0 0 14px 14px;padding-inline:22px}
+  .lab-card{min-height:190px}
+}
 </style>
 
 <div class="wrap" id="app">
   <header class="top">
     <div class="brand">
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="6" width="32" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 14l5 3-5 3M16 21h8" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><b>تمكّن لاب</b><small>المختبر الذكي للشبكات والأنظمة</small></div>
+      <div><b>تَمَكَّن</b><small>منصة التدريب التقني التفاعلي — الكلية التقنية بأضم</small></div>
     </div>
-    <button class="btn" id="homeBtn" hidden>كل المختبرات</button>
+    <button class="btn" id="homeBtn" hidden>← المهارات</button>
   </header>
 
+  <div id="startupAlert" role="status" style="background:#FFF5E5;border:1px solid #DBAB57;border-radius:12px;color:#60471D;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.9">
+    <strong>تنبيه تشغيل المنصة:</strong> إذا ظهرت هذه الرسالة وبقيت أزرار «المهارات العملية» وغيرها دون استجابة، فأنت تفتح نسخة معاينة لا تشغّل المحاكي. افتح <a href="https://nalmasoudi.github.io/tamakkan-lab/" style="color:#075F74;font-weight:700">رابط تمكّن في Safari</a> بعد رفع ملف index.html إلى GitHub Pages. لا يمكن تشغيل المحاكي من معاينة الملفات التي تمنع JavaScript.
+  </div>
+  <script>
+  (function(){
+    var a=document.getElementById('startupAlert');
+    if(!a)return;
+    a.textContent='جاري تهيئة المحاكي...';
+    window.addEventListener('error',function(e){
+      if(!window.__tamakkanBootDone){
+        a.style.display='block';
+        a.textContent='تعذر بدء تشغيل المحاكي في هذا المتصفح: '+(e.message||'خطأ غير معروف')+'. افتح الرابط المنشور في Safari.';
+      }
+    });
+  })();
+  </script>
   <main id="home">
+    <noscript><div style="margin:16px 0;padding:14px;border:1px solid #c98436;border-radius:10px;background:#fff8e8;color:#573c1e;font-weight:600">هذه معاينة لا تشغّل JavaScript. افتح منصة تمكّن من رابط GitHub Pages باستخدام Safari أو Chrome لتعمل الخيارات والتجارب.</div></noscript>
     <div class="prof" id="prof"></div>
     <section class="intro">
-      <h1>تدرّب على أجهزة سيسكو من جوالك، بدون جهاز كمبيوتر.</h1>
-      <p>اختر طريقة العمل: تدريب عملي مرتب حسب المواد، أو مساحة فارغة ترسم فيها شبكتك بنفسك.</p>
+      <h1>المهارات العملية</h1>
+      <p>تعلّم، طبّق، واختبر مهاراتك التقنية.</p>
     </section>
     <div class="modes">
       <button class="mode" data-go="courses">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="4" y="3" width="22" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 11l3 3 5-6M9 20h12" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <b>التدريب العملي</b>
-        <span>تجارب عملية مرتبة حسب المواد، بمهام خطوة بخطوة وتحقق تلقائي من كل مهمة.</span>
+        <b>المهارات العملية</b>
+        <span>تجارب عملية مرتبة حسب المقرر.</span>
       </button>
       <button class="mode" data-go="learn">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 8l11-4 11 4-11 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12v7c0 2 3 4 6 4s6-2 6-4v-7M26 8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
         <b>الشروحات</b>
-        <span>دروس مرتبة وواضحة لكل مادة، بأمثلة أوامر جاهزة وزر ينقلك للتجربة المناسبة. مفتوحة للجميع للتعلّم الذاتي.</span>
+        <span>شرح مختصر وأمثلة للتطبيق.</span>
       </button>
       <button class="mode" data-go="ws">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="7" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><rect x="18" y="4" width="9" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="11" y="19" width="9" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 10l3 9M22 12l-4 7" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"/></svg></span>
         <b>مساحة عمل حرة</b>
-        <span>ارسم شبكتك: أضف راوتر وسويتش وكمبيوتر، وصّلها، ثم اضبط الأوامر وجرّب الـ ping.</span>
+        <span>ابنِ شبكتك وجرّب الأوامر بنفسك.</span>
       </button>
       <button class="mode" data-go="exam">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="5" y="4" width="20" height="23" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 3h8v4h-8zM10 15l3 3 6-6M10 22h10" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <b>التقييم</b>
-        <span>اختبار عملي برابط من مدرّبك، لكل طالب قيم خاصة به، وتصحيح تلقائي ورمز نتيجة يُسلَّم في Blackboard.</span>
+        <span>مهام عملية يحددها المدرب.</span>
       </button>
     </div>
-    <div class="how"><b>كيف أكتب الأوامر على الجوال؟</b> اضغط على الأزرار السريعة أسفل الطرفية، أو اكتب أول حرفين من الأمر (مثل <code>conf t</code>). زر <code>Tab</code> يكمل الكلمة، وزر <code>?</code> يعرض الأوامر المتاحة.</div>
+    
   </main>
 
   <section id="learn" hidden>
@@ -618,7 +782,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
   </section>
 
   <section id="courses" hidden>
-    <div class="labhead"><h2>التدريب العملي</h2></div>
+    <div class="labhead"><h2>المهارات العملية</h2></div>
     <div id="courseList"></div>
     <details class="panel adder" id="adder">
       <summary>إضافة تجارب جديدة (للمدرّب)</summary>
@@ -642,12 +806,12 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="exbar" id="exbar" hidden><span class="extime" id="exTime">--:--</span><span class="exwho" id="exWho"></span><button type="button" class="btn pri" id="exSubmit">تسليم</button></div>
     <div class="labhead">
       <h2 id="labTitle"></h2>
-      <div class="prog"><button type="button" class="btn" id="guideBtn">📘 الدليل</button><button type="button" class="btn" id="repBtn">📄 تقرير الإنجاز</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
+      <div class="prog"><button type="button" class="btn" id="guideBtn">الدليل</button><button type="button" class="btn" id="repBtn">حفظ وإرسال</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
     </div>
     <div class="seg" role="tablist" id="seg">
-      <button role="tab" data-v="term" aria-selected="true">الطرفية</button>
+      <button role="tab" data-v="term" aria-selected="true">التطبيق</button>
       <button role="tab" data-v="tasks" aria-selected="false">المهام</button>
-      <button role="tab" data-v="topo" aria-selected="false">الرسم</button>
+      <button role="tab" data-v="topo" aria-selected="false">مخطط التجربة</button>
     </div>
     <div class="grid">
       <div class="pane" data-pane="term">
@@ -661,11 +825,11 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
           <input id="cmd" type="text" inputmode="text" enterkeyhint="send" autocapitalize="none" autocorrect="off" spellcheck="false" dir="ltr">
           <button type="submit">تنفيذ</button>
         </form>
-        <p class="tip">اكتب <code>?</code> في أي مكان لعرض الخيارات. السهم لأعلى يعيد آخر أمر.</p>
+        
       </div>
       <div class="side">
         <div class="pane" data-pane="tasks" hidden><div class="panel"><h3 id="taskHead">المهام</h3><ul class="tasks" id="tasks"></ul><div id="win"></div></div></div>
-        <div class="pane" data-pane="topo" hidden><div class="panel"><div id="orig"></div><h3>مخطط الشبكة</h3><p class="tip" id="topoTip" style="display:block!important;margin:0 0 8px">اضغط على أي جهاز لفتح سطر أوامره.</p><div class="miniwrap" id="topoWrap"><div class="zctl"><button type="button" data-zt="topo" data-zoom="in" aria-label="تكبير">+</button><button type="button" data-zt="topo" data-zoom="out" aria-label="تصغير">−</button><button type="button" data-zt="topo" data-zoom="fit">ملاءمة</button></div><div id="topo"></div></div>
+        <div class="pane" data-pane="topo" hidden><div class="panel"><div id="orig"></div><h3>مخطط التجربة</h3><p class="tip" id="topoTip" style="display:block!important;margin:0 0 8px">اضغط على أي جهاز لفتح سطر أوامره.</p><div class="miniwrap" id="topoWrap"><div class="zctl"><button type="button" data-zt="topo" data-zoom="in" aria-label="تكبير">+</button><button type="button" data-zt="topo" data-zoom="out" aria-label="تصغير">−</button><button type="button" data-zt="topo" data-zoom="fit">ملاءمة</button></div><div id="topo"></div></div>
           <div class="legend"><span><i style="background:var(--ok)"></i>مُفعّل ويعمل</span><span><i style="background:var(--bad)"></i>غير مُفعّل أو لا اتصال</span></div></div></div>
       </div>
     </div>
@@ -4719,7 +4883,7 @@ function wuiDrawer(d) {
     var done = lab.done.has(i), hint = !ex && g.hint === i ? '<pre class="wdh">' + esc((t.h || []).join('\n')) + '</pre>' : '';
     return '<li class="' + (done ? 'ok' : '') + '"><span>' + (done ? '✔' : '○') + '</span><div>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + (!ex ? '<br><a class="wl" data-wa="hint" data-arg="' + i + '">' + (g.hint === i ? 'أخفِ الأوامر' : 'أظهر الأوامر') + '</a>' : '') + hint + '</div></li>';
   }).join('');
-  return '<div class="wdrw"><div class="wdrh"><b>' + esc(def.title) + '</b><a class="wx" data-wa="drawer">✕</a></div><div class="wdrp">' + lab.done.size + ' من ' + def.tasks.length + '</div><div class="wdvs">' + devs + '</div><ol class="wdl">' + tasks + '</ol><div class="wenv"><a class="wl" data-wa="guide">📘 دليل المهام (طباعة / حفظ PDF)</a><br><a class="wl" data-wa="report">📄 تقرير الإنجاز (طباعة / حفظ PDF)</a><br><br>بيئة المادة (الدومين والإعدادات) تُحفظ تلقائيًا على هذا الجهاز وتستمر في كل مختبرات المادة.<br><a class="wl" data-wa="envreset">' + (g.envc ? 'اضغط مرة ثانية للتأكيد: حذف كل شيء والبدء من الصفر' : 'إعادة ضبط البيئة (ابدأ من الصفر)') + '</a></div></div>';
+  return '<div class="wdrw"><div class="wdrh"><b>' + esc(def.title) + '</b><a class="wx" data-wa="drawer">✕</a></div><div class="wdrp">' + lab.done.size + ' من ' + def.tasks.length + '</div><div class="wdvs">' + devs + '</div><ol class="wdl">' + tasks + '</ol><div class="wenv"><a class="wl" data-wa="guide">📘 دليل المهام (طباعة / حفظ PDF)</a><br><a class="wl" data-wa="report">📄 التقرير (طباعة / حفظ PDF)</a><br><br>بيئة المادة (الدومين والإعدادات) تُحفظ تلقائيًا على هذا الجهاز وتستمر في كل مختبرات المادة.<br><a class="wl" data-wa="envreset">' + (g.envc ? 'اضغط مرة ثانية للتأكيد: حذف كل شيء والبدء من الصفر' : 'إعادة ضبط البيئة (ابدأ من الصفر)') + '</a></div></div>';
 }
 function wuiDeskIcons(d, list) {
   return '<div class="wicons">' + list.map(function (a) { return '<a class="wicon" data-wa="' + a[0] + '" data-arg="' + a[1] + '"><i>' + a[2] + '</i><span>' + a[3] + '</span></a>'; }).join('') + '</div>';
@@ -7661,7 +7825,7 @@ function renderCourses() {
     CSEL = null;
     $('#courseList').innerHTML = '<div class="labs">' + cs.map(function (c) {
       var ls = labs.filter(function (l) { return labCourse(l) === c.id; }), done = ls.filter(function (l) { return DONE[l.id]; }).length;
-      return '<article class="lab-card"><div class="meta">' + (c.code ? '<span class="chip">' + esc(c.code) + '</span>' : '') + (ls.length && done === ls.length ? '<span class="chip done">مكتمل</span>' : '') + '</div><h2>' + esc(c.title) + '</h2>' + (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
+      return '<article class="lab-card"><div class="meta">' + '' + (ls.length && done === ls.length ? '<span class="chip done">مكتمل</span>' : '') + '</div><h2>' + esc(c.title) + '</h2>' + (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
         '<div class="meta"><span>' + ls.length + ' تجارب</span><span>أنجزت ' + done + '</span></div><button class="btn pri" data-course="' + esc(c.id) + '">افتح المادة</button></article>';
     }).join('') + '</div>';
     return;
@@ -8785,7 +8949,7 @@ function profSwitch(id) {
 function profNorm(v) { return String(v || '').replace(/[٠-٩]/g, function (c) { return c.charCodeAt(0) - 1632; }).replace(/[۰-۹]/g, function (c) { return c.charCodeAt(0) - 1776; }).replace(/\s+/g, '').toLowerCase(); }
 function renderProf() {
   var el = $('#prof'); if (!el) return; var n = Object.keys(DONE).filter(function (k) { return DONE[k]; }).length;
-  if (!WHO) el.innerHTML = '<div class="prof-h"><b>سجّل دخولك برقمك التدريبي</b><span>لتُحفظ تجاربك وبيئتك (الدومين والإعدادات) لكل المواد. أول دخول لرقم جديد ينشئ له كلمة سر.</span></div><form class="prof-f2" id="profF"><input id="profId" inputmode="numeric" autocomplete="username" placeholder="رقم المتدرب" maxlength="16"><input id="profPw" type="password" autocomplete="current-password" placeholder="كلمة السر (4 خانات فأكثر)"><button class="btn pri" type="submit">دخول</button></form><p class="prof-m" id="profM"></p><div class="prof-b"><button class="btn" id="profForgot" hidden>نسيت كلمة السر؟ احذف بيانات هذا الرقم من الجهاز</button></div>';
+  if (!WHO) el.innerHTML = '<div class="prof-h"><b>سجّل دخولك برقمك التدريبي</b><span>احفظ تقدمك واستكمل تدريبك من هذا الجهاز.</span></div><form class="prof-f2" id="profF"><input id="profId" inputmode="numeric" autocomplete="username" placeholder="رقم المتدرب" maxlength="16"><input id="profPw" type="password" autocomplete="current-password" placeholder="كلمة السر (4 خانات فأكثر)"><button class="btn pri" type="submit">دخول</button></form><p class="prof-m" id="profM"></p><div class="prof-b"><button class="btn" id="profForgot" hidden>نسيت كلمة السر؟ احذف بيانات هذا الرقم من الجهاز</button></div>';
   else el.innerHTML = '<div class="prof-h"><b>رقمك: <span class="mono">' + esc(WHO) + '</span></b><span>التجارب المنجزة: ' + n + ' · يُحفظ كل شيء تلقائيًا على هذا الجهاز.</span></div><div class="prof-b"><button class="btn" id="profX">رمز الحفظ (نقل لجهاز آخر)</button><button class="btn" id="profI">استيراد رمز</button><button class="btn" id="profO">خروج</button></div><div id="profBox" hidden><input id="profPw2" type="password" class="imp" autocomplete="current-password" placeholder="كلمة السر لتأكيد العملية" style="margin-top:8px;font-family:inherit;direction:rtl"><textarea id="profT" class="imp" rows="4" dir="ltr" spellcheck="false"></textarea><div class="prof-b"><button class="btn pri" id="profGo" hidden>استيراد</button><button class="btn pri" id="profMk" hidden>إنشاء الرمز</button></div></div><p class="prof-m" id="profM"></p>';
 }
 function profMsg(t, bad) { var m = $('#profM'); if (m) { m.textContent = t; m.style.color = bad ? 'var(--bad)' : 'var(--ok)'; } }
@@ -9517,15 +9681,15 @@ function repVerify(code) {
 function repHtml(R) {
   var D = repDT(R.now), S = repDT(R.t0), x = [];
   var lbl = R.rows.length ? '' : '';
-  x.push('<div class="rp-head"><div><h1>تقرير إنجاز التدريب العملي</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div><div class="rp-score"><b>' + R.earn + '</b><span>من ' + R.mk.total + '</span><em>' + R.pc + '% — ' + repGrade(R.pc) + '</em></div></div>');
+  x.push('<div class="rp-head"><div><h1>تقرير تجربة معملية</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div><div class="rp-score"><b>' + R.earn + '</b><span>من ' + R.mk.total + '</span><em>' + R.pc + '% — ' + repGrade(R.pc) + '</em></div></div>');
   x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td><input id="rpName" value="' + ea(R.who.n) + '" placeholder="اكتب اسمك" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td><th>الرقم الأكاديمي</th><td><input id="rpId" dir="ltr" inputmode="numeric" value="' + ea(R.who.i) + '" placeholder="000000000" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td></tr>' +
     '<tr><th>المقرر</th><td>' + esc(R.course ? R.course.title + ' (' + R.course.code + ')' : labCourse(R.def)) + '</td><th>التجربة</th><td>' + esc(R.def.title) + (R.def.qn ? '<br><small>' + esc(R.def.qn) + '</small>' : '') + '</td></tr>' +
     '<tr><th>تاريخ إصدار التقرير</th><td>' + esc(D.g) + '<br><small>' + esc(D.h) + '</small></td><th>وقت الإصدار</th><td dir="ltr" style="text-align:right">' + D.t + '</td></tr>' +
     '<tr><th>بدء التجربة</th><td>' + esc(S.iso) + '</td><th>المدة</th><td>' + esc(repDur(R.now - R.t0)) + '</td></tr></table>');
   x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + R.rows.map(function (r) {
-    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(استُخدم التلميح)</small>' : '') + '</td><td>' + (r.ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
+    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(استُخدم التلميح)</small>' : '') + '</td><td>' + (r.ok ? '✔ منجزة' : '✘ غير منجزة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
   }).join('') + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + R.earn + ' / ' + R.mk.total + '</td></tr></tfoot></table>');
-  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المتحققة ' + R.rows.filter(function (r) { return r.ok; }).length + ' وغير المتحققة ' + R.rows.filter(function (r) { return !r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
+  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المنجزة ' + R.rows.filter(function (r) { return r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
   x.push('<h3>الحالة النهائية للأجهزة</h3>');
   R.lab.order.forEach(function (n) {
     var d = R.lab.devs[n], st = []; try { st = repState(d); } catch (e) { }
@@ -9573,32 +9737,12 @@ function openGuide(def) {
   if (!def) return;
   openReport(def);
 }
-function repSaveFile(btn) {
-  var pg = document.getElementById('rpPage'); if (!pg) return;
-  if (!REP.gdef) { var R2 = repData(); if (R2) { pg.innerHTML = repHtml(R2); REP.code = R2.code; REP.text = repText(R2); } }
-  var nm = repProf(); var ni = pg.querySelector('#rpName'), ii = pg.querySelector('#rpId');
-  if (ni) ni.setAttribute('value', nm.n || ''); if (ii) ii.setAttribute('value', nm.i || '');
-  var css = Array.prototype.map.call(document.querySelectorAll('style'), function (x) { return x.textContent; }).join('\n');
-  var ttl = (REP.gdef ? 'دليل المهام - ' + REP.gdef.title : 'تقرير الإنجاز - ' + (nm.n || nm.i || 'طالب'));
-  var html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(ttl) + '</title><style>' + css + '#rep{position:static!important;overflow:visible!important}body{display:block!important;background:#e9edf1}</style></head><body class="repopen"><div id="rep" dir="rtl"><div class="rp-bar norep"><button type="button" class="btn pri" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div><div class="rp-page">' + pg.innerHTML + '</div></div></body></html>';
-  var fn = ttl.replace(/[\\\/:*?"<>|]+/g, '-') + '.html';
-  function fallback() {
-    try { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' })); a.download = fn; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); btn.textContent = 'تم الحفظ ✓'; }
-    catch (x) { btn.textContent = 'تعذّر الحفظ — استخدم «نسخ ملخص»'; }
-  }
-  if (window.claude && claude.use) {
-    claude.use('downloads').then(function (d) {
-      if (!d) return fallback();
-      d.save({ filename: fn, data: new Blob([html], { type: 'text/html' }) }).then(function () { btn.textContent = 'تم الحفظ ✓'; }, function (er) { if (!er || er.code !== 'declined') fallback(); });
-    }, fallback);
-  } else fallback();
-}
 function openReport(gdef) {
   if (window.EX && EX.active) { return; }
   var R = gdef ? null : repData(); if (!gdef && !R) return;
   var old = document.getElementById('rep'); if (old) old.remove();
   var el = document.createElement('div'); el.id = 'rep'; el.setAttribute('dir', 'rtl');
-  el.innerHTML = '<div class="rp-bar norep"><button type="button" class="btn pri" id="rpPrint">🖨 طباعة / حفظ PDF</button><button type="button" class="btn pri" id="rpSave">⬇ حفظ ملف التقرير</button><button type="button" class="btn" id="rpCopy">نسخ ملخص</button><button type="button" class="btn" id="rpVer">تحقق من رمز</button><button type="button" class="btn" id="rpClose">✕ إغلاق</button></div>' +
+  el.innerHTML = '<div class="rp-bar norep"><button type="button" class="btn pri" id="rpPrint">🖨 طباعة / حفظ PDF</button><button type="button" class="btn" id="rpCopy">نسخ ملخص</button><button type="button" class="btn" id="rpVer">تحقق من رمز</button><button type="button" class="btn" id="rpClose">✕ إغلاق</button></div>' +
     '<div class="rp-vp norep" id="rpVP" hidden><textarea id="rpVT" dir="ltr" rows="3" placeholder="الصق رمز التحقق NR1..."></textarea><button type="button" class="btn pri" id="rpChk">تحقق</button><div id="rpVR"></div></div>' +
     '<div class="rp-hint norep">للحفظ كـ PDF: اضغط «طباعة / حفظ PDF» ثم اختر «حفظ كـ PDF» (في الآيفون: من نافذة الطباعة اضغط مشاركة ← حفظ في الملفات). يمكنك كتابة اسمك ورقمك قبل الطباعة.</div>' +
     '<div class="rp-page" id="rpPage">' + (gdef ? guideHtml(gdef) : repHtml(R)) + '</div>';
@@ -9618,7 +9762,6 @@ function openReport(gdef) {
       document.title = ttl;
       setTimeout(function () { try { window.print(); } catch (x) { var hn = document.querySelector('.rp-hint'); if (hn) hn.textContent = 'تعذّرت الطباعة في هذه البيئة. افتح الموقع مباشرة في المتصفح ثم أعد المحاولة، أو استخدم «نسخ ملخص».'; } setTimeout(function () { document.title = old; }, 1500); }, 60);
     }
-    else if (id === 'rpSave') { repSaveFile(e.target); }
     else if (id === 'rpCopy') copyText(REP.text, e.target, 'تم النسخ ✓');
     else if (id === 'rpVer') { var vp = document.getElementById('rpVP'); vp.hidden = !vp.hidden; }
     else if (id === 'rpChk') {
@@ -9688,7 +9831,7 @@ function logout() { SESS = { role: 'guest', id: '', name: '', courses: [], labs:
 /* ---- home bar ---- */
 function renderAcctBar() {
   var box = $('#acctBar');
-  if (!box) { var how = document.querySelector('#home .how'); if (!how) return; how.insertAdjacentHTML('beforebegin', '<div id="acctBar" class="acctbar"></div>'); box = $('#acctBar'); box.addEventListener('click', function (e) { var b = e.target.closest('[data-ac]'); if (!b) return; var a = b.getAttribute('data-ac'); if (a === 'login') openLogin(); else if (a === 'out') logout(); else if (a === 'adm') renderAdmin('tr'); }); }
+  if (!box) { var anchor = document.querySelector('#home .intro') || document.querySelector('#home .modes'); if (!anchor) return; anchor.insertAdjacentHTML('beforebegin', '<div id="acctBar" class="acctbar"></div>'); box = $('#acctBar'); box.addEventListener('click', function (e) { var b = e.target.closest('[data-ac]'); if (!b) return; var a = b.getAttribute('data-ac'); if (a === 'login') openLogin(); else if (a === 'out') logout(); else if (a === 'adm') renderAdmin('tr'); }); }
   if (SESS.role === 'guest') box.innerHTML = '<button class="btn" data-ac="login">دخول المدرّبين والمسؤول</button>';
   else box.innerHTML = '<span>مرحبًا <b>' + esc(SESS.name || SESS.id) + '</b> (' + (SESS.role === 'admin' ? 'مسؤول' : 'مدرّب') + ')</span>' + (SESS.role === 'admin' ? '<button class="btn" data-ac="adm">لوحة المسؤول</button>' : '') + '<button class="btn" data-ac="out">خروج</button>';
 }
@@ -9826,6 +9969,17 @@ $('#acct').addEventListener('click', async function (e) {
 $('#acct').addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.target.id === 'aPw' || e.target.id === 'aId') && $('#aId')) doLogin(); });
 applySess();
 
+</script>
+<script>
+(function(){
+  var a=document.getElementById('startupAlert');
+  try {
+    if(typeof VIEW==='string' && typeof show==='function' && document.querySelector('[data-go="courses"]')) {
+      window.__tamakkanBootDone=true;
+      if(a)a.style.display='none';
+    } else if(a){a.style.display='block';a.textContent='لم تكتمل تهيئة تمكّن، افتح الرابط المنشور في Safari.';}
+  }catch(e){if(a){a.style.display='block';a.textContent='خطأ عند تشغيل تمكّن: '+e.message;}}
+})();
 </script>
 </body>
 </html>
