@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f3a5f"><meta name="apple-mobile-web-app-capable" content="yes"></head><body>
-<title>مختبر الشبكات</title>
+<title>تمكّن لاب – المختبر الذكي</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Readex+Pro:wght@500;600;700&display=swap">
 <style>
@@ -576,7 +576,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
   <header class="top">
     <div class="brand">
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="6" width="32" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 14l5 3-5 3M16 21h8" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><b>مختبر الشبكات</b><small>محاكي أوامر سيسكو IOS للجوال</small></div>
+      <div><b>تمكّن لاب</b><small>المختبر الذكي للشبكات والأنظمة</small></div>
     </div>
     <button class="btn" id="homeBtn" hidden>كل المختبرات</button>
   </header>
@@ -585,13 +585,13 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="prof" id="prof"></div>
     <section class="intro">
       <h1>تدرّب على أجهزة سيسكو من جوالك، بدون جهاز كمبيوتر.</h1>
-      <p>اختر طريقة العمل: تجارب جاهزة مرتبة حسب المواد، أو مساحة فارغة ترسم فيها شبكتك بنفسك.</p>
+      <p>اختر طريقة العمل: تدريب عملي مرتب حسب المواد، أو مساحة فارغة ترسم فيها شبكتك بنفسك.</p>
     </section>
     <div class="modes">
       <button class="mode" data-go="courses">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="4" y="3" width="22" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 11l3 3 5-6M9 20h12" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <b>التجارب الجاهزة</b>
-        <span>تجارب مرتبة حسب المواد، بمهام خطوة بخطوة وتحقق تلقائي من كل مهمة.</span>
+        <b>التدريب العملي</b>
+        <span>تجارب عملية مرتبة حسب المواد، بمهام خطوة بخطوة وتحقق تلقائي من كل مهمة.</span>
       </button>
       <button class="mode" data-go="learn">
         <span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 8l11-4 11 4-11 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12v7c0 2 3 4 6 4s6-2 6-4v-7M26 8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
@@ -618,7 +618,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
   </section>
 
   <section id="courses" hidden>
-    <div class="labhead"><h2>التجارب الجاهزة</h2></div>
+    <div class="labhead"><h2>التدريب العملي</h2></div>
     <div id="courseList"></div>
     <details class="panel adder" id="adder">
       <summary>إضافة تجارب جديدة (للمدرّب)</summary>
@@ -642,7 +642,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="exbar" id="exbar" hidden><span class="extime" id="exTime">--:--</span><span class="exwho" id="exWho"></span><button type="button" class="btn pri" id="exSubmit">تسليم</button></div>
     <div class="labhead">
       <h2 id="labTitle"></h2>
-      <div class="prog"><button type="button" class="btn" id="guideBtn">📘 الدليل</button><button type="button" class="btn" id="repBtn">📄 التقرير</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
+      <div class="prog"><button type="button" class="btn" id="guideBtn">📘 الدليل</button><button type="button" class="btn" id="repBtn">📄 تقرير الإنجاز</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
     </div>
     <div class="seg" role="tablist" id="seg">
       <button role="tab" data-v="term" aria-selected="true">الطرفية</button>
@@ -4719,7 +4719,7 @@ function wuiDrawer(d) {
     var done = lab.done.has(i), hint = !ex && g.hint === i ? '<pre class="wdh">' + esc((t.h || []).join('\n')) + '</pre>' : '';
     return '<li class="' + (done ? 'ok' : '') + '"><span>' + (done ? '✔' : '○') + '</span><div>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + (!ex ? '<br><a class="wl" data-wa="hint" data-arg="' + i + '">' + (g.hint === i ? 'أخفِ الأوامر' : 'أظهر الأوامر') + '</a>' : '') + hint + '</div></li>';
   }).join('');
-  return '<div class="wdrw"><div class="wdrh"><b>' + esc(def.title) + '</b><a class="wx" data-wa="drawer">✕</a></div><div class="wdrp">' + lab.done.size + ' من ' + def.tasks.length + '</div><div class="wdvs">' + devs + '</div><ol class="wdl">' + tasks + '</ol><div class="wenv"><a class="wl" data-wa="guide">📘 دليل المهام (طباعة / حفظ PDF)</a><br><a class="wl" data-wa="report">📄 التقرير (طباعة / حفظ PDF)</a><br><br>بيئة المادة (الدومين والإعدادات) تُحفظ تلقائيًا على هذا الجهاز وتستمر في كل مختبرات المادة.<br><a class="wl" data-wa="envreset">' + (g.envc ? 'اضغط مرة ثانية للتأكيد: حذف كل شيء والبدء من الصفر' : 'إعادة ضبط البيئة (ابدأ من الصفر)') + '</a></div></div>';
+  return '<div class="wdrw"><div class="wdrh"><b>' + esc(def.title) + '</b><a class="wx" data-wa="drawer">✕</a></div><div class="wdrp">' + lab.done.size + ' من ' + def.tasks.length + '</div><div class="wdvs">' + devs + '</div><ol class="wdl">' + tasks + '</ol><div class="wenv"><a class="wl" data-wa="guide">📘 دليل المهام (طباعة / حفظ PDF)</a><br><a class="wl" data-wa="report">📄 تقرير الإنجاز (طباعة / حفظ PDF)</a><br><br>بيئة المادة (الدومين والإعدادات) تُحفظ تلقائيًا على هذا الجهاز وتستمر في كل مختبرات المادة.<br><a class="wl" data-wa="envreset">' + (g.envc ? 'اضغط مرة ثانية للتأكيد: حذف كل شيء والبدء من الصفر' : 'إعادة ضبط البيئة (ابدأ من الصفر)') + '</a></div></div>';
 }
 function wuiDeskIcons(d, list) {
   return '<div class="wicons">' + list.map(function (a) { return '<a class="wicon" data-wa="' + a[0] + '" data-arg="' + a[1] + '"><i>' + a[2] + '</i><span>' + a[3] + '</span></a>'; }).join('') + '</div>';
@@ -9517,15 +9517,15 @@ function repVerify(code) {
 function repHtml(R) {
   var D = repDT(R.now), S = repDT(R.t0), x = [];
   var lbl = R.rows.length ? '' : '';
-  x.push('<div class="rp-head"><div><h1>تقرير تجربة معملية</h1><div class="rp-sub">محاكي «مختبر الشبكات»</div></div><div class="rp-score"><b>' + R.earn + '</b><span>من ' + R.mk.total + '</span><em>' + R.pc + '% — ' + repGrade(R.pc) + '</em></div></div>');
+  x.push('<div class="rp-head"><div><h1>تقرير إنجاز التدريب العملي</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div><div class="rp-score"><b>' + R.earn + '</b><span>من ' + R.mk.total + '</span><em>' + R.pc + '% — ' + repGrade(R.pc) + '</em></div></div>');
   x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td><input id="rpName" value="' + ea(R.who.n) + '" placeholder="اكتب اسمك" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td><th>الرقم الأكاديمي</th><td><input id="rpId" dir="ltr" inputmode="numeric" value="' + ea(R.who.i) + '" placeholder="000000000" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td></tr>' +
     '<tr><th>المقرر</th><td>' + esc(R.course ? R.course.title + ' (' + R.course.code + ')' : labCourse(R.def)) + '</td><th>التجربة</th><td>' + esc(R.def.title) + (R.def.qn ? '<br><small>' + esc(R.def.qn) + '</small>' : '') + '</td></tr>' +
     '<tr><th>تاريخ إصدار التقرير</th><td>' + esc(D.g) + '<br><small>' + esc(D.h) + '</small></td><th>وقت الإصدار</th><td dir="ltr" style="text-align:right">' + D.t + '</td></tr>' +
     '<tr><th>بدء التجربة</th><td>' + esc(S.iso) + '</td><th>المدة</th><td>' + esc(repDur(R.now - R.t0)) + '</td></tr></table>');
   x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + R.rows.map(function (r) {
-    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(استُخدم التلميح)</small>' : '') + '</td><td>' + (r.ok ? '✔ منجزة' : '✘ غير منجزة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
+    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(استُخدم التلميح)</small>' : '') + '</td><td>' + (r.ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
   }).join('') + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + R.earn + ' / ' + R.mk.total + '</td></tr></tfoot></table>');
-  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المنجزة ' + R.rows.filter(function (r) { return r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
+  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المتحققة ' + R.rows.filter(function (r) { return r.ok; }).length + ' وغير المتحققة ' + R.rows.filter(function (r) { return !r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
   x.push('<h3>الحالة النهائية للأجهزة</h3>');
   R.lab.order.forEach(function (n) {
     var d = R.lab.devs[n], st = []; try { st = repState(d); } catch (e) { }
@@ -9573,12 +9573,32 @@ function openGuide(def) {
   if (!def) return;
   openReport(def);
 }
+function repSaveFile(btn) {
+  var pg = document.getElementById('rpPage'); if (!pg) return;
+  if (!REP.gdef) { var R2 = repData(); if (R2) { pg.innerHTML = repHtml(R2); REP.code = R2.code; REP.text = repText(R2); } }
+  var nm = repProf(); var ni = pg.querySelector('#rpName'), ii = pg.querySelector('#rpId');
+  if (ni) ni.setAttribute('value', nm.n || ''); if (ii) ii.setAttribute('value', nm.i || '');
+  var css = Array.prototype.map.call(document.querySelectorAll('style'), function (x) { return x.textContent; }).join('\n');
+  var ttl = (REP.gdef ? 'دليل المهام - ' + REP.gdef.title : 'تقرير الإنجاز - ' + (nm.n || nm.i || 'طالب'));
+  var html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(ttl) + '</title><style>' + css + '#rep{position:static!important;overflow:visible!important}body{display:block!important;background:#e9edf1}</style></head><body class="repopen"><div id="rep" dir="rtl"><div class="rp-bar norep"><button type="button" class="btn pri" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div><div class="rp-page">' + pg.innerHTML + '</div></div></body></html>';
+  var fn = ttl.replace(/[\\\/:*?"<>|]+/g, '-') + '.html';
+  function fallback() {
+    try { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' })); a.download = fn; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); btn.textContent = 'تم الحفظ ✓'; }
+    catch (x) { btn.textContent = 'تعذّر الحفظ — استخدم «نسخ ملخص»'; }
+  }
+  if (window.claude && claude.use) {
+    claude.use('downloads').then(function (d) {
+      if (!d) return fallback();
+      d.save({ filename: fn, data: new Blob([html], { type: 'text/html' }) }).then(function () { btn.textContent = 'تم الحفظ ✓'; }, function (er) { if (!er || er.code !== 'declined') fallback(); });
+    }, fallback);
+  } else fallback();
+}
 function openReport(gdef) {
   if (window.EX && EX.active) { return; }
   var R = gdef ? null : repData(); if (!gdef && !R) return;
   var old = document.getElementById('rep'); if (old) old.remove();
   var el = document.createElement('div'); el.id = 'rep'; el.setAttribute('dir', 'rtl');
-  el.innerHTML = '<div class="rp-bar norep"><button type="button" class="btn pri" id="rpPrint">🖨 طباعة / حفظ PDF</button><button type="button" class="btn" id="rpCopy">نسخ ملخص</button><button type="button" class="btn" id="rpVer">تحقق من رمز</button><button type="button" class="btn" id="rpClose">✕ إغلاق</button></div>' +
+  el.innerHTML = '<div class="rp-bar norep"><button type="button" class="btn pri" id="rpPrint">🖨 طباعة / حفظ PDF</button><button type="button" class="btn pri" id="rpSave">⬇ حفظ ملف التقرير</button><button type="button" class="btn" id="rpCopy">نسخ ملخص</button><button type="button" class="btn" id="rpVer">تحقق من رمز</button><button type="button" class="btn" id="rpClose">✕ إغلاق</button></div>' +
     '<div class="rp-vp norep" id="rpVP" hidden><textarea id="rpVT" dir="ltr" rows="3" placeholder="الصق رمز التحقق NR1..."></textarea><button type="button" class="btn pri" id="rpChk">تحقق</button><div id="rpVR"></div></div>' +
     '<div class="rp-hint norep">للحفظ كـ PDF: اضغط «طباعة / حفظ PDF» ثم اختر «حفظ كـ PDF» (في الآيفون: من نافذة الطباعة اضغط مشاركة ← حفظ في الملفات). يمكنك كتابة اسمك ورقمك قبل الطباعة.</div>' +
     '<div class="rp-page" id="rpPage">' + (gdef ? guideHtml(gdef) : repHtml(R)) + '</div>';
@@ -9598,6 +9618,7 @@ function openReport(gdef) {
       document.title = ttl;
       setTimeout(function () { try { window.print(); } catch (x) { var hn = document.querySelector('.rp-hint'); if (hn) hn.textContent = 'تعذّرت الطباعة في هذه البيئة. افتح الموقع مباشرة في المتصفح ثم أعد المحاولة، أو استخدم «نسخ ملخص».'; } setTimeout(function () { document.title = old; }, 1500); }, 60);
     }
+    else if (id === 'rpSave') { repSaveFile(e.target); }
     else if (id === 'rpCopy') copyText(REP.text, e.target, 'تم النسخ ✓');
     else if (id === 'rpVer') { var vp = document.getElementById('rpVP'); vp.hidden = !vp.hidden; }
     else if (id === 'rpChk') {
