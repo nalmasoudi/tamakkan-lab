@@ -9505,7 +9505,9 @@ function remapIps(def, rnd) {
 function variantDef(P, id) {
   var base = LABS.filter(function (l) { return l.id === P.l; })[0];
   if (!base) return null;
-  var def = remapIps(base, rng(h53(P.e + '|' + id, 3)));
+  var def = P.z ? JSON.parse(JSON.stringify(base)) : remapIps(base, rng(h53(P.e + '|' + id, 3)));
+  if (P.s && P.s.length) { var js = JSON.stringify(def); P.s.forEach(function (p) { js = js.split(JSON.stringify(p[0]).slice(1, -1)).join(JSON.stringify(p[1]).slice(1, -1)); }); def = JSON.parse(js); }
+  if (P.m) def.mk = P.m;
   def.exam = true; def.title = P.t || base.title;
   var dev = def.devs.filter(function (x) { return x[1] === 'router'; })[0] || def.devs.filter(function (x) { return x[1] === 'switch'; })[0];
   if (dev) def.tasks.push({ t: 'اضبط رسالة banner motd على ' + dev[0] + ' بحيث تتضمن رقمك الأكاديمي (' + id + ')', dev: dev[0], h: ['enable', 'configure terminal', 'banner motd #' + id + '#'], ok: [{ k: 'bannerhas', d: dev[0], s: String(id) }] });
@@ -9621,16 +9623,28 @@ function finishExam(P, rec) {
   $('#exbar').hidden = true; try { $('#cmd').blur(); } catch (e) {}
   CUR.lab = null; CUR.dev = null;
   renderDone(P, rec);
+  sendResult(P, rec);
+}
+function sendResult(P, rec) {
+  if (!P.q || rec.pv || EX.pv) return;
+  var st = function (t, c) { var x = document.getElementById('exSend'); if (x) { x.textContent = t; x.className = 'note ' + c; } };
+  st('جارٍ إرسال درجتك للمدرب…', '');
+  var jobs = [];
+  try {
+    if (P.q) jobs.push(fetch('https://ntfy.sh/' + P.q, { method: 'POST', body: rec.sub }).then(function (r) { if (!r.ok) throw 0; }));
+    Promise.all(jobs).then(function () { rec.sent = 1; saveRec(rec); st('تم إرسال درجتك للمدرب تلقائياً ✔', 'exok'); })
+      .catch(function () { st('تعذّر الإرسال (تحقق من الإنترنت). اضغط «إعادة الإرسال».', 'exbad'); });
+  } catch (x) { st('تعذّر الإرسال. اضغط «إعادة الإرسال».', 'exbad'); }
 }
 function renderDone(P, rec) {
   show('examS');
   $('#examS').innerHTML = '<div class="labhead"><h2>' + esc(P.t) + '</h2></div><div class="panel">' +
     '<div class="exbig exok">تم تسليم الاختبار</div>' +
     '<p>الدرجة: <b>' + rec.sc + '</b> من <b>' + rec.N + '</b> مهمة — الرقم <b dir="ltr">' + esc(rec.i) + '</b></p>' +
-    '<p class="note" style="font-size:.95rem;color:var(--fg)"><b>الخطوة الأخيرة:</b> انسخ الرمز التالي كاملاً والصقه في إجابتك على سؤال الاختبار في Blackboard ثم سلّم هناك. بدون هذا الرمز لن تُحتسب درجتك.</p>' +
-    '<textarea class="exres" id="exRes" readonly rows="6">' + esc(rec.sub) + '</textarea>' +
-    '<div class="row2" style="margin-top:8px"><button class="btn pri" data-act="copyres">نسخ الرمز</button><button class="btn" data-act="home">الرئيسية</button></div>' +
-    '<p class="note">إذا تعذّر النسخ اضغط داخل المربع ثم حدّد الكل وانسخ. يمكنك فتح رابط الاختبار نفسه لاحقاً لعرض الرمز مجدداً.</p></div>';
+    (P.q ? '<p class="note" id="exSend">' + (rec.sent ? 'تم إرسال درجتك للمدرب تلقائياً ✔' : 'لم يُرسل بعد') + '</p>' + (rec.sent ? '' : '<button class="btn" data-act="resend">إعادة الإرسال</button>') : '') +
+    '<p class="note">احتفظ بهذه الصفحة حتى تظهر رسالة «تم الإرسال ✔». يمكنك عرض تقريرك الآن.</p>' +
+    '<div class="row2" style="margin-top:8px"><button class="btn pri" data-act="stureport">📄 تقرير الاختبار</button><button class="btn" data-act="home">الرئيسية</button></div>' +
+    '</div>';
 }
 $('#exSubmit').addEventListener('click', function () {
   var b = this;
@@ -9642,7 +9656,7 @@ $('#exSubmit').addEventListener('click', function () {
 /* ---- student home ---- */
 function renderExamHome() {
   $('#examHome').innerHTML = '<div class="labhead"><h2>التقييم</h2></div><div class="modes">' +
-    '<button class="mode" data-act="stu"><b>أنا طالب</b><span>افتح رابط الاختبار الذي وضعه مدرّبك في Blackboard (أو الصقه هنا).</span></button>' +
+    '<button class="mode" data-act="stu"><b>أنا طالب</b><span>افتح رابط الاختبار الذي أرسله مدرّبك (أو الصقه هنا).</span></button>' +
     '<button class="mode" data-act="trn"><b>أنا مدرّب</b><span>أنشئ رابط اختبار لتجربة معيّنة، ثم استورد نتائج الطلاب وراجع التنبيهات.</span></button></div>' +
     '<div class="panel" id="stuBox" style="margin-top:14px" hidden><label class="fld"><span>الصق رابط الاختبار</span><input id="stuLink" class="ltr" placeholder="https://…#x=…"></label><p class="note" id="stuMsg"></p><button class="btn pri" data-act="stugo">فتح الاختبار</button></div>';
 }
@@ -9664,28 +9678,63 @@ function renderTrainer(tab) {
       '<label class="fld"><span>مدة الاختبار بالدقائق</span><input id="tDur" type="number" min="5" max="240" value="45" class="ltr"></label>' +
       '<label class="fld"><span>يفتح الدخول في</span><input id="tFrom" type="datetime-local" class="ltr" value="' + inpDT(now) + '"></label>' +
       '<label class="fld"><span>آخر وقت للدخول</span><input id="tTo" type="datetime-local" class="ltr" value="' + inpDT(now + 3 * 3600000) + '"></label>' +
+      '<details style="margin:8px 0"><summary><b>تخصيص الاختبار</b> (اختياري)</summary>' +
+      '<label class="fld" style="flex-direction:row;gap:8px;align-items:center"><input type="checkbox" id="tZ"><span>أرقام موحّدة لجميع الطلاب (بدل التغيير العشوائي لكل طالب)</span></label>' +
+      '<label class="fld"><span>استبدال أرقام أو أسماء (سطر لكل تغيير: القديم ← الجديد)</span><textarea id="tSub" rows="3" class="ltr" spellcheck="false" placeholder="192.168.0.1 -> 10.10.5.1&#10;R1 -> Riyadh"></textarea></label>' +
+      '<div class="fld"><span>درجة كل مهمة</span><div id="tMk"></div><p class="note" id="tMkT"></p></div></details>' +
       '<p class="note" id="tMsg"></p><button class="btn pri" style="width:100%" data-act="mk">إنشاء رابط الاختبار</button></div><div id="tOut"></div>';
   } else {
-    t += '<div class="panel"><label class="fld"><span>الصق كل إجابات الطلاب من Blackboard (يكفي لصق كل النص دفعة واحدة)</span><textarea id="iTxt" rows="7" spellcheck="false" placeholder="NL1.xxxx.yyyy"></textarea></label>' +
+    var exs = loadExams().filter(function (x) { return x.q; }).reverse();
+    t += '<div class="panel"><h3>النتائج المباشرة</h3>' + (exs.length ? '<label class="fld"><span>الاختبار</span><select id="iEx">' + exs.map(function (x) { return '<option value="' + esc(x.q) + '">' + esc(x.t) + ' — ' + esc(x.e) + '</option>'; }).join('') + '</select></label><button class="btn pri" style="width:100%" data-act="pull">جلب نتائج الطلاب الآن</button><p class="note" id="iSt">تصل النتائج تلقائياً عند تسليم الطلاب، وتتحدّث هنا كل نصف دقيقة. تبقى على الخادم 12 ساعة، فاجلبها في نفس اليوم.</p>' : '<p class="note">أنشئ اختباراً من هذا الجهاز ليظهر هنا.</p>') + '</div>';
+    t += '<div class="panel"><h3>إعدادات التحليل</h3><textarea id="iTxt" hidden></textarea>' +
       '<label class="fld"><span>قائمة أرقام الشعبة (اختياري، رقم في كل سطر) لرصد من لم يسلّم أو سلّم برقم غريب</span><textarea id="iRos" rows="3" spellcheck="false"></textarea></label>' +
       '<label class="fld"><span>الدرجة العظمى</span><input id="iMax" type="number" min="1" value="100" class="ltr"></label>' +
-      '<button class="btn pri" style="width:100%" data-act="imp">تحليل النتائج</button></div><div id="iOut"></div>';
+      '</div><div id="iOut"></div>';
   }
   $('#examT').innerHTML = t;
-  if (tab === 'new') { var sel = $('#tLab'); var sync = function () { var o = sel.options[sel.selectedIndex]; $('#tTitle').value = o.textContent; $('#tDur').value = Math.max(20, Math.round((+o.getAttribute('data-min') || 30) * 1.5 / 5) * 5); }; sel.addEventListener('change', sync); sync(); }
+  clearInterval(EX.poll); if (tab === 'imp' && $('#iEx')) { EX.poll = setInterval(function () { if (!document.getElementById('iEx')) return clearInterval(EX.poll); pullResults(true); }, 30000); }
+  if (tab === 'new') { var sel = $('#tLab'); var sync = function () { var o = sel.options[sel.selectedIndex]; $('#tTitle').value = o.textContent; $('#tDur').value = Math.max(20, Math.round((+o.getAttribute('data-min') || 30) * 1.5 / 5) * 5); }; sel.addEventListener('change', sync); sync();
+    var drawMk = function () {
+      var d = variantDef({ v: 1, e: 'x', l: sel.value, t: '', z: 1 }, '0000'), mk = repPts(d), h = '';
+      d.tasks.forEach(function (t, i) { h += '<div style="display:flex;gap:8px;align-items:center;margin:4px 0"><input class="ltr tmk" type="number" min="0" max="1000" value="' + mk.pts[i] + '" style="width:64px"><span style="font-size:13px">' + (i + 1) + '. ' + esc(t.t) + '</span></div>'; });
+      $('#tMk').innerHTML = h; sumMk();
+    };
+    var sumMk = function () { var s = 0; Array.prototype.forEach.call(document.querySelectorAll('.tmk'), function (x) { s += +x.value || 0; }); $('#tMkT').textContent = 'المجموع: ' + s; };
+    sel.addEventListener('change', drawMk); $('#tMk').addEventListener('input', sumMk); drawMk(); }
+}
+function pullResults(quiet) {
+  var q = $('#iEx') && $('#iEx').value, st = $('#iSt'); if (!q) return;
+  if (!quiet) st.textContent = 'جارٍ الجلب…';
+  var key = 'netlab.pull.' + q, old = ''; try { old = localStorage.getItem(key) || ''; } catch (x) { }
+  fetch('https://ntfy.sh/' + q + '/json?poll=1&since=all').then(function (r) { return r.text(); }).then(function (tx) {
+    var evs = tx.split('\n').filter(Boolean).map(function (l) { try { return JSON.parse(l); } catch (x) { return null; } }).filter(function (v) { return v && v.event === 'message'; });
+    return Promise.all(evs.map(function (v) { return v.attachment && v.attachment.url ? fetch(v.attachment.url).then(function (r) { return r.text(); }).catch(function () { return ''; }) : v.message; })).then(function (ms) {
+      var all = (old + '\n' + ms.join('\n')); try { localStorage.setItem(key, all.slice(-900000)); } catch (x) { }
+      $('#iTxt').value = all;
+      var A = analyze(all, $('#iRos').value, Math.max(1, +$('#iMax').value || 100));
+      EX.last = A; $('#iOut').innerHTML = A.rows.length ? renderAnalysis(A) : '<div class="panel" style="margin-top:14px"><p class="note">لم يسلّم أحد بعد.</p></div>';
+      st.textContent = 'آخر تحديث ' + new Date().toLocaleTimeString('ar-SA') + ' — المسلِّمون: ' + A.rows.length;
+    });
+  }).catch(function () { st.textContent = 'تعذّر الاتصال. تحقق من الإنترنت.'; });
 }
 function makeExam() {
   var lab = $('#tLab').value, dur = +$('#tDur').value, a = new Date($('#tFrom').value).getTime(), b = new Date($('#tTo').value).getTime(), msg = $('#tMsg');
   if (!(dur >= 5)) { msg.textContent = 'المدة غير صحيحة.'; return; }
   if (!(a > 0) || !(b > a)) { msg.textContent = 'تحقق من وقت الفتح والإغلاق.'; return; }
-  var P = { v: 1, e: rid(6), l: lab, d: dur, a: a, b: b, t: $('#tTitle').value.trim() || 'اختبار عملي' };
-  var ex = loadExams(); ex.push({ e: P.e, xs: examSig(P), t: P.t, l: P.l, d: P.d, a: P.a, b: P.b, at: Date.now() }); saveExams(ex);
+  var P = { v: 1, e: rid(6), q: 'tml' + rid(6) + rid(6) + rid(6), l: lab, d: dur, a: a, b: b, t: $('#tTitle').value.trim() || 'اختبار عملي' };
+  if ($('#tZ').checked) P.z = 1;
+  var sb = [], bad = '';
+  ($('#tSub').value || '').split('\n').forEach(function (ln) { ln = ln.trim(); if (!ln) return; var m = /^(.+?)\s*(?:->|=>|←|=)\s*(.+)$/.exec(ln); if (!m) { bad = ln; return; } sb.push([m[1].trim(), m[2].trim()]); });
+  if (bad) { msg.textContent = 'سطر الاستبدال غير مفهوم: ' + bad; return; }
+  if (sb.length) P.s = sb.slice(0, 30);
+  var mk = Array.prototype.map.call(document.querySelectorAll('.tmk'), function (x) { return Math.max(0, +x.value || 0); });
+  if (mk.length && mk.reduce(function (a, b) { return a + b; }, 0) > 0) P.m = mk;
+  var ex = loadExams(); ex.push({ e: P.e, q: P.q, P: P, xs: examSig(P), t: P.t, l: P.l, d: P.d, a: P.a, b: P.b, at: Date.now() }); saveExams(ex);
   var link = examLink(P), pvLink = examLink(P, true);
-  var q = 'افتح الرابط التالي لبدء الاختبار العملي:\n' + link + '\n\nأدخل رقمك الأكاديمي وابدأ، مدة الاختبار ' + P.d + ' دقيقة. عند التسليم سيظهر لك رمز يبدأ بـ NL1 — انسخه كاملاً والصقه في إجابتك هنا ثم سلّم الاختبار.';
+  var q = 'افتح الرابط التالي لبدء الاختبار العملي:\n' + link + '\n\nأدخل رقمك الأكاديمي وابدأ، مدة الاختبار ' + P.d + ' دقيقة.';
   $('#tOut').innerHTML = '<div class="panel" style="margin-top:14px"><h3>جاهز — رمز الاختبار ' + P.e + '</h3>' +
     '<label class="fld"><span>الرابط</span><textarea class="exres" id="oLink" readonly rows="3">' + esc(link) + '</textarea></label>' +
-    '<div class="row2"><button class="btn pri" data-act="cplink">نسخ الرابط</button><button class="btn" data-act="cpq">نسخ نص السؤال لـ Blackboard</button><button class="btn" data-act="pv" data-l="' + esc(pvLink) + '">جرّب كطالب</button></div>' +
-    '<details style="margin-top:10px"><summary>إعدادات Blackboard المقترحة</summary><p class="note">أنشئ اختباراً (Test) فيه سؤال واحد من نوع «مقالي» والصق نص السؤال فيه. اجعل المحاولات: محاولة واحدة. المدة الزمنية: ' + (P.d + 10) + ' دقيقة. وقت التوفر يغطي ' + fmtDT(P.a) + ' إلى ' + fmtDT(P.b) + '. أخفِ الإجابات عن الطلاب.</p></details>' +
+    '<div class="row2"><button class="btn pri" data-act="cplink">نسخ الرابط</button><button class="btn" data-act="pv" data-l="' + esc(pvLink) + '">جرّب كطالب</button></div>' +
     '<p class="note">الرابط يعمل من الصفحة المستضافة التي فتحتها منها. إذا كنت في نسخة معاينة فانسخه بعد رفع المحاكي على رابطه الدائم.</p></div>';
   $('#tOut')._q = q; $('#tOut')._link = link;
 }
@@ -9735,7 +9784,7 @@ function analyze(text, rosterTxt, max) {
     if (gaps.length >= 15 && gaps.filter(function (x) { return x <= 1; }).length / gaps.length > 0.4) add('إدخال أسرع من المعتاد', 'w');
     if ((R.t1 - R.t0) / 1000 < R.d * 60 * 0.2 && per >= 0.8) add('أنهى بسرعة غير معتادة', 'w');
     if (ros && !ros[R.i]) add('رقمه ليس في قائمة الشعبة', 'r');
-    r.flags = f; r.per = per; r.mins = Math.round((R.t1 - R.t0) / 600) / 10; r.grade = Math.round(per * max * 10) / 10;
+    r.flags = f; r.per = per; r.mins = Math.round((R.t1 - R.t0) / 600) / 10; r.grade = Math.round(markFrac(R, per) * max * 10) / 10;
     r.left = leftover(R);
   });
   for (var i = 0; i < rows.length; i++) for (var j = i + 1; j < rows.length; j++) {
@@ -9749,18 +9798,67 @@ function analyze(text, rosterTxt, max) {
   rows.sort(function (a, b) { return (a.R.i > b.R.i) ? 1 : -1; });
   return { rows: rows, missing: missing, bad: bad, max: max };
 }
+function statsPanel(A) {
+  var n = A.rows.length; if (!n) return '';
+  var g = A.rows.map(function (r) { return r.grade; }), sum = g.reduce(function (a, b) { return a + b; }, 0);
+  var mx = Math.max.apply(null, g), mn = Math.min.apply(null, g), pass = g.filter(function (x) { return x >= A.max * 0.6; }).length;
+  var bins = [0, 0, 0, 0, 0], names = ['أقل من 60%', '60–69%', '70–79%', '80–89%', '90%+'];
+  g.forEach(function (x) { var p = x / A.max * 100; bins[p < 60 ? 0 : p < 70 ? 1 : p < 80 ? 2 : p < 90 ? 3 : 4]++; });
+  var h = '<div class="panel" style="margin-top:14px"><h3>إحصاءات الشعبة</h3><p>المتوسط: <b>' + (Math.round(sum / n * 10) / 10) + '</b> — الأعلى: <b>' + mx + '</b> — الأدنى: <b>' + mn + '</b> — الناجحون (60%+): <b>' + pass + '/' + n + '</b></p>';
+  bins.forEach(function (c, i) { h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:13px"><span style="width:84px">' + names[i] + '</span><span style="flex:1;background:var(--line);border-radius:6px;height:10px;overflow:hidden"><i style="display:block;height:100%;width:' + Math.round(c / n * 100) + '%;background:var(--accent)"></i></span><b class="num">' + c + '</b></div>'; });
+  var byLab = {}; A.rows.forEach(function (r) { (byLab[r.R.l] = byLab[r.R.l] || []).push(r); });
+  Object.keys(byLab).forEach(function (l) {
+    var base = LABS.filter(function (x) { return x.id === l; })[0], rs = byLab[l], N = rs[0].R.N || 0; if (!base || !N) return;
+    h += '<h3 style="margin-top:14px">تحليل المهام — ' + esc(base.title || l) + '</h3><div class="tblwrap"><table class="extbl"><thead><tr><th>المهمة</th><th>نسبة الإنجاز</th></tr></thead><tbody>';
+    var rows = [];
+    for (var i = 0; i < N; i++) { var c = rs.filter(function (r) { return r.R.k.indexOf(i) >= 0; }).length; rows.push([i, c]); }
+    rows.sort(function (a, b) { return a[1] - b[1]; }).forEach(function (x) {
+      var t = base.tasks[x[0]] ? base.tasks[x[0]].t : 'مهمة ' + (x[0] + 1), p = Math.round(x[1] / rs.length * 100);
+      h += '<tr><td style="font-size:13px">' + (x[0] + 1) + '. ' + esc(t) + '</td><td class="num ' + (p < 50 ? 'exbad' : '') + '"><b>' + p + '%</b></td></tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  return h + '<p class="note">المهام مرتبة من الأضعف؛ ما تحت 50% غالباً يحتاج إعادة شرح.</p></div>';
+}
 function renderAnalysis(A) {
   var fl = A.rows.filter(function (r) { return r.flags.length; });
   var h = '<div class="panel" style="margin-top:14px"><h3>الملخص</h3><p>عدد المسلِّمين: <b>' + A.rows.length + '</b> — بحاجة لمراجعة: <b class="' + (fl.length ? 'exbad' : 'exok') + '">' + fl.length + '</b>' + (A.missing.length ? ' — لم يسلّموا: <b class="exwarn">' + A.missing.length + '</b>' : '') + (A.bad ? ' — رموز تالفة: <b class="exbad">' + A.bad + '</b>' : '') + '</p>';
   if (A.missing.length) h += '<p class="note">لم يسلّم: <span dir="ltr">' + esc(A.missing.join('، ')) + '</span></p>';
   h += '<div class="row2"><button class="btn pri" data-act="csv">نسخ CSV</button><button class="btn" data-act="cptab">نسخ كجدول (للصق في Excel)</button></div></div>';
+  h += statsPanel(A);
   h += '<div class="panel" style="margin-top:14px"><h3>الطلاب</h3><div class="tblwrap"><table class="extbl"><thead><tr><th>الرقم / الاسم</th><th>الدرجة</th><th>المهام</th><th>دقائق</th><th>تنبيهات</th></tr></thead><tbody>' +
-    A.rows.slice().sort(function (a, b) { return (b.flags.length ? 1 : 0) - (a.flags.length ? 1 : 0) || (a.R.i > b.R.i ? 1 : -1); }).map(function (r) {
-      return '<tr><td class="num">' + esc(r.R.i) + '<br><span style="font-family:var(--font-body);direction:rtl;display:inline-block">' + esc(r.R.n || '') + '</span></td><td class="num"><b>' + r.grade + '</b></td><td class="num">' + r.R.k.length + '/' + r.R.N + '</td><td class="num">' + r.mins + '</td><td>' +
+    A.rows.map(function (r, ix) { r.ix = ix; return r; }).sort(function (a, b) { return (b.flags.length ? 1 : 0) - (a.flags.length ? 1 : 0) || (a.R.i > b.R.i ? 1 : -1); }).map(function (r) {
+      return '<tr><td class="num">' + esc(r.R.i) + ' <button class="btn" style="padding:2px 8px;font-size:12px" data-act="rowrep" data-i="' + r.ix + '">تقرير</button><br><span style="font-family:var(--font-body);direction:rtl;display:inline-block">' + esc(r.R.n || '') + '</span></td><td class="num"><b>' + r.grade + '</b></td><td class="num">' + r.R.k.length + '/' + r.R.N + '</td><td class="num">' + r.mins + '</td><td>' +
         (r.flags.length ? r.flags.map(function (x) { return '<span class="flag ' + (x.s === 'w' ? 'w' : '') + '">' + esc(x.t) + '</span>'; }).join('') : '<span class="exok">—</span>') + '</td></tr>';
     }).join('') + '</tbody></table></div>' +
     '<p class="note">الأحمر يستدعي المراجعة، والأصفر مؤشر فقط. هذه التنبيهات قرائن وليست حكماً: اسأل الطالب دقيقتين عن إعداده قبل أي إجراء.</p></div>';
   return h;
+}
+function examP(R) {
+  var g = loadExams().filter(function (x) { return x.e === R.e; })[0], P = g && g.P ? g.P : { v: 1, e: R.e, l: R.l, d: R.d, a: R.a, b: R.b, t: '' };
+  return P;
+}
+function markFrac(R, per) {
+  try { var d = variantDef(examP(R), R.i), mk = repPts(d); if (mk.total && mk.pts.length === (R.N || 0)) return R.k.reduce(function (s, i) { return s + (mk.pts[i] || 0); }, 0) / mk.total; } catch (x) { }
+  return per;
+}
+function examRepHtml(r, trainer) {
+  var R = r.R, D = repDT(Date.now()), S = repDT(R.t0), d = null, base = LABS.filter(function (l) { return l.id === R.l; })[0];
+  try { d = variantDef(examP(R), R.i); } catch (x) { }
+  var mk = d ? repPts(d) : { pts: [], total: 100, eq: true }, tasks = d ? d.tasks : [], earn = 0;
+  var rows = tasks.map(function (t, i) { var ok = R.k.indexOf(i) >= 0; if (ok) earn += mk.pts[i] || 0; return '<tr class="' + (ok ? 'ok' : 'no') + '"><td>' + (i + 1) + '</td><td>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + '</td><td>' + (ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (ok ? mk.pts[i] : 0) + ' / ' + mk.pts[i] + '</td></tr>'; }).join('');
+  var pc = mk.total ? Math.round(earn / mk.total * 100) : 0, x = [];
+  x.push('<div class="rp-head"><img class="rp-logo" alt="" src="' + ((document.getElementById('heroLogo') || {}).src || '') + '"><div><h1>تقرير الاختبار العملي</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div></div>');
+  x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td>' + esc(R.n || '—') + '</td><th>الرقم الأكاديمي</th><td dir="ltr" style="text-align:right">' + esc(R.i) + '</td></tr>' +
+    '<tr><th>الاختبار</th><td>' + esc(base ? base.title : R.l) + '</td><th>رمز الاختبار</th><td dir="ltr" style="text-align:right">' + esc(R.e) + '</td></tr>' +
+    '<tr><th>بدء الاختبار</th><td>' + esc(S.iso) + '</td><th>المدة المستغرقة / المسموحة</th><td>' + esc(repDur((R.t1 - R.t0))) + ' / ' + R.d + ' دقيقة</td></tr>' +
+    '<tr><th>تاريخ إصدار التقرير</th><td>' + esc(D.g) + '</td><th>النتيجة</th><td><b>' + earn + ' / ' + mk.total + '</b> (' + pc + '% — ' + repGrade(pc) + ')</td></tr></table>');
+  x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + earn + ' / ' + mk.total + '</td></tr></tfoot></table>');
+  if (trainer && r.flags && r.flags.length) x.push('<h3>تنبيهات للمراجعة</h3><ul>' + r.flags.map(function (f) { return '<li>' + esc(f.t) + '</li>'; }).join('') + '</ul>');
+  x.push('<h3>ملاحظات المدرب</h3><div class="rp-box"></div><div class="rp-sign"><span>اسم المدرب: ____________________</span><span>التوقيع: ____________</span><span>الدرجة النهائية: ______</span></div>');
+  x.push('<div class="rp-ver"><b>رمز النتيجة</b> (للتحقق من سلامة التقرير):<div dir="ltr" class="rp-code">' + esc(r.code) + '</div></div>');
+  var text = 'تقرير الاختبار — ' + (R.n || '') + ' (' + R.i + ')\n' + (base ? base.title : R.l) + '\nالنتيجة: ' + earn + ' / ' + mk.total + '\n' + r.code;
+  return { html: x.join(''), text: text, code: r.code, ttl: 'تقرير الاختبار - ' + (R.n || R.i) };
 }
 function csvOf(A) {
   var q = function (s) { s = String(s == null ? '' : s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -9796,6 +9894,10 @@ function stuGo(link, msgEl) {
     }
     else if (a === 'csv') copyText(csvOf(EX.last), b);
     else if (a === 'cptab') copyText(csvOf(EX.last).replace(/\r\n/g, '\n').split('\n').map(function (r) { return r.replace(/"([^"]*)"/g, '$1').replace(/,/g, '\t'); }).join('\n'), b);
+    else if (a === 'pull') pullResults(false);
+    else if (a === 'resend') { var g3 = EX.gate; var rc = g3 && loadRec(g3.P.e); if (rc) sendResult(g3.P, rc); }
+    else if (a === 'stureport') { var g4 = EX.gate, rc4 = g4 && loadRec(g4.P.e); if (rc4 && rc4.sub) { var m4 = /NL1\.[A-Za-z0-9_-]+\.[0-9a-f]+/.exec(rc4.sub); if (m4) openReport(null, examRepHtml(readResult(m4[0]), false)); } }
+    else if (a === 'rowrep') { var rw = EX.last && EX.last.rows[+b.getAttribute('data-i')]; if (rw) openReport(null, examRepHtml(rw, true)); }
     else if (a === 'copyres') copyText($('#exRes').value, b);
     else if (a === 'resume') { var g = EX.gate, rec = loadRec(g.P.e); if (rec) startRun(g.P, rec, false); }
     else if (a === 'start') {
@@ -9831,7 +9933,7 @@ function repWho() {
   return { n: n, i: i };
 }
 function repPts(def) {
-  var N = def.tasks.length, tot = def.marks || 100, a = MARKS[def.id];
+  var N = def.tasks.length, tot = def.marks || 100, a = def.mk && def.mk.length === N ? def.mk : MARKS[def.id];
   if (a && a.length === N) return { pts: a.slice(), total: a.reduce(function (x, y) { return x + y; }, 0), eq: false };
   var base = Math.floor(tot / N), r = tot - base * N, o = [];
   for (var i = 0; i < N; i++) o.push(base + (i < r ? 1 : 0));
@@ -9957,11 +10059,11 @@ function openGuide(def) {
 }
 function repBuild() {
   var pg = document.getElementById('rpPage'); if (!pg) return null;
-  if (!REP.gdef) { var R2 = repData(); if (R2) { pg.innerHTML = repHtml(R2); REP.code = R2.code; REP.text = repText(R2); } }
+  if (!REP.gdef && !REP.custom) { var R2 = repData(); if (R2) { pg.innerHTML = repHtml(R2); REP.code = R2.code; REP.text = repText(R2); } }
   var nm = repProf(); var ni = pg.querySelector('#rpName'), ii = pg.querySelector('#rpId');
   if (ni) ni.setAttribute('value', nm.n || ''); if (ii) ii.setAttribute('value', nm.i || '');
   var css = Array.prototype.map.call(document.querySelectorAll('style'), function (x) { return x.textContent; }).join('\n');
-  var ttl = (REP.gdef ? 'دليل المهام - ' + REP.gdef.title : 'تقرير الإنجاز - ' + (nm.n || nm.i || 'طالب'));
+  var ttl = (REP.custom ? REP.custom.ttl : REP.gdef ? 'دليل المهام - ' + REP.gdef.title : 'تقرير الإنجاز - ' + (nm.n || nm.i || 'طالب'));
   var html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(ttl) + '</title><style>' + css + '#rep{position:static!important;overflow:visible!important}body{display:block!important;background:#e9edf1}</style></head><body><div id="rep" dir="rtl"><div class="rp-bar norep"><button type="button" class="btn pri" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div><div class="rp-page">' + pg.innerHTML + '</div></div></body></html>';
   return { html: html, fn: ttl.replace(/[\\\/:*?"<>|]+/g, '-') + '.html', ttl: ttl };
 }
@@ -9989,17 +10091,17 @@ function repSaveFile(btn) {
     }, fallback);
   } else fallback();
 }
-function openReport(gdef) {
+function openReport(gdef, custom) {
   if (window.EX && EX.active) { return; }
-  var R = gdef ? null : repData(); if (!gdef && !R) return;
+  var R = (gdef || custom) ? null : repData(); if (!gdef && !custom && !R) return;
   var old = document.getElementById('rep'); if (old) old.remove();
   var el = document.createElement('div'); el.id = 'rep'; el.setAttribute('dir', 'rtl');
   el.innerHTML = '<div class="rp-bar norep"><button type="button" class="btn pri" id="rpPrint">🖨 طباعة / حفظ PDF</button><button type="button" class="btn pri" id="rpSave">⬇ حفظ ملف التقرير</button><button type="button" class="btn" id="rpCopy">نسخ ملخص</button><button type="button" class="btn" id="rpVer">تحقق من رمز</button><button type="button" class="btn" id="rpClose">✕ إغلاق</button></div>' +
     '<div class="rp-vp norep" id="rpVP" hidden><textarea id="rpVT" dir="ltr" rows="3" placeholder="الصق رمز التحقق NR1..."></textarea><button type="button" class="btn pri" id="rpChk">تحقق</button><div id="rpVR"></div></div>' +
     '<div class="rp-hint norep">للحفظ كـ PDF: اضغط «طباعة / حفظ PDF» ثم اختر «حفظ كـ PDF» (في الآيفون: من نافذة الطباعة اضغط مشاركة ← حفظ في الملفات). يمكنك كتابة اسمك ورقمك قبل الطباعة.</div>' +
-    '<div class="rp-page" id="rpPage">' + (gdef ? guideHtml(gdef) : repHtml(R)) + '</div>';
-  REP.gdef = gdef || null;
-  document.documentElement.appendChild(el); if (R) { REP.code = R.code; REP.text = repText(R); } else { REP.code = ''; REP.text = guideText(gdef); }
+    '<div class="rp-page" id="rpPage">' + (gdef ? guideHtml(gdef) : custom ? custom.html : repHtml(R)) + '</div>';
+  REP.gdef = gdef || null; REP.custom = custom || null;
+  document.documentElement.appendChild(el); if (R) { REP.code = R.code; REP.text = repText(R); } else { REP.code = custom ? custom.code : ''; REP.text = custom ? custom.text : guideText(gdef); }
   document.body.classList.add('repopen');
   el.addEventListener('input', function (e) {
     if (e.target.id === 'rpName' || e.target.id === 'rpId') { var p = repProf(); p.n = $('#rpName').value; p.i = $('#rpId').value; repSaveProf(p); }
