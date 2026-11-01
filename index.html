@@ -571,6 +571,25 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 .rp-p{margin:4px 0;font-size:13px;line-height:1.6}.rp-ul{margin:4px 0;padding-inline-start:20px;font-size:13px;line-height:1.7}
 .rp-task{border:1px solid #c9d2da;border-radius:6px;margin:8px 0;break-inside:avoid;overflow:hidden}.rp-th{display:flex;align-items:center;gap:8px;background:#eef2f6;padding:7px 8px}.rp-n{flex:none;width:26px;height:26px;border-radius:50%;background:#0B1626;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.rp-tt{flex:1;font-size:13px;line-height:1.5}.rp-tm{flex:none;font-size:12px;font-weight:700;color:#0B1626}.rp-cb{flex:none;font-size:20px;line-height:1}.rp-st{padding:6px 8px;font-size:12px}.rp-st pre{margin-top:4px}
 
+.qbar{flex:none;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--gold);border-radius:12px;padding:4px 6px;margin-bottom:6px}
+.qbar button{flex:none;width:34px;height:34px;min-height:0;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.3rem;line-height:1}
+.qmid{flex:1;min-width:0;cursor:pointer}.qmid b{font-size:.72rem;color:var(--muted);font-weight:600}
+.qtxt{font-size:.84rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.qbar.open .qtxt{display:block;-webkit-line-clamp:unset;max-height:min(34dvh,200px);overflow:auto}
+.qbar.qdone{border-inline-start-color:var(--ok)}
+#pcsheet{position:fixed;inset:0;z-index:9100;background:rgba(11,22,38,.55);display:flex;align-items:flex-end;justify-content:center}
+.pcs-card{background:var(--surface);color:var(--fg);width:min(100%,460px);border-radius:20px 20px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.25);max-height:88dvh;overflow:auto}
+@media(min-width:620px){#pcsheet{align-items:center}.pcs-card{border-radius:20px}}
+.pcs-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}.pcs-h b{font-family:var(--font-display);font-size:1.05rem;flex:1}.pcs-h span{color:var(--muted);font-size:.8rem}
+.pcs-h button{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.1rem}
+.pcs-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcs-tiles button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 8px;border:1px solid var(--line);border-radius:16px;background:var(--bg);text-align:center}
+.pcs-tiles i{font-style:normal;font-size:2rem;line-height:1}.pcs-tiles b{font-size:.95rem;direction:ltr}.pcs-tiles small{color:var(--muted);font-size:.78rem;direction:ltr}
+.pcs-mode{display:flex;gap:18px;margin:4px 0 10px}.pcs-mode label{display:flex;align-items:center;gap:6px}
+.pcs-f{display:grid;gap:8px}.pcs-f label{display:grid;gap:3px;font-size:.84rem;color:var(--muted);direction:ltr;text-align:left}
+.pcs-f input{font:inherit;font-family:var(--font-mono);font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+.pcs-f input:disabled{opacity:.5}
+.pcs-msg{min-height:1.4em;margin:8px 0 4px;font-size:.88rem}.pcs-act{display:flex;gap:8px}.pcs-act .btn{flex:1}
 /* ===== هوية تمكّن لاب — ألوان شعار القسم ===== */
 :root{--bg:#F1F0F3;--surface:#FFFFFF;--fg:#0B1626;--muted:#56616C;--line:#D9DCE0;--accent:#3F6B56;--accent-fg:#FFFFFF;--ok:#2E7D57;--warn:#9A7424;--gold:#B89B5E;--ink:#0B1626;--font-display:"Alexandria","Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#09111C;--surface:#111D2D;--fg:#E8EDF2;--muted:#9AA7B4;--line:#223245;--accent:#7FB59A;--accent-fg:#08121C;--gold:#D4B779;--ink:#0B1626}}
@@ -684,6 +703,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="grid">
       <div class="pane" data-pane="term">
         <div class="devtabs" id="devTabs" role="tablist"></div>
+        <div class="qbar" id="qbar" hidden><button type="button" id="qPrev" aria-label="المهمة السابقة">›</button><div class="qmid"><b id="qNum"></b><div id="qTxt" class="qtxt"></div></div><button type="button" id="qNext" aria-label="المهمة التالية">‹</button></div>
         <div class="miniwrap" id="miniWrap"><div class="zctl"><button type="button" data-zt="mini" data-zoom="in" aria-label="تكبير">+</button><button type="button" data-zt="mini" data-zoom="out" aria-label="تصغير">−</button><button type="button" data-zt="mini" data-zoom="fit">ملاءمة</button><button type="button" id="diagBig" style="margin-inline-start:auto">كبّر الرسم</button><button type="button" id="termBig">كبّر الطرفية</button></div><div class="mini" id="miniTopo" aria-label="مخطط الشبكة"></div></div>
         <div class="wui" id="wui" hidden></div>
         <div class="term" id="term" role="log" aria-live="polite" tabindex="0"><div id="termOut"></div><div class="live" id="live" aria-hidden="true"></div></div>
@@ -4748,8 +4768,8 @@ function wuiDrawer(d) {
   var lab = CUR.lab, W = d.win, g = W.g, def = lab.def, ex = window.EX && EX.active;
   var devs = lab.order.map(function (n) { var x = lab.devs[n]; return '<a class="wdv' + (x === d ? ' on' : '') + '" data-wa="dev" data-arg="' + esc(n) + '">' + esc(n) + '</a>'; }).join('');
   var tasks = def.tasks.map(function (t, i) {
-    var done = lab.done.has(i), hint = !ex && g.hint === i ? '<pre class="wdh">' + esc((t.h || []).join('\n')) + '</pre>' : '';
-    return '<li class="' + (done ? 'ok' : '') + '"><span>' + (done ? '✔' : '○') + '</span><div>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + (!ex ? '<br><a class="wl" data-wa="hint" data-arg="' + i + '">' + (g.hint === i ? 'أخفِ الأوامر' : 'أظهر الأوامر') + '</a>' : '') + hint + '</div></li>';
+    var done = lab.done.has(i), hint = !ex && g.hint === i ? '<pre class="wdh">' + esc(hintMask(t.h || [])) + '</pre>' : '';
+    return '<li class="' + (done ? 'ok' : '') + '"><span>' + (done ? '✔' : '○') + '</span><div>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + (!ex ? '<br><a class="wl" data-wa="hint" data-arg="' + i + '">' + (g.hint === i ? 'أخفِ التلميح' : '💡 تلميح') + '</a>' : '') + hint + '</div></li>';
   }).join('');
   return '<div class="wdrw"><div class="wdrh"><b>' + esc(def.title) + '</b><a class="wx" data-wa="drawer">✕</a></div><div class="wdrp">' + lab.done.size + ' من ' + def.tasks.length + '</div><div class="wdvs">' + devs + '</div><ol class="wdl">' + tasks + '</ol><div class="wenv"><a class="wl" data-wa="guide">📘 دليل المهام (طباعة / حفظ PDF)</a><br><a class="wl" data-wa="report">📄 تقرير الإنجاز (طباعة / حفظ PDF)</a><br><br>بيئة المادة (الدومين والإعدادات) تُحفظ تلقائيًا على هذا الجهاز وتستمر في كل مختبرات المادة.<br><a class="wl" data-wa="envreset">' + (g.envc ? 'اضغط مرة ثانية للتأكيد: حذف كل شيء والبدء من الصفر' : 'إعادة ضبط البيئة (ابدأ من الصفر)') + '</a></div></div>';
 }
@@ -5056,7 +5076,7 @@ function wuiAct(d, act, arg, vals) {
     case 'ps': return wuiAct(d, 'open', 'ps', vals);
     case 'start': g.start = !g.start; return;
     case 'drawer': g.drawer = !g.drawer; return;
-    case 'hint': g.hint = g.hint === +arg ? -1 : +arg; if (g.hint >= 0) { var l0 = lab0(); l0.hints = l0.hints || {}; l0.hints[+arg] = 1; } return;
+    case 'hint': { var l0 = lab0(); l0.hints = l0.hints || {}; if (g.hint === +arg) { g.hint = -1; } else { g.hint = +arg; l0.hints[+arg] = 1; } return; }
     case 'fullx': W.full = false; return;
     case 'fullon': W.full = true; return;
     case 'min': g.scr = 'desk'; return;
@@ -6321,10 +6341,14 @@ function ipTask(dev, t, ifs, first, extra) {
     h.push('no shutdown');
     ok.push(ipc(dev, x[0], x[1], x[2]));
   });
+  if (/(العناوين|عناوين الواجهات)\s*$/.test(t) && /^[^:]+:\s*اسم الجهاز/.test(t)) {
+    var hn = ''; (extra || []).forEach(function (x) { var m = /^hostname\s+(\S+)/.exec(x); if (m) hn = m[1]; });
+    t = dev + ': ' + (hn ? 'سمِّ الجهاز ' + hn + '، و' : '') + 'عنوِن ' + ifs.map(function (x, k) { return (k ? 'والمنفذ ' : 'المنفذ ') + x[0] + ' بالعنوان ' + x[1] + ' وقناع الشبكة ' + x[2] + (x[3] ? ' (طرف DCE: اضبط سرعة الساعة 128000)' : ''); }).join('، ') + '، ثم شغّل المنافذ';
+  }
   return T(dev, t, h, ok);
 }
 function hostTask(dev, name, first) { return T(dev, 'اضبط اسم الجهاز ' + name, (first ? EC.slice() : []).concat(['hostname ' + name]), [{ k: 'host', d: dev, v: name }]); }
-function pcTask(dev, ip, m, gw) { return T(dev, 'اضبط ' + dev + ' على ' + ip + (gw ? ' والبوابة ' + gw : ''), ['ip ' + ip + ' ' + m + (gw ? ' ' + gw : '')], [pcc(dev, ip, m, gw)]); }
+function pcTask(dev, ip, m, gw) { return T(dev, 'اضبط ' + dev + ' على العنوان ' + ip + ' وقناع الشبكة ' + m + (gw ? ' والبوابة ' + gw : ''), ['ip ' + ip + ' ' + m + (gw ? ' ' + gw : '')], [pcc(dev, ip, m, gw)]); }
 
 var R1P = ['enable', 'configure terminal', 'hostname R1', 'interface g0/0', 'ip address 209.165.200.225 255.255.255.248', 'no shutdown', 'interface s0/0/0', 'ip address 10.1.1.1 255.255.255.252', 'clock rate 128000', 'no shutdown', 'exit', 'ip route 0.0.0.0 0.0.0.0 10.1.1.2', 'end'], R2P = ['enable', 'configure terminal', 'hostname R2', 'interface s0/0/0', 'ip address 10.1.1.2 255.255.255.252', 'no shutdown', 'interface s0/0/1', 'ip address 10.2.2.2 255.255.255.252', 'clock rate 128000', 'no shutdown', 'exit', 'ip route 209.165.200.224 255.255.255.248 10.1.1.1', 'ip route 192.168.3.0 255.255.255.0 10.2.2.1', 'end'], R3P = ['enable', 'configure terminal', 'hostname R3', 'interface s0/0/1', 'ip address 10.2.2.1 255.255.255.252', 'no shutdown', 'interface g0/1', 'ip address 192.168.3.1 255.255.255.0', 'no shutdown', 'exit', 'ip route 0.0.0.0 0.0.0.0 10.2.2.2', 'end'], R2Q1 = ['enable', 'configure terminal', 'hostname R2', 'interface s0/0/0', 'ip address 10.1.1.2 255.255.255.252', 'no shutdown', 'interface s0/0/1', 'ip address 10.2.2.2 255.255.255.252', 'clock rate 128000', 'no shutdown', 'end'], ASAP = ['enable', 'configure terminal', 'hostname CCNAS-ASA', 'domain-name ccnasecurity.com', 'enable password cisco12345', 'interface vlan 1', 'nameif inside', 'security-level 100', 'ip address 192.168.1.1 255.255.255.0', 'interface vlan 2', 'nameif outside', 'security-level 0', 'ip address 209.165.200.226 255.255.255.248', 'interface vlan 3', 'nameif dmz', 'security-level 70', 'ip address 192.168.2.1 255.255.255.0', 'interface e0/0', 'switchport access vlan 2', 'interface e0/2', 'switchport access vlan 3', 'exit', 'route outside 0.0.0.0 0.0.0.0 209.165.200.225', 'object network inside-net', 'subnet 192.168.1.0 255.255.255.0', 'nat (inside,outside) dynamic interface', 'exit', 'policy-map global_policy', 'class inspection_default', 'inspect icmp', 'end'];
 
@@ -7231,6 +7255,194 @@ function buildLab(def) {
   return lab;
 }
 
+/* نصوص المهام الصريحة (أسئلة بقيم محددة بدون حل). تُطبَّق بعد تعريف التجارب: QT[معرّف][رقم المهمة من 1] = نص */
+var QT = {
+  ospf: {
+    7: 'R1: فعّل OSPF بالعملية رقم 10 ومعرّف الموجه 1.1.1.1، وأعلن الشبكات 192.168.1.0 و192.168.12.0 و192.168.13.0 في المنطقة 0، واجعل المنفذ g0/0 سلبياً',
+    8: 'R2: فعّل OSPF بالعملية رقم 10 ومعرّف الموجه 2.2.2.2، وأعلن الشبكات 192.168.2.0 و192.168.12.0 و192.168.23.0 في المنطقة 0، واجعل المنفذ g0/0 سلبياً',
+    9: 'R3: فعّل OSPF بالعملية رقم 10 ومعرّف الموجه 3.3.3.3، وأعلن الشبكات 192.168.3.0 و192.168.13.0 و192.168.23.0 في المنطقة 0، واجعل المنفذ g0/0 سلبياً',
+    11: 'R1: اعرض جدول التوجيه وتأكد من ظهور مسار OSPF (رمز O) إلى الشبكة 192.168.3.0'
+  },
+  dhcpv4: {
+    1: 'R1: سمِّ الجهاز R1، واضبط المنفذ g0/0/0 على العنوان 10.0.0.1 وقناع الشبكة 255.255.255.252، ثم شغّل المنفذ g0/0/1',
+    2: 'R1: أنشئ الواجهة الفرعية g0/0/1.100 (تغليف dot1q للـ VLAN 100) بالعنوان 192.168.1.1 وقناع 255.255.255.192، والواجهة g0/0/1.200 (VLAN 200) بالعنوان 192.168.1.65 وقناع 255.255.255.224',
+    3: 'R2: سمِّ الجهاز R2، واضبط المنفذ g0/0/0 على العنوان 10.0.0.2 وقناع 255.255.255.252، والمنفذ g0/0/1 على العنوان 192.168.1.97 وقناع 255.255.255.224، وشغّلهما',
+    5: 'R2: أضف مساراً افتراضياً (0.0.0.0/0) يمر عبر R1 على العنوان 10.0.0.1',
+    8: 'R1: استثنِ العناوين من 192.168.1.1 إلى 192.168.1.5، ومن 192.168.1.97 إلى 192.168.1.101 من التوزيع',
+    9: 'R1: أنشئ المجمّع R1_Client_LAN للشبكة 192.168.1.0 بقناع 255.255.255.192 والبوابة 192.168.1.1 والنطاق ccna-lab.com ومدة التأجير 2 يوم و12 ساعة و30 دقيقة',
+    10: 'R1: أنشئ المجمّع R2_Client_LAN للشبكة 192.168.1.96 بقناع 255.255.255.224 والبوابة 192.168.1.97',
+    11: 'R2: فعّل ترحيل DHCP على المنفذ g0/0/1 باتجاه خادم R1 على العنوان 10.0.0.1'
+  },
+  dhcpv6: {
+    5: 'R1: فعّل توجيه IPv6، واضبط g0/0/0 على 2001:db8:acad:2::1/64 وg0/0/1 على 2001:db8:acad:1::1/64، وشغّلهما، وأضف مساراً افتراضياً عبر 2001:db8:acad:2::2',
+    6: 'R2: فعّل توجيه IPv6، واضبط g0/0/0 على 2001:db8:acad:2::2/64 وg0/0/1 على 2001:db8:acad:3::1/64، وشغّلهما، وأضف مساراً افتراضياً عبر 2001:db8:acad:2::1',
+    7: 'R1: أنشئ مجمّع DHCPv6 عديم الجنسية باسم R1-STATELESS بخادم DNS 2001:db8:acad::254 والنطاق STATELESS.com',
+    8: 'R1: اربط المجمّع R1-STATELESS بالمنفذ g0/0/1 وفعّل العلم other-config-flag',
+    9: 'R1: أنشئ مجمّع DHCPv6 بحالة باسم R2-STATEFUL بالبادئة 2001:db8:acad:3:aaa::/80 وخادم DNS 2001:db8:acad::254 والنطاق STATEFUL.com',
+    10: 'R1: اربط المجمّع R2-STATEFUL بالمنفذ g0/0/0',
+    11: 'R2: على المنفذ g0/0/1 فعّل العلم managed-config-flag واضبط ترحيل DHCPv6 إلى 2001:db8:acad:2::1 عبر g0/0/0'
+  }
+};
+QT.intervlan = {
+  1: 'S1: أنشئ VLAN 10 باسم Management وVLAN 20 باسم Sales وVLAN 30 باسم Operations',
+  2: 'S2: أنشئ VLAN 10 باسم Management وVLAN 20 باسم Sales وVLAN 30 باسم Operations',
+  3: 'S1: اجعل المنفذين F0/1 (نحو S2) وF0/5 (نحو R1) بوضع trunk',
+  4: 'S2: اجعل المنفذ F0/1 بوضع trunk',
+  5: 'S1: اجعل المنفذ F0/6 بوضع access وضمّه إلى VLAN 20',
+  6: 'S2: اجعل المنفذ F0/18 بوضع access وضمّه إلى VLAN 30',
+  7: 'S1: عطّل المنفذ غير المستخدم F0/2 (shutdown)',
+  8: 'R1: سمِّ الجهاز R1 وشغّل المنفذ g0/0/1، ثم أنشئ الواجهات الفرعية g0/0/1.10 وg0/0/1.20 وg0/0/1.30 (تغليف dot1q بأرقام الـ VLAN) بالعناوين 192.168.10.1 و192.168.20.1 و192.168.30.1 وقناع 255.255.255.0 لكل منها',
+  9: 'S1: اضبط واجهة VLAN 10 على العنوان 192.168.10.11 وقناع 255.255.255.0 وشغّلها، والبوابة الافتراضية 192.168.10.1',
+  10: 'S2: اضبط واجهة VLAN 10 على العنوان 192.168.10.12 وقناع 255.255.255.0 وشغّلها، والبوابة الافتراضية 192.168.10.1'
+};
+QT.static = {
+  1: 'R1: سمِّ الجهاز R1، واضبط المنفذ f0/0 على 192.168.1.1، والمنفذ s0/2/0 على 192.168.4.1، والمنفذ s0/2/1 على 192.168.5.1 (قناع 255.255.255.0 للجميع، وطرفا DCE: سرعة الساعة 128000)، وشغّل المنافذ',
+  2: 'R2: سمِّ الجهاز R2، واضبط المنفذ f0/0 على 192.168.2.1 والمنفذ s0/2/0 على 192.168.4.2 (قناع 255.255.255.0)، وشغّلهما',
+  3: 'R3: سمِّ الجهاز R3، واضبط المنفذ f0/0 على 192.168.3.1 والمنفذ s0/2/0 على 192.168.5.2 (قناع 255.255.255.0)، وشغّلهما',
+  7: 'R1: أضف مسارين ثابتين: إلى الشبكة 192.168.2.0/24 عبر 192.168.4.2، وإلى الشبكة 192.168.3.0/24 عبر 192.168.5.2',
+  8: 'R2: أضف مسارات ثابتة عبر R1 (192.168.4.1) إلى الشبكات 192.168.1.0/24 و192.168.3.0/24 و192.168.5.0/24',
+  9: 'R3: أضف مسارات ثابتة عبر R1 (192.168.5.1) إلى الشبكات 192.168.1.0/24 و192.168.2.0/24 و192.168.4.0/24'
+};
+QT['nat-pat'] = {
+  1: 'R1: سمِّ الجهاز R1، واضبط g0/0/1 على 192.168.1.1 وقناع 255.255.255.0، وg0/0/0 على 209.165.200.230 وقناع 255.255.255.248، وشغّلهما، وأضف مساراً افتراضياً عبر 209.165.200.225',
+  2: 'S1: سمِّ الجهاز S1 واضبط واجهة VLAN 1 على العنوان 192.168.1.11 وقناع 255.255.255.0 وشغّلها',
+  3: 'S2: سمِّ الجهاز S2 واضبط واجهة VLAN 1 على العنوان 192.168.1.12 وقناع 255.255.255.0 وشغّلها',
+  7: 'R1: حدّد g0/0/1 منفذاً داخلياً (inside) وg0/0/0 منفذاً خارجياً (outside) لـ NAT',
+  8: 'R1: اضبط NAT ثابتاً يترجم العنوان الداخلي 192.168.1.3 إلى العنوان العام 209.165.200.229',
+  11: 'R1: اضبط NAT ديناميكياً: مجمّع باسم PUBLIC_ACCESS من 209.165.200.226 إلى 209.165.200.228 بقناع 255.255.255.248، وقائمة وصول رقم 1 تسمح بالشبكة 192.168.1.0/24، وقاعدة ترجمة تربط القائمة بالمجمّع',
+  13: 'R1: حوّل إلى PAT: احذف قاعدة المجمّع واستبدلها بقاعدة تترجم القائمة 1 عبر عنوان المنفذ g0/0/0 مع overload، ثم امسح الترجمات الحالية'
+};
+QT['acl-std'] = {
+  1: 'S1: سمِّ الجهاز S1، وأنشئ VLAN 20 (Management) وVLAN 30 (Operations) وVLAN 40 (Sales) وVLAN 999 (ParkingLot) وVLAN 1000 (Native)، واجعل F0/1 وF0/5 بوضع trunk مع VLAN الأصلي 1000',
+  2: 'S1: اجعل F0/6 بوضع access على VLAN 30 (PC-A)، واضبط واجهة VLAN 20 على 10.20.0.2 وقناع 255.255.255.0 مع البوابة الافتراضية 10.20.0.1',
+  3: 'S2: سمِّ الجهاز S2، وأنشئ نفس الـ VLANs الخمس، واجعل F0/1 بوضع trunk مع VLAN الأصلي 1000',
+  4: 'S2: اجعل F0/5 بوضع access على VLAN 20 (نحو R2) وF0/18 على VLAN 40 (PC-B)، واضبط واجهة VLAN 20 على 10.20.0.3 وقناع 255.255.255.0 مع البوابة الافتراضية 10.20.0.1',
+  5: 'R1: سمِّ الجهاز R1 وشغّل g0/0/1، وأنشئ الواجهات الفرعية 20 و30 و40 (dot1q) بالعناوين 10.20.0.1 و10.30.0.1 و10.40.0.1 وقناع 255.255.255.0، وواجهة Loopback1 بالعنوان 172.16.1.1 وقناع 255.255.255.0',
+  6: 'R2: سمِّ الجهاز R2، واضبط g0/0/1 على 10.20.0.4 وقناع 255.255.255.0 وشغّله، وأضف مساراً افتراضياً عبر 10.20.0.1',
+  10: 'R1: فعّل الوصول عن بُعد على خطوط vty من 0 إلى 4: كلمة السر cisco، وتسجيل الدخول، وبروتوكول telnet',
+  11: 'R1: أنشئ قائمة الوصول رقم 1 تسمح للمضيف 10.30.0.10 (PC-A) فقط، وطبّقها على خطوط vty بالاتجاه الداخلي (access-class)',
+  14: 'R1: أنشئ قائمة الوصول رقم 10 تمنع المضيف 10.40.0.10 (PC-B) وتسمح لغيره، وطبّقها على الواجهة g0/0/1.40 بالاتجاه الداخلي'
+};
+QT['ppp-eigrp'] = {
+  1: 'R1: سمِّ الجهاز R1، واضبط المنفذ f0/0 على العنوان 192.168.10.1 وقناع 255.255.255.0، والمنفذ s0/0/0 على 10.1.1.1 وقناع 255.255.255.252 (طرف DCE: سرعة الساعة 128000)، وشغّلهما',
+  2: 'R3: سمِّ الجهاز R3، واضبط المنفذ s0/0/0 على العنوان 10.1.1.2 وقناع 255.255.255.252، والمنفذ s0/0/1 على 10.2.2.1 وقناع 255.255.255.252 (طرف DCE: سرعة الساعة 128000)، والمنفذ s0/1/0 على 209.165.200.225 وقناع 255.255.255.252، وشغّل المنافذ',
+  3: 'R2: سمِّ الجهاز R2، واضبط المنفذ f0/0 على العنوان 192.168.30.1 وقناع 255.255.255.0، والمنفذ s0/0/1 على 10.2.2.2 وقناع 255.255.255.252، وشغّلهما',
+  4: 'R1: فعّل تغليف PPP على المنفذ s0/0/0، واضبط مصادقة PAP بإرسال اسم المستخدم R1 وكلمة السر cisco',
+  5: 'R3: أنشئ المستخدمين R1 وR2 وISP بكلمة السر cisco، وفعّل PPP على s0/0/0 وs0/0/1 مع مصادقة PAP، وعلى s0/1/0 مع مصادقة CHAP',
+  6: 'R2: فعّل تغليف PPP على المنفذ s0/0/1، واضبط مصادقة PAP بإرسال اسم المستخدم R2 وكلمة السر cisco',
+  7: 'R3: اعرض حالة المنفذ s0/0/0 وتأكد أن بروتوكول LCP في حالة Open',
+  8: 'R1: فعّل EIGRP بالرقم 1 وأعلن الشبكتين 192.168.10.0 و10.1.1.0 (قناع عكسي 0.0.0.3)، وعطّل التلخيص التلقائي، واجعل f0/0 سلبياً',
+  9: 'R3: فعّل EIGRP بالرقم 1 وأعلن الشبكتين 10.1.1.0 و10.2.2.0 (قناع عكسي 0.0.0.3 لكل منهما)، وعطّل التلخيص التلقائي',
+  10: 'R2: فعّل EIGRP بالرقم 1 وأعلن الشبكتين 192.168.30.0 و10.2.2.0 (قناع عكسي 0.0.0.3)، وعطّل التلخيص التلقائي، واجعل f0/0 سلبياً'
+};
+QT.pppoe = {
+  1: 'ISP: سمِّ الجهاز ISP، وأنشئ المستخدم Cust1 بكلمة السر cisco123، وأنشئ مجمّع العناوين PPPoE_POOL من 209.165.201.1 إلى 209.165.201.10',
+  2: 'ISP: أنشئ المجموعة bba-group pppoe باسم global مع القالب Virtual-Template 1، واضبط القالب بالعنوان 209.165.200.1 وقناع 255.255.255.0 وmtu 1492 والمجمّع PPPoE_POOL ومصادقة CHAP بنمط callin',
+  3: 'ISP: فعّل PPPoE على المنفذ g0/1 للمجموعة global وشغّل المنفذ',
+  4: 'Cust1: سمِّ الجهاز Cust1، وأنشئ الواجهة Dialer1 بعنوان يُتفاوض عليه تلقائياً (negotiated) وتغليف PPP وmtu 1492 وdialer pool 1، ومصادقة CHAP باسم Cust1 وكلمة السر cisco123',
+  5: 'Cust1: اربط المنفذ g0/1 بالـ Dialer: فعّل pppoe بمجمّع الاتصال رقم 1 وشغّل المنفذ بدون عنوان IP',
+  6: 'Cust1: أضف مساراً افتراضياً عبر الواجهة Dialer1'
+};
+QT['nat-3r'] = {
+  1: 'R1: سمِّ الجهاز R1، واضبط f0/0 على 192.168.10.1 وقناع 255.255.255.0، وs0/0/0 على 10.1.1.1 وقناع 255.255.255.252، وشغّلهما، وأضف مساراً افتراضياً عبر 10.1.1.2',
+  2: 'R3: سمِّ الجهاز R3، واضبط f0/0 على 192.168.30.1 وقناع 255.255.255.0، وs0/0/1 على 10.2.2.2 وقناع 255.255.255.252، وشغّلهما، وأضف مساراً افتراضياً عبر 10.2.2.1',
+  3: 'R2: سمِّ الجهاز R2، واضبط f0/0 على 192.168.20.1 (قناع 255.255.255.0)، وs0/0/0 على 10.1.1.2 وs0/0/1 على 10.2.2.1 (قناع 255.255.255.252 وسرعة الساعة 128000 لكليهما)، وs0/1/0 على 209.165.200.226 وقناع 255.255.255.224، وشغّل المنافذ',
+  4: 'R2: أضف مسارات ثابتة إلى 192.168.10.0/24 عبر 10.1.1.1، وإلى 192.168.30.0/24 عبر 10.2.2.2، ومساراً افتراضياً عبر 209.165.200.225',
+  9: 'R2: حدّد f0/0 وs0/0/0 وs0/0/1 منافذ داخلية (inside)، وs0/1/0 منفذاً خارجياً (outside)',
+  10: 'R2: اضبط NAT ثابتاً يترجم الخادم 192.168.20.254 إلى العنوان العام 209.165.202.130',
+  11: 'R2: اضبط NAT ديناميكياً: المجمّع NAT_POOL من 209.165.202.131 إلى 209.165.202.134 بقناع 255.255.255.224، وقائمة الوصول 1 تسمح بالشبكة 192.168.0.0 بقناع عكسي 0.0.255.255، وقاعدة ترجمة تربط القائمة بالمجمّع',
+  13: 'R2: حوّل إلى PAT: احذف قاعدة المجمّع واستبدلها بقاعدة تترجم القائمة 1 عبر المنفذ s0/1/0 مع overload، ثم امسح الترجمات الحالية'
+};
+QT.gre = {
+  1: 'WEST: سمِّ الجهاز WEST، واضبط s0/0/0 على 10.1.1.2 وقناع 255.255.255.252 (طرف DCE: سرعة الساعة 128000)، وg0/1 على 192.168.1.1 وقناع 255.255.255.0، وشغّلهما، وأضف مساراً افتراضياً عبر 10.1.1.1',
+  2: 'EAST: سمِّ الجهاز EAST، واضبط s0/0/1 على 10.2.2.2 وقناع 255.255.255.252، وg0/1 على 192.168.3.1 وقناع 255.255.255.0، وشغّلهما، وأضف مساراً افتراضياً عبر 10.2.2.1',
+  6: 'WEST: أنشئ الواجهة Tunnel0 بالعنوان 172.16.12.1 وقناع 255.255.255.252، ومصدر النفق s0/0/0، ووجهته 10.2.2.2، بنمط gre ip',
+  7: 'EAST: أنشئ الواجهة Tunnel0 بالعنوان 172.16.12.2 وقناع 255.255.255.252، ومصدر النفق s0/0/1، ووجهته 10.1.1.2، بنمط gre ip',
+  8: 'WEST: فعّل OSPF بالعملية 1 وأعلن الشبكتين 192.168.1.0/24 و172.16.12.0/30 في المنطقة 0، واجعل g0/1 سلبياً',
+  9: 'EAST: فعّل OSPF بالعملية 1 وأعلن الشبكتين 192.168.3.0/24 و172.16.12.0/30 في المنطقة 0، واجعل g0/1 سلبياً'
+};
+QT.netflow = {
+  4: 'R2: فعّل NetFlow على الدخول (ip flow ingress) على المنافذ g0/0 وs0/0/0 وs0/0/1',
+  5: 'R2: صدّر بيانات NetFlow بالإصدار 9 إلى المجمّع PC-B على العنوان 192.168.2.3 والمنفذ 9996'
+};
+QT.build = {
+  1: 'R1: اضبط المنفذ g0/0 على العنوان 192.168.0.1 وقناع الشبكة 255.255.255.0، والمنفذ g0/1 على العنوان 192.168.1.1 وقناع الشبكة 255.255.255.0، وشغّل المنفذين'
+};
+QT['sec-admin'] = {
+  5: 'R1: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.1.1.2',
+  6: 'R3: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.2.2.2',
+  8: 'R1: اضبط الحد الأدنى لطول كلمات السر على 10 أحرف، وفعّل تشفير كلمات السر، واضبط كلمة سر التمكين secret على ciscoenpa55',
+  9: 'R1: اضبط رسالة banner motd بالنص: Unauthorized access is prohibited!',
+  10: 'R1: امنع الدخول لمدة 120 ثانية بعد 3 محاولات فاشلة خلال 60 ثانية (login block-for)، وسجّل محاولات الدخول الناجحة والفاشلة',
+  11: 'R1: اضبط اسم النطاق ccnasecurity.com، وولّد مفاتيح RSA بطول 1024، وفعّل SSH الإصدار 2 بمهلة 90 ثانية و2 محاولة توثيق',
+  12: 'R1: أنشئ المستخدم المحلي SSHadmin بصلاحية 15 وكلمة السر ciscosshpa55 (secret)',
+  13: 'R1: على وحدة التحكم console 0: كلمة السر ciscoconpa55 مع login، ومهلة 5 دقائق، وتفعيل logging synchronous',
+  14: 'R1: على خطوط vty من 0 إلى 4: اجعل الدخول بالمستخدمين المحليين (login local) وبروتوكول ssh فقط ومهلة 5 دقائق',
+  15: 'PC-A: اتصل بـ R1 على العنوان 192.168.1.1 عبر SSH بالمستخدم SSHadmin',
+  16: 'PC-C: جرّب telnet إلى R1 على العنوان 10.1.1.1 (يجب أن يُرفض لأن VTY تقبل SSH فقط)',
+  17: 'R1: فعّل AAA (aaa new-model)، وأنشئ قائمتي توثيق محليتين: default وSSH-LOGIN، واضبط الحد الأقصى للمحاولات الفاشلة على 3',
+  18: 'R1: طبّق قائمة التوثيق SSH-LOGIN على خطوط vty من 0 إلى 4',
+  19: 'R1: اسمح لمستوى الصلاحية 5 بتنفيذ الأمر ping، وأنشئ المستخدم JR-ADMIN بصلاحية 5 وكلمة السر ciscojradmin55 (secret)',
+  20: 'R1: عرّف خادم RADIUS على PC-A بالعنوان 192.168.1.3 (المنفذ 1812 للتوثيق و1813 للمحاسبة) والمفتاح radiuspa55، وأنشئ قائمة التوثيق RAD-LOGIN بخادم RADIUS ثم المحلي احتياطاً',
+  21: 'R1: تحقق من إعدادات SSH وحماية الدخول وصلاحياتك بالأوامر show ip ssh وshow login وshow privilege'
+};
+QT['zpf-fw'] = {
+  5: 'R1: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.1.1.2',
+  6: 'R3: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.2.2.2',
+  9: 'R1: أنشئ منطقتي الأمان IN-ZONE وOUT-ZONE',
+  10: 'R1: أنشئ فئة حركة من نوع inspect باسم INSIDE-PROTOCOLS بنمط match-any تطابق بروتوكولات icmp وtcp وudp',
+  11: 'R1: أنشئ السياسة INSIDE-TO-OUTSIDE (policy-map type inspect): افحص (inspect) فئة INSIDE-PROTOCOLS، واسقط (drop) كل ما عداها في class-default',
+  12: 'R1: أنشئ زوج المناطق IN-2-OUT من المصدر IN-ZONE إلى الوجهة OUT-ZONE وطبّق عليه السياسة INSIDE-TO-OUTSIDE',
+  13: 'R1: اجعل المنفذ g0/1 عضواً في IN-ZONE والمنفذ s0/0/0 عضواً في OUT-ZONE',
+  16: 'R1: تحقق من المناطق والأزواج والجلسات بالأوامر show zone security وshow zone-pair security وshow policy-map type inspect zone-pair sessions'
+};
+QT['ios-ips'] = {
+  5: 'R1: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.1.1.2',
+  6: 'R3: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.2.2.2',
+  8: 'R1: أنشئ المجلد ipsdir في ذاكرة flash',
+  9: 'R1: اضبط مسار توقيعات IPS على flash:ipsdir، وأنشئ القاعدة iosips، واجعل الإشعارات إلى log (ip ips notify log) وفعّل logging',
+  10: 'R1: في فئات التوقيعات: ألغِ كل التوقيعات (category all مع retired true) ثم فعّل الفئة ios_ips basic (retired false)',
+  11: 'R1: طبّق القاعدة iosips على المنفذ g0/1 بالاتجاهين in وout',
+  13: 'R1: عدّل التوقيع 2004 (النسخة 0): فعّله (enabled true) واضبط الإجراءات على produce-alert وdeny-packet-inline',
+  15: 'R1: تحقق من الإعدادات بالأوامر show ip ips configuration وshow ip ips interfaces وshow ip ips signature count وshow logging'
+};
+QT['ipsec-s2s'] = {
+  5: 'R1: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.1.1.2',
+  6: 'R3: أضف مساراً افتراضياً (0.0.0.0/0) عبر R2 على العنوان 10.2.2.2',
+  8: 'R1: أنشئ سياسة ISAKMP رقم 10: تشفير aes 256، توثيق pre-share، مجموعة Diffie-Hellman رقم 5، وهاش sha، واضبط المفتاح المشترك vpnpa55 للنظير 10.2.2.1',
+  9: 'R3: أنشئ سياسة ISAKMP رقم 10: تشفير aes 256، توثيق pre-share، مجموعة Diffie-Hellman رقم 5، وهاش sha، واضبط المفتاح المشترك vpnpa55 للنظير 10.1.1.1',
+  10: 'R1: أنشئ مجموعة التحويل VPN-SET بالخوارزميتين esp-aes وesp-sha-hmac، وقائمة الوصول 110 تسمح بالحركة من الشبكة 192.168.1.0/24 إلى 192.168.3.0/24',
+  11: 'R3: أنشئ مجموعة التحويل VPN-SET بالخوارزميتين esp-aes وesp-sha-hmac، وقائمة الوصول 110 تسمح بالحركة من الشبكة 192.168.3.0/24 إلى 192.168.1.0/24',
+  12: 'R1: أنشئ خريطة التشفير VPN-MAP رقم 10 (ipsec-isakmp) بالنظير 10.2.2.1 ومجموعة التحويل VPN-SET وقائمة الوصول 110، وطبّقها على المنفذ s0/0/0',
+  13: 'R3: أنشئ خريطة التشفير VPN-MAP رقم 10 (ipsec-isakmp) بالنظير 10.1.1.1 ومجموعة التحويل VPN-SET وقائمة الوصول 110، وطبّقها على المنفذ s0/0/1',
+  15: 'R1: تحقق من وجود الارتباط الأمني بالأمرين show crypto isakmp sa وshow crypto ipsec sa'
+};
+QT['asa-basic'] = {
+  1: 'ASA: سمِّ الجهاز CCNAS-ASA، واضبط اسم النطاق ccnasecurity.com، وكلمة سر التمكين cisco12345',
+  2: 'ASA: واجهة VLAN 1: الاسم inside ومستوى الأمان 100 والعنوان 192.168.1.1 وقناع 255.255.255.0',
+  3: 'ASA: واجهة VLAN 2: الاسم outside ومستوى الأمان 0 والعنوان 209.165.200.226 وقناع 255.255.255.248',
+  4: 'ASA: واجهة VLAN 3: الاسم dmz ومستوى الأمان 70 والعنوان 192.168.2.1 وقناع 255.255.255.0',
+  5: 'ASA: اربط المنفذ E0/0 بـ VLAN 2 والمنفذ E0/2 بـ VLAN 3 (access)',
+  6: 'ASA: أضف مساراً افتراضياً على واجهة outside عبر R1 على العنوان 209.165.200.225',
+  11: 'ASA: اضبط NAT ديناميكياً (PAT) للشبكة الداخلية 192.168.1.0/24 باسم الكائن inside-net، من inside إلى outside عبر عنوان الواجهة',
+  13: 'ASA: فعّل فحص ICMP (inspect icmp) ضمن الفئة inspection_default في السياسة global_policy',
+  15: 'ASA: فعّل خادم DHCP على واجهة inside بالنطاق من 192.168.1.5 إلى 192.168.1.36 وخادم DNS 209.165.201.2',
+  16: 'ASA: فعّل SSH: مستخدم محلي admin بكلمة السر adminpass، وتوثيق ssh على LOCAL، ومفاتيح RSA بطول 1024، والسماح للشبكة 192.168.1.0/24 من inside بمهلة 10 دقائق',
+  17: 'ASA: عرّف كائن الخادم dmz-server بالعنوان 192.168.2.3 وترجمة ثابتة من dmz إلى outside إلى العنوان العام 209.165.200.227',
+  18: 'ASA: أنشئ قائمة الوصول OUTSIDE-DMZ التي تسمح لأي مصدر بالوصول إلى الخادم 192.168.2.3، وطبّقها على واجهة outside بالاتجاه الداخلي (access-group)'
+};
+QT['asa-vpn'] = {
+  4: 'ASA: أنشئ مجمّع العناوين REMOTE-POOL من 192.168.1.100 إلى 192.168.1.110 بقناع 255.255.255.0، والمستخدم remote-user بكلمة السر cisco456',
+  5: 'ASA: فعّل IKEv1 على واجهة outside، وأنشئ السياسة رقم 10: توثيق pre-share، تشفير aes-256، هاش sha، مجموعة 2، مدة 86400',
+  6: 'ASA: أنشئ مجموعة التحويل ESP-AES-SHA بالخوارزميتين esp-aes-256 وesp-sha-hmac',
+  7: 'ASA: أنشئ سياسة المجموعة الداخلية REMOTE-GP ببروتوكول النفق ikev1 وخادم DNS 209.165.201.2',
+  8: 'ASA: أنشئ مجموعة النفق REMOTE-VPN من نوع remote-access، واضبط مجمّع العناوين REMOTE-POOL وسياسة المجموعة REMOTE-GP',
+  9: 'ASA: اضبط المفتاح المشترك لمجموعة النفق REMOTE-VPN على cisco123 (ikev1)',
+  10: 'ASA: أنشئ الخريطة الديناميكية DYN-MAP رقم 10 بمجموعة التحويل ESP-AES-SHA، وخريطة التشفير CRYPTO-MAP رقم 10 المرتبطة بها، وطبّقها على واجهة outside',
+  11: 'PC-C: اتصل بـ ASA على العنوان 209.165.200.226 بمجموعة النفق REMOTE-VPN ومفتاحها cisco123 والمستخدم remote-user وكلمة السر cisco456 (أمر vpn connect)'
+};
+(function () { LABS.forEach(function (l) { var q = QT[l.id]; if (q) Object.keys(q).forEach(function (k) { if (l.tasks[k - 1]) l.tasks[k - 1].t = q[k]; }); }); })();
+
 /* ===== الشروحات: دروس مرتبة لكل مادة (متاحة للجميع) ===== */
 var LEARN = [
   { id: 'start', title: 'ابدأ من هنا', desc: 'كيف تستخدم المحاكي وتقرأ الأوامر.', lessons: [
@@ -7772,7 +7984,7 @@ function applyFix() {
     if (!kb || !BASEH) BASEH = Math.max(vv ? vv.height : 0, window.innerHeight);
     if (!kb) b.style.setProperty('--vvh', BASEH + 'px');
     var big = b.classList.contains('termbig'), dg = b.classList.contains('diagbig');
-    b.style.setProperty('--mh', (Math.round(BASEH * (dg ? 0.28 : big ? 0.10 : 0.20)) - ((window.EX && EX.active) ? 30 : 0)) + 'px');
+    b.style.setProperty('--mh', (Math.round(BASEH * (dg ? 0.28 : big ? 0.10 : 0.20)) - ((window.EX && EX.active) ? 30 : 0) - ((document.getElementById('qbar') && !document.getElementById('qbar').hidden) ? (document.getElementById('qbar').classList.contains('open') ? 90 : 46) : 0)) + 'px');
     b.style.setProperty('--th', (dg ? 84 : Math.round(BASEH * (big ? 0.42 : 0.20))) + 'px');
     b.style.top = '0px'; b.scrollTop = 0; document.documentElement.scrollTop = 0;
   } else b.style.top = '';
@@ -7802,7 +8014,7 @@ $('#devTabs').addEventListener('click', function (e) {
   var b = e.target.closest('[data-d]');
   if (!b) return;
   CUR.dev = CUR.lab.devs[b.getAttribute('data-d')];
-  renderDevTabs(); renderTerm(); refresh(); if (CUR.lab.def.free) wsInfo(); $('#cmd').focus();
+  renderDevTabs(); renderTerm(); refresh(); if (CUR.lab.def.free) wsInfo(); $('#cmd').focus(); if (pcIsCli(CUR.dev)) pcdeskOpen(CUR.dev);
 });
 
 /* ---- terminal ---- */
@@ -7837,7 +8049,7 @@ var CHIPS = {
 };
 function renderChips() {
   var d = CUR.dev, list = (d.pending || (window.EX && EX.active) ? [] : (d.win && d.win.kind !== 'ubuntu' ? [['gui'], ['ipconfig'], ['hostname'], ['Get-Help ', 'pc'], ['ping ']] : d.os === 'printer' ? [['status'], ['show ip']] : d.lx && d.lx.inst ? [['1'], ['2'], ['yes']] : CHIPS[d.mode] || [])).filter(function (c) { return !c[1] || c[1] === d.type; });
-  var h = '<button class="k" data-k="tab">Tab</button><button class="k" data-k="help">?</button><button class="k" data-k="up">↑</button>';
+  var h = '<button class="k" data-k="tab">Tab</button><button class="k" data-k="help">?</button><button class="k" data-k="up">↑</button>' + (pcIsCli(d) ? '<button class="k" data-k="desk">🖥 Desktop</button>' : '') + '<button class="k" data-k="home" aria-label="بداية السطر">⇤</button><button class="k" data-k="left" aria-label="يسار">◀</button><button class="k" data-k="right" aria-label="يمين">▶</button><button class="k" data-k="end" aria-label="نهاية السطر">⇥</button>';
   h += list.map(function (c) { return '<button data-t="' + esc(c[0]) + '">' + esc(c[0].trim()) + '</button>'; }).join('');
   $('#chips').innerHTML = h;
 }
@@ -7858,10 +8070,32 @@ function updateLive() {
   if (!CUR.dev) return;
   var d = CUR.dev, inp = $('#cmd'), v = inp.value;
   if (d.pending && pendHide(d)) v = v.replace(/./g, '\u2022');
-  $('#live').innerHTML = '<b>' + esc(pendPrompt(d)) + '</b>' + esc(v) + '<span class="caret"></span>';
+  var cp = v.length; try { if (document.activeElement === inp && inp.selectionStart != null) cp = Math.min(inp.selectionStart, v.length); } catch (x) { }
+  $('#live').innerHTML = '<b>' + esc(pendPrompt(d)) + '</b><span id="lvA">' + esc(v.slice(0, cp)) + '</span><span class="caret"></span><span id="lvB">' + esc(v.slice(cp)) + '</span>';
   var t = $('#term'); t.scrollTop = t.scrollHeight;
 }
 $('#cmd').addEventListener('input', updateLive);
+document.addEventListener('selectionchange', function () { if (document.activeElement === $('#cmd')) updateLive(); });
+function liveIndex(x, y) {
+  var a = document.getElementById('lvA'), b = document.getElementById('lvB'), n = null, off = 0, r = null;
+  if (!a || !b) return -1;
+  try {
+    if (document.caretRangeFromPoint) { r = document.caretRangeFromPoint(x, y); if (r) { n = r.startContainer; off = r.startOffset; } }
+    else if (document.caretPositionFromPoint) { r = document.caretPositionFromPoint(x, y); if (r) { n = r.offsetNode; off = r.offset; } }
+  } catch (e) { }
+  if (!n) return -1;
+  var la = a.textContent.length;
+  if (a.contains(n)) return Math.min(off, la);
+  if (b.contains(n)) return la + Math.min(off, b.textContent.length);
+  var lv = document.getElementById('live');
+  if (n === lv || lv.contains(n)) { var rc = b.getBoundingClientRect(); var ra = a.getBoundingClientRect(); return (y < ra.top - 2) ? 0 : (x > rc.right ? la + b.textContent.length : la); }
+  return -1;
+}
+$('#live').addEventListener('click', function (e) {
+  if (Date.now() - (window._panAt || 0) < 400 || getSelection().toString()) return;
+  var i = liveIndex(e.clientX, e.clientY); if (i < 0) return;
+  e.stopPropagation(); var inp = $('#cmd'); inp.focus(); try { inp.setSelectionRange(i, i); } catch (x) { } updateLive();
+});
 
 /* ---- windows gui ---- */
 function wuiPaint() {
@@ -8087,10 +8321,16 @@ $('#wui').addEventListener('focusout', function () { setTimeout(function () { va
 $('#wui').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox' && e.target.type !== 'radio') { var b = $('#wui').querySelector('.wbtns .wb.pri, .wlock .wb.pri'); if (b) b.click(); } });
 $('#term').addEventListener('click', function () { if (!getSelection().toString()) $('#cmd').focus(); });
 $('#cmd').addEventListener('blur', function () { setTimeout(function () { if (document.activeElement !== $('#cmd')) { document.body.classList.remove('lab-kb'); applyFix(); } }, 200); });
-$('#cmd').addEventListener('focus', function () { document.body.classList.add('lab-kb'); applyFix(); setTimeout(function () { window.scrollTo(0, 0); applyFix(); }, 250); setTimeout(function () { var t = $('#term'); t.scrollTop = t.scrollHeight; }, 300); });
+$('#cmd').addEventListener('focus', function () { if (QOPEN) { QOPEN = false; qRender(); } document.body.classList.add('lab-kb'); applyFix(); setTimeout(function () { window.scrollTo(0, 0); applyFix(); }, 250); setTimeout(function () { var t = $('#term'); t.scrollTop = t.scrollHeight; }, 300); });
 if (window.visualViewport) window.visualViewport.addEventListener('resize', function () { var t = $('#term'); t.scrollTop = t.scrollHeight; });
 function chipAct(b) {
   var inp = $('#cmd'), k = b.getAttribute('data-k');
+  if (k === 'home' || k === 'left' || k === 'right' || k === 'end') {
+    inp.focus(); var L = inp.value.length, s = 0; try { s = inp.selectionStart; } catch (x) { }
+    s = k === 'home' ? 0 : k === 'end' ? L : k === 'left' ? Math.max(0, s - 1) : Math.min(L, s + 1);
+    try { inp.setSelectionRange(s, s); } catch (x) { } updateLive(); return;
+  }
+  if (k === 'desk') { pcdeskOpen(CUR.dev); return; }
   if (k === 'tab') tabComplete();
   else if (k === 'help') showHelp(inp.value);
   else if (k === 'up') histMove(-1);
@@ -8190,13 +8430,13 @@ function renderTasks() {
     }
     var dv = t.dev && lab.devs[t.dev] ? '<button class="devtag" data-dev="' + esc(t.dev) + '">' + esc(t.dev) + '</button>' : '';
     return '<li class="task" data-i="' + i + '" data-done="0"><span class="chk"></span><div><p>' + dv + esc(t.t) + '</p>' + form +
-      ((window.EX && EX.active) ? '' : '<button class="hintbtn" data-h="' + i + '">' + (t.subnet ? 'أظهر الحل' : 'أظهر الأوامر') + '</button><pre class="hint" hidden>' + esc(hint.join('\n')) + '</pre>') + '</div></li>';
+      ((window.EX && EX.active) ? '' : '<button class="hintbtn" data-h="' + i + '" data-lv="0">💡 تلميح</button><pre class="hint" hidden data-mask="' + esc(t.subnet ? 'راجع شرح «تقسيم العناوين» في قسم الشروحات ثم احسب بنفسك.' : hintMask(t.h)) + '"></pre>') + '</div></li>';
   }).join('');
 }
 $('#tasks').addEventListener('click', function (e) {
   var dv = e.target.closest('[data-dev]');
   if (dv && CUR.lab.devs[dv.getAttribute('data-dev')]) {
-    CUR.dev = CUR.lab.devs[dv.getAttribute('data-dev')]; renderDevTabs(); renderTerm(); refresh(); setView('term'); return;
+    CUR.dev = CUR.lab.devs[dv.getAttribute('data-dev')]; renderDevTabs(); renderTerm(); refresh(); setView('term'); if (pcIsCli(CUR.dev)) pcdeskOpen(CUR.dev); return;
   }
   var ck = e.target.closest('[data-chk]');
   if (ck) {
@@ -8210,10 +8450,18 @@ $('#tasks').addEventListener('click', function (e) {
     return;
   }
   var b = e.target.closest('[data-h]'); if (!b) return;
-  var pre = b.nextElementSibling; pre.hidden = !pre.hidden; if (!pre.hidden) { CUR.lab.hints = CUR.lab.hints || {}; CUR.lab.hints[+b.getAttribute('data-h')] = 1; }
-  var sub = b.textContent.indexOf('الحل') >= 0 || b.textContent === 'أخفِ الحل';
-  b.textContent = pre.hidden ? (sub ? 'أظهر الحل' : 'أظهر الأوامر') : (sub ? 'أخفِ الحل' : 'أخفِ الأوامر');
+  var pre = b.nextElementSibling, lv = +b.getAttribute('data-lv') || 0, ix = +b.getAttribute('data-h');
+  CUR.lab.hints = CUR.lab.hints || {};
+  if (lv === 0) { pre.hidden = false; pre.textContent = pre.getAttribute('data-mask'); b.setAttribute('data-lv', '1'); b.textContent = 'أخفِ التلميح'; CUR.lab.hints[ix] = 1; }
+  else { pre.hidden = true; b.setAttribute('data-lv', '0'); b.textContent = '💡 تلميح'; }
 });
+function hintMask(lines) {
+  return lines.filter(Boolean).map(function (l) {
+    var tk = String(l).trim().split(/\s+/), keep = [], cut = false;
+    for (var i = 0; i < tk.length; i++) { if (i >= 3 || /[0-9.\/:=]/.test(tk[i]) || (i > 0 && /^-/.test(tk[i]))) { cut = true; break; } keep.push(tk[i]); }
+    return keep.join(' ') + (cut ? ' …' : '');
+  }).join('\n');
+}
 function checkTasks() {
   var lab = CUR.lab, tasks = lab.def.tasks;
   if (!tasks.length) return;
@@ -8230,7 +8478,33 @@ function checkTasks() {
     $('#win').innerHTML = '<div class="win">أحسنت! أكملت مختبر «' + esc(lab.def.title) + '».</div>';
     if (!(window.EX && EX.active) && !DONE[lab.def.id]) { DONE[lab.def.id] = 1; saveDone(); }
   }
+  qRender();
 }
+var QI = -1, QOPEN = false, QMAN = false, QLAB = null;
+function qRender() {
+  var bar = document.getElementById('qbar'); if (!bar) return;
+  var lab = CUR.lab, tasks = lab && lab.def.tasks || [];
+  var show = !!lab && tasks.length && !(CUR.dev && CUR.dev.win);
+  bar.hidden = !show; if (!show) { applyFix(); return; }
+  if (QLAB !== lab) { QLAB = lab; QI = -1; QMAN = false; QOPEN = false; }
+  if (QI < 0 || QI >= tasks.length || (!QMAN && lab.done.has(QI))) {
+    var nx = -1; for (var k = 0; k < tasks.length; k++) { if (!lab.done.has(k)) { nx = k; break; } }
+    QI = nx < 0 ? tasks.length - 1 : nx; QMAN = false;
+  }
+  var t = tasks[QI], done = lab.done.has(QI);
+  document.getElementById('qNum').textContent = (QI + 1) + '/' + tasks.length;
+  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + t.t; bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
+  applyFix();
+}
+document.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('#qbar') && document.body.classList.contains('lab-kb')) e.preventDefault(); });
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('#qbar'); if (!b) return;
+  var n = CUR.lab ? CUR.lab.def.tasks.length : 0, id = e.target.closest('button') ? e.target.closest('button').id : '';
+  if (id === 'qPrev') { QI = (QI - 1 + n) % n; QMAN = true; }
+  else if (id === 'qNext') { QI = (QI + 1) % n; QMAN = true; }
+  else QOPEN = !QOPEN;
+  qRender();
+});
 
 /* ---- topology ---- */
 /* ---- Packet Tracer style drawing ---- */
@@ -8610,7 +8884,7 @@ document.addEventListener('click', function (e) {
   var g = e.target.closest && e.target.closest('svg.topo [data-dev]');
   if (!g || !CUR.lab || (CUR.lab.def.free && !g.closest('#miniTopo'))) return;
   var d = CUR.lab.devs[g.getAttribute('data-dev')]; if (!d) return;
-  CUR.dev = d; renderDevTabs(); renderTerm(); refresh(); setView('term');
+  CUR.dev = d; renderDevTabs(); renderTerm(); refresh(); setView('term'); if (pcIsCli(d)) pcdeskOpen(d);
   var t = $('#term'); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'nearest' });
 });
 
@@ -8768,7 +9042,7 @@ attachDrag('mini'); attachDrag('topo');
   var ci = $('#cmd'); if (ci) ci.addEventListener('keydown', function (e) { if (e.key === 'Enter') setTimeout(function () { term.scrollLeft = 0; }, 0); });
   document.addEventListener('touchmove', function (e) {
     if (!document.body.classList.contains('fixterm') || document.getElementById('rep')) return;
-    if (e.target.closest && e.target.closest('#term,#miniTopo,#devTabs,#chips,#rep')) return;
+    if (e.target.closest && e.target.closest('#term,#miniTopo,#devTabs,#chips,#rep,#pcsheet')) return;
     if (e.cancelable) e.preventDefault();
   }, { passive: false });
 })();
@@ -9067,6 +9341,82 @@ renderProf();
   }, true);
   document.addEventListener('scroll', function (e) { if (menu && !e.target.closest) return; if (menu && !(e.target.closest && e.target.closest('.wctx'))) close(); }, true);
 })();
+
+/* سطح مكتب الحاسب (مثل Packet Tracer): إعدادات IP + Command Prompt */
+function pcIsCli(d) { return !!d && d.type === 'pc' && !d.win && !d.os; }
+function pcdeskClose() { var s = document.getElementById('pcsheet'); if (s) s.remove(); }
+function pcdeskOpen(d, view) {
+  d = d || CUR.dev; if (!pcIsCli(d) || (window.EX && EX.active && 0)) return;
+  pcdeskClose();
+  var s = document.createElement('div'); s.id = 'pcsheet'; s.setAttribute('dir', 'rtl'); s.setAttribute('data-d', d.name);
+  s.innerHTML = '<div class="pcs-card" role="dialog" aria-label="' + esc(d.name) + '"></div>';
+  document.body.appendChild(s);
+  pcdeskView(d, view || 'home');
+}
+function pcdeskView(d, view, msg) {
+  var c = document.querySelector('#pcsheet .pcs-card'); if (!c) return;
+  var f = d.ifaces.FastEthernet0 || {};
+  if (view === 'home') {
+    c.innerHTML = '<div class="pcs-h"><b>' + esc(d.name) + '</b><span>Desktop</span><button type="button" data-pcs="close" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pcs-tiles"><button type="button" data-pcs="ip"><i>⚙</i><b>IP Configuration</b><small>' + (f.ip ? esc(f.ip) : 'غير مضبوط') + '</small></button>' +
+      '<button type="button" data-pcs="cmd"><i>⌨</i><b>Command Prompt</b><small>ping وغيره</small></button></div>';
+    return;
+  }
+  if (view === 'ip') {
+    var st = !f.dhcp;
+    c.innerHTML = '<div class="pcs-h"><button type="button" data-pcs="home" aria-label="رجوع">›</button><b>IP Configuration</b><span>' + esc(d.name) + '</span><button type="button" data-pcs="close" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pcs-mode"><label><input type="radio" name="pcm" value="dhcp"' + (st ? '' : ' checked') + '> DHCP</label><label><input type="radio" name="pcm" value="static"' + (st ? ' checked' : '') + '> Static</label></div>' +
+      '<div class="pcs-f"><label>IP Address<input dir="ltr" inputmode="decimal" data-pf="ip" autocomplete="off" value="' + esc(f.ip || '') + '"></label>' +
+      '<label>Subnet Mask<input dir="ltr" inputmode="decimal" data-pf="mask" autocomplete="off" value="' + esc(f.mask || '') + '"></label>' +
+      '<label>Default Gateway<input dir="ltr" inputmode="decimal" data-pf="gw" autocomplete="off" value="' + esc(f.gw || '') + '"></label>' +
+      '<label>DNS Server<input dir="ltr" inputmode="decimal" data-pf="dns" autocomplete="off" value="' + esc(f.dns || '') + '"></label></div>' +
+      '<p class="pcs-msg" role="status">' + (msg || '') + '</p>' +
+      '<div class="pcs-act"><button type="button" class="btn pri" data-pcs="apply">تطبيق</button><button type="button" class="btn" data-pcs="cmd">Command Prompt</button></div>';
+    pcdeskMode(c);
+  }
+}
+function pcdeskMode(c) {
+  var m = c.querySelector('input[name=pcm]:checked'), dh = m && m.value === 'dhcp';
+  c.querySelectorAll('[data-pf]').forEach(function (i) { i.disabled = dh; });
+}
+function pcdeskRun(d, line) {
+  EMIT(d, promptOf(d) + '\u0001' + line, 'cmd'); d.hist.push(line); d.hi = d.hist.length;
+  try { exec(d, line, CUR.lab); } catch (e) { EMIT(d, '% Error: ' + e.message, 'err'); }
+}
+function pcdeskApply(d) {
+  var c = document.querySelector('#pcsheet .pcs-card'), m = c.querySelector('input[name=pcm]:checked');
+  var v = function (k) { return (c.querySelector('[data-pf=' + k + ']').value || '').trim(); };
+  var f = d.ifaces.FastEthernet0;
+  if (m && m.value === 'dhcp') {
+    pcdeskRun(d, 'ip dhcp'); refresh();
+    pcdeskView(d, 'ip', f.dhcp ? '<b style="color:var(--ok)">✔ حصل الجهاز على عنوان من DHCP</b>' : '<b style="color:var(--bad)">✘ لم يحصل على عنوان (تأكد من خادم DHCP والاتصال)</b>');
+    return;
+  }
+  var ip = v('ip'), mk = v('mask'), gw = v('gw'), dns = v('dns');
+  if (!ip) return pcdeskView(d, 'ip', '<b style="color:var(--bad)">أدخل عنوان IP</b>');
+  if (!okIp(ip)) return pcdeskView(d, 'ip', '<b style="color:var(--bad)">عنوان IP غير صحيح</b>');
+  if (!mk) mk = /^(\d+)\./.test(ip) ? (+RegExp.$1 < 128 ? '255.0.0.0' : +RegExp.$1 < 192 ? '255.255.0.0' : '255.255.255.0') : '255.255.255.0';
+  if (!okMask(mk)) return pcdeskView(d, 'ip', '<b style="color:var(--bad)">قناع الشبكة غير صحيح</b>');
+  if (gw && !okIp(gw)) return pcdeskView(d, 'ip', '<b style="color:var(--bad)">عنوان البوابة غير صحيح</b>');
+  if (dns && !okIp(dns)) return pcdeskView(d, 'ip', '<b style="color:var(--bad)">عنوان DNS غير صحيح</b>');
+  pcdeskRun(d, 'ip ' + ip + ' ' + mk + (gw ? ' ' + gw : '')); f.dns = dns; refresh();
+  pcdeskView(d, 'ip', '<b style="color:var(--ok)">✔ تم حفظ الإعدادات</b>');
+}
+document.addEventListener('click', function (e) {
+  var s = e.target.closest && e.target.closest('#pcsheet'); if (!s) return;
+  var d = CUR.lab && CUR.lab.devs[s.getAttribute('data-d')]; if (!d) return pcdeskClose();
+  if (e.target === s) return pcdeskClose();
+  var b = e.target.closest('[data-pcs]'); if (!b) return;
+  var a = b.getAttribute('data-pcs');
+  if (a === 'close') pcdeskClose();
+  else if (a === 'home') pcdeskView(d, 'home');
+  else if (a === 'ip') pcdeskView(d, 'ip');
+  else if (a === 'apply') pcdeskApply(d);
+  else if (a === 'cmd') { pcdeskClose(); CUR.dev = d; renderDevTabs(); renderTerm(); refresh(); setView('term'); var i = document.getElementById('cmd'); if (i) i.focus(); }
+});
+document.addEventListener('change', function (e) {
+  if (e.target.name === 'pcm') { var c = document.querySelector('#pcsheet .pcs-card'); if (c) pcdeskMode(c); }
+});
 
 /* ===== Exam mode (no server) =====
    - Trainer creates a signed exam link (lab + duration + window).
@@ -9534,10 +9884,10 @@ function repData() {
   var lab = CUR.lab; if (!lab) return null;
   try { checkTasks(); } catch (e) { }
   var def = lab.def, now = Date.now(), who = repWho(), mk = repPts(def), N = def.tasks.length, earn = 0, hints = lab.hints || {};
-  var rows = def.tasks.map(function (t, i) { var ok = lab.done.has(i); if (ok) earn += mk.pts[i]; return { i: i, t: t.t, dev: t.dev || '', ok: ok, p: mk.pts[i], h: hints[i] ? 1 : 0 }; });
+  var rows = def.tasks.map(function (t, i) { var ok = lab.done.has(i); if (ok) earn += mk.pts[i]; return { i: i, t: t.t, dev: t.dev || '', ok: ok, p: mk.pts[i], h: hints[i] || 0 }; });
   var course = COURSES.filter(function (c) { return c.id === labCourse(def); })[0];
   var pc = mk.total ? Math.round(earn / mk.total * 100) : 0;
-  return { lab: lab, def: def, who: who, mk: mk, rows: rows, earn: earn, pc: pc, N: N, now: now, t0: lab.t0 || now, course: course, hints: Object.keys(hints).length };
+  return { lab: lab, def: def, who: who, mk: mk, rows: rows, earn: earn, pc: pc, N: N, now: now, t0: lab.t0 || now, course: course, hints: Object.keys(hints).length, sols: Object.keys(hints).filter(function (k) { return hints[k] === 2; }).length };
 }
 function repCode(R) {
   var P = { v: 1, i: R.who.i, n: R.who.n, l: R.def.id, k: R.rows.filter(function (r) { return r.ok; }).map(function (r) { return r.i; }), N: R.N, m: R.earn, M: R.mk.total, t0: R.t0, t1: R.now, h: R.hints };
@@ -9555,9 +9905,9 @@ function repHtml(R) {
     '<tr><th>تاريخ إصدار التقرير</th><td>' + esc(D.g) + '<br><small>' + esc(D.h) + '</small></td><th>وقت الإصدار</th><td dir="ltr" style="text-align:right">' + D.t + '</td></tr>' +
     '<tr><th>بدء التجربة</th><td>' + esc(S.iso) + '</td><th>المدة</th><td>' + esc(repDur(R.now - R.t0)) + '</td></tr></table>');
   x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + R.rows.map(function (r) {
-    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(استُخدم التلميح)</small>' : '') + '</td><td>' + (r.ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
+    return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(' + 'استُخدم تلميح' + ')</small>' : '') + '</td><td>' + (r.ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
   }).join('') + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + R.earn + ' / ' + R.mk.total + '</td></tr></tfoot></table>');
-  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المتحققة ' + R.rows.filter(function (r) { return r.ok; }).length + ' وغير المتحققة ' + R.rows.filter(function (r) { return !r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
+  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المتحققة ' + R.rows.filter(function (r) { return r.ok; }).length + ' وغير المتحققة ' + R.rows.filter(function (r) { return !r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints  + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
   x.push('<h3>الحالة النهائية للأجهزة</h3>');
   R.lab.order.forEach(function (n) {
     var d = R.lab.devs[n], st = []; try { st = repState(d); } catch (e) { }
@@ -9592,7 +9942,7 @@ function guideHtml(def) {
   if (devs.length) x.push('<h3>الأجهزة المستخدمة</h3><p class="rp-p">' + devs.join(' • ') + '</p>');
   x.push('<h3>خطوات التنفيذ</h3><p class="rp-note">رقم المهمة والنص والدرجة مطابقة تماماً لما يظهر في التقرير الذي تصدره التجربة. ضع علامة ✔ في المربع بعد إنجاز كل مهمة.</p>');
   def.tasks.forEach(function (t, i) {
-    var steps = (t.h || []).filter(Boolean);
+    var steps = [];
     x.push('<div class="rp-task"><div class="rp-th"><span class="rp-n">' + (i + 1) + '</span><div class="rp-tt">' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + '</div><div class="rp-tm">' + mk.pts[i] + ' درجة</div><div class="rp-cb">☐</div></div>' +
       (steps.length ? '<div class="rp-st"><b>الخطوات / الأوامر المساعدة:</b><pre>' + esc(steps.join('\n')) + '</pre></div>' : '') + '</div>');
   });
