@@ -3844,6 +3844,7 @@ function lxCheck(l, d, c) {
 /* ===== Windows Server / Windows client simulation (course: Operating Systems 1 / MCSA) =====
    Devices are 'pc' type with d.os = 'win' (server) or 'wclient'. State in d.win.  GUI is in wui.js */
 var WS_NOW = { date: '2026-10-24', time: '22:30' };
+function wsReal() { var d = new Date(), p = function (n) { return ('0' + n).slice(-2); }; return { date: d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()), time: p(d.getHours()) + ':' + p(d.getMinutes()) }; }
 var WS_TZS = [['Pacific Standard Time', '(UTC-08:00) Pacific Time (US & Canada)'], ['Eastern Standard Time', '(UTC-05:00) Eastern Time (US & Canada)'], ['UTC', '(UTC) Coordinated Universal Time'], ['GMT Standard Time', '(UTC+00:00) Dublin, Edinburgh, Lisbon, London'], ['W. Europe Standard Time', '(UTC+01:00) Amsterdam, Berlin, Rome, Paris'], ['Egypt Standard Time', '(UTC+02:00) Cairo'], ['Arab Standard Time', '(UTC+03:00) Kuwait, Riyadh'], ['Arabian Standard Time', '(UTC+04:00) Abu Dhabi, Muscat'], ['India Standard Time', '(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi']];
 var WS_ROLES = [
   { id: 'adds', feat: 'AD-Domain-Services', name: 'Active Directory Domain Services', desc: 'AD DS stores information about objects on the network and makes this information available to users and network administrators.' },
@@ -4110,7 +4111,7 @@ function wsCheck(l, d, c) {
     case 'nicname': return (W.nicName || 'Ethernet0').toLowerCase() === c.v.toLowerCase();
     case 'nicoff': return !!W.nicOff === (c.v !== false);
     case 'tz': return W.tz === c.v;
-    case 'time': return W.clock.date === WS_NOW.date && Math.abs(wsMin(W.clock.time) - wsMin(WS_NOW.time)) <= 20;
+    case 'time': { var R = wsReal(); return (W.clock.date === WS_NOW.date && Math.abs(wsMin(W.clock.time) - wsMin(WS_NOW.time)) <= 20) || (W.clock.date === R.date && Math.abs(wsMin(W.clock.time) - wsMin(R.time)) <= 60); }
     case 'rdp': return W.rdp === (c.v !== false);
     case 'icmp': return !!W.fw.icmp;
     case 'role': return !!W.roles[c.r];
@@ -6934,7 +6935,7 @@ var LABS = [
       T('Server', 'سجّل الدخول بـ Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin' }]),
       T('Server', 'اضبط عنوان IP ثابتاً: 192.168.10.10/24 والبوابة 192.168.10.1 و DNS 192.168.10.10', ['New-NetIPAddress -InterfaceAlias Ethernet0 -IPAddress 192.168.10.10 -PrefixLength 24 -DefaultGateway 192.168.10.1', 'Set-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses 192.168.10.10', 'ipconfig /all'], [{ k: 'win', d: 'Server', t: 'ip', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', dns: '192.168.10.10' }]),
       T('Server', 'اضبط المنطقة الزمنية Arab Standard Time', ['Get-TimeZone', 'Set-TimeZone -Id "Arab Standard Time"'], [{ k: 'win', d: 'Server', t: 'tz', v: 'Arab Standard Time' }]),
-      T('Server', 'اضبط التاريخ والوقت: 2026-10-24 الساعة 22:30', ['Set-Date -Date "2026-10-24 22:30"', 'Get-Date'], [{ k: 'win', d: 'Server', t: 'time' }]),
+      T('Server', 'اضبط تاريخ اليوم والوقت الحالي (مثلاً 2026-10-24 الساعة 22:30 أو تاريخ ووقت جهازك اليوم)', ['Set-Date -Date "2026-10-24 22:30"', 'Get-Date'], [{ k: 'win', d: 'Server', t: 'time' }]),
       T('Server', 'فعّل سطح المكتب البعيد (Remote Desktop)', ['Set-ItemProperty -Path "HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server" -Name fDenyTSConnections -Value 0', 'Enable-NetFirewallRule -DisplayGroup "Remote Desktop"'], [{ k: 'win', d: 'Server', t: 'rdp' }]),
       T('PC1', 'من PC1: جرّب ping للخادم 192.168.10.10 (سيفشل لأن جدار الحماية يحجب ICMP)', ['ping 192.168.10.10'], [{ k: 'win', d: 'PC1', t: 'ran', c: '^ping 192' }]),
       T('Server', 'اسمح بـ ping على الخادم (قاعدة File and Printer Sharing - Echo Request ICMPv4) ثم أعد الاختبار من PC1', ['Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)"'], [{ k: 'win', d: 'Server', t: 'icmp' }]),
