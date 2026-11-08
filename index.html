@@ -10184,12 +10184,13 @@ var PS_KEY = 'netlab.stamps';
 function psStamps() { try { return JSON.parse(localStorage.getItem(SK(PS_KEY)) || '{}'); } catch (e) { return {}; } }
 window.passStamp = function (id) { var s = psStamps(); if (s[id]) return; s[id] = Date.now(); try { localStorage.setItem(SK(PS_KEY), JSON.stringify(s)); } catch (e) { } };
 var PS_BASE = 'https://nalmasoudi.github.io/tamakkan-lab/';
-(function () { var m = /[#&]t=(PRJ[A-Za-z0-9]{6})/i.exec(location.hash); if (m) try { localStorage.setItem('netlab.pclass', m[1].toUpperCase()); } catch (e) { } })();
+(function () { var m = /[#&]t=([A-Za-z0-9]{3,24})/i.exec(location.hash); if (m) try { localStorage.setItem('netlab.pclass', m[1].toLowerCase()); } catch (e) { } })();
+function psNorm(c) { return String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function psClassOk(c) { return /^[a-z0-9]{3,24}$/.test(psNorm(c)) && psNorm(c) === String(c || '').trim().toLowerCase(); }
 function psClassGet() { try { return localStorage.getItem('netlab.pclass') || ''; } catch (e) { return ''; } }
-function psCodeField(id) { return psClassOk(psClassGet()) ? '' : '<label class="fld" style="flex:1 1 100%"><span>رمز مدرّبك (أو افتح رابط مدرّبك فيُحفظ تلقائياً)</span><input id="' + id + '" class="ltr" placeholder="PRJXXXXXX" autocapitalize="characters"></label>'; }
-function psResolve(inputId) { var el = document.getElementById(inputId), c = psClassGet(); if (psClassOk(c)) return c; c = ((el && el.value) || '').trim().toUpperCase(); if (psClassOk(c)) { try { localStorage.setItem('netlab.pclass', c); } catch (e) { } return c; } return ''; }
-function psClassOk(c) { return /^PRJ[A-Z0-9]{6}$/.test(String(c || '').trim().toUpperCase()); }
-function psTopic(c) { return 'tmlp' + String(c).trim().toLowerCase(); }
+function psCodeField(id) { return psClassGet() ? '<p class="note" style="flex:1 1 100%">المدرّب: <b dir="ltr">' + esc(psClassGet()) + '</b> <a href="#" data-ps="chg" style="color:var(--acc,#2a7)">تغيير</a></p>' : '<label class="fld" style="flex:1 1 100%"><span>معرّف مدرّبك (يكتبه الطالب مرة واحدة فقط)</span><input id="' + id + '" class="ltr" placeholder="مثال: naif" autocapitalize="none"></label>'; }
+function psResolve(inputId) { var el = document.getElementById(inputId), c = psClassGet(); if (c) return c; c = psNorm((el && el.value) || ''); if (psClassOk(c)) { try { localStorage.setItem('netlab.pclass', c); } catch (e) { } return c; } return ''; }
+function psTopic(c) { return 'tmlp' + psNorm(c); }
 function psData() {
   var labs = allLabs().filter(function (l) { return String(l.id).indexOf('exam') < 0; }), st = psStamps(), out = [];
   allCourses().forEach(function (c) {
@@ -10237,7 +10238,7 @@ function psReportHtml() {
 }
 function psSend(btn) {
   var c = psResolve('psClass'), m = $('#psMsg');
-  if (!c) { m.textContent = 'اكتب رمز مدرّبك أو افتح الرابط الذي أرسله لك.'; m.className = 'note exbad'; return; }
+  if (!c) { m.textContent = 'اكتب معرّف مدرّبك (مثل naif) مرة واحدة.'; m.className = 'note exbad'; return; }
   if (!repWho().i) { m.textContent = 'سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.'; m.className = 'note exbad'; return; }
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
   fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك للمدرّب ✔'; m.className = 'note exok'; })
@@ -10247,7 +10248,7 @@ function psSendReport(btn) {
   var m = document.getElementById('winMsg'), R = repData(); if (!R || !m) return;
   var c = psResolve('winCls');
   var bad = function (t) { m.textContent = t; m.className = 'note exbad'; };
-  if (!c) return bad('اكتب رمز مدرّبك أو افتح الرابط الذي أرسله لك.');
+  if (!c) return bad('اكتب معرّف مدرّبك (مثل naif) مرة واحدة.');
   if (!R.who.i) return bad('سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.');
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
   fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة لمدرّبك ✔'; m.className = 'note exok'; })
@@ -10256,12 +10257,13 @@ function psSendReport(btn) {
 document.addEventListener('click', function (e) {
   var w = e.target.closest('#win [data-w]');
   if (w) { if (w.getAttribute('data-w') === 'rep') openReport(); else psSendReport(w); return; }
-  var b = e.target.closest('#courseList [data-ps],#psT [data-ps]'); if (!b) return;
-  var a = b.getAttribute('data-ps');
+  var b = e.target.closest('#courseList [data-ps],#psT [data-ps],#win [data-ps]'); if (!b) return;
+  var a = b.getAttribute('data-ps'); e.preventDefault();
+  if (a === 'chg') { try { localStorage.removeItem('netlab.pclass'); } catch (x) { } var p = b.parentNode; if (p) p.outerHTML = psCodeField('winCls'); return; }
+  if (a === 'tset') { var v = psNorm(($('#psTid') || {}).value); if (psClassOk(v)) { try { localStorage.setItem('netlab.tclass', v); } catch (x) { } psTrainer(); } return; }
   if (a === 'rep') openReport(null, psReportHtml());
   else if (a === 'send') psSend(b);
-  else if (a === 'gen') { var c = 'PRJ' + rid(6); try { localStorage.setItem('netlab.tclass', c); } catch (x) { } psTrainer(); }
-  else if (a === 'cpl') copyText(psLink(), b);
+  else if (a === 'cpl') copyText(psTClass(), b);
   else if (a === 'pull') psPull(false);
   else if (a === 'csv') copyText(psCsv(), b);
   else if (a === 'stu') { PS_SEL = b.getAttribute('data-i'); psShow(); }
@@ -10270,11 +10272,10 @@ document.addEventListener('click', function (e) {
 var PS_SEL = null, PS_BY = null;
 /* ---- trainer view ---- */
 var PSL = null;
-function psTClass() { var c = ''; try { c = localStorage.getItem('netlab.tclass') || ''; if (!c) { c = 'PRJ' + rid(6); localStorage.setItem('netlab.tclass', c); } } catch (e) { c = c || 'PRJ' + rid(6); } return c; }
-function psLink() { return PS_BASE + '#t=' + psTClass(); }
+function psTClass() { var c = ''; try { c = localStorage.getItem('netlab.tclass') || ''; } catch (e) { } if (!c && typeof SESS !== 'undefined' && SESS.id) c = psNorm(SESS.id); return psNorm(c); }
 function psTrainer() {
   var c = psTClass(), el = $('#psT'); if (!el) return;
-  el.innerHTML = '<div class="panel"><h3>رابط طلابك</h3><p class="note">أرسل هذا الرابط لطلابك. من يفتحه تُربط تقاريره بك تلقائياً، ولا يكتب أي رمز.</p><div class="psbig" dir="ltr" style="font-size:.85rem;letter-spacing:0;word-break:break-all">' + esc(psLink()) + '</div><div class="row2"><button class="btn pri" data-ps="cpl">نسخ الرابط</button><button class="btn" data-ps="gen">رابط جديد</button></div><p class="note">لو بدّلت الرابط ينقطع من يستخدم القديم. الطلاب يصلون من الرابط فقط، فلا تتداخل شعبتك مع شعب المدربين الآخرين.</p></div><div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب وتقاريرهم</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>';
+  el.innerHTML = '<div class="panel"><h3>معرّف مدرّبك</h3>' + (c ? '<p class="note">قل لطلابك فقط: «اكتبوا هذا المعرّف مرة واحدة عند أول إرسال». لا روابط ولا رموز.</p><div class="psbig" dir="ltr">' + esc(c) + '</div><div class="row2"><button class="btn pri" data-ps="cpl">نسخ المعرّف</button></div>' : '<p class="note">اختر معرّفاً قصيراً بالأحرف الإنجليزية (3–24 حرفاً أو أرقام) وأعطه لطلابك.</p><div class="row2"><input id="psTid" class="ltr" placeholder="مثال: naif" style="flex:1"><button class="btn pri" data-ps="tset">حفظ</button></div>') + '</div>' + '<div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب وتقاريرهم</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>';
   clearInterval(PSL); if (c) { PSL = setInterval(function () { if (!document.getElementById('psOut')) return clearInterval(PSL); psPull(true); }, 30000); psPull(true); }
 }
 function psParse(text) {
