@@ -368,7 +368,7 @@ svg.topo [data-dev]{touch-action:none}
 .wpsc{display:flex;gap:6px;overflow-x:auto;padding:5px;background:#001a40;scrollbar-width:none;touch-action:pan-x}.wpsc a{color:#eaeaea;border:1px solid #3a5a8a;border-radius:99px;padding:5px 12px;font:12px var(--font-mono);white-space:nowrap;cursor:pointer}
 .wpsf{display:flex;align-items:center;gap:6px;background:#001a40;padding:5px 6px}.wpsf label{color:#f2d96b;font:12px var(--font-mono);max-width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wpsf input{flex:1;min-width:0;background:#0a2a5c;color:#fff;border:1px solid #3a5a8a;border-radius:4px;padding:8px;font:16px var(--font-mono);min-height:40px}
-.wdrw{position:absolute;top:0;bottom:0;right:0;width:min(340px,92%);background:#fff;color:#111;z-index:12;box-shadow:-4px 0 20px rgba(0,0,0,.5);overflow:auto;padding:10px 12px;direction:rtl;text-align:right;font-family:var(--font-body)}
+.wdrw{-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y!important;max-height:100%;position:absolute;top:0;bottom:0;right:0;width:min(340px,92%);background:#fff;color:#111;z-index:12;box-shadow:-4px 0 20px rgba(0,0,0,.5);overflow:auto;padding:10px 12px;direction:rtl;text-align:right;font-family:var(--font-body)}
 .wdrh{display:flex;justify-content:space-between;align-items:center;gap:8px}.wdrh b{font-size:14px}.wdrp{color:#555;font-size:12px;margin:2px 0 6px}
 .wdvs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.wdv{border:1px solid #1c6bb5;color:#1c6bb5;border-radius:6px;padding:4px 10px;font:12px var(--font-mono);cursor:pointer}.wdv.on{background:#1c6bb5;color:#fff}
 .wdl{padding:0;margin:0;list-style:none}.wdl li{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #eee;font-size:13px;line-height:1.7}.wdl li.ok{color:#777;text-decoration:line-through}.wdl li span{flex:none;color:#14903a}
@@ -9098,7 +9098,7 @@ attachDrag('mini'); attachDrag('topo');
   var ci = $('#cmd'); if (ci) ci.addEventListener('keydown', function (e) { if (e.key === 'Enter') setTimeout(function () { term.scrollLeft = 0; }, 0); });
   document.addEventListener('touchmove', function (e) {
     if (!document.body.classList.contains('fixterm') || document.getElementById('rep')) return;
-    if (e.target.closest && e.target.closest('#term,#miniTopo,#devTabs,#chips,#rep,#pcsheet')) return;
+    if (e.target.closest && e.target.closest('#term,#miniTopo,#devTabs,#chips,#rep,#pcsheet,.wdrw')) return;
     if (e.cancelable) e.preventDefault();
   }, { passive: false });
 })();
