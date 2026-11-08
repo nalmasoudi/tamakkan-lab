@@ -10188,7 +10188,10 @@ var PS_BASE = 'https://nalmasoudi.github.io/tamakkan-lab/';
 function psNorm(c) { return String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, ''); }
 function psClassOk(c) { return /^[a-z0-9]{3,24}$/.test(psNorm(c)) && psNorm(c) === String(c || '').trim().toLowerCase(); }
 function psClassGet() { try { return localStorage.getItem('netlab.pclass') || ''; } catch (e) { return ''; } }
-function psCodeField(id) { return psClassGet() ? '<p class="note" style="flex:1 1 100%">المدرّب: <b dir="ltr">' + esc(psClassGet()) + '</b> <a href="#" data-ps="chg" style="color:var(--acc,#2a7)">تغيير</a></p>' : '<label class="fld" style="flex:1 1 100%"><span>معرّف مدرّبك (يكتبه الطالب مرة واحدة فقط)</span><input id="' + id + '" class="ltr" placeholder="مثال: naif" autocapitalize="none"></label>'; }
+var PS_TRS = [{ id: 'naif', n: 'نايف' }, { id: 'hasen', n: 'حاسن العزيزي' }, { id: 'abdulwahid', n: 'عبدالواحد الزهراني' }, { id: 'abdulghani', n: 'عبدالغني المالكي' }];
+function psTName(c) { c = psNorm(c); for (var i = 0; i < PS_TRS.length; i++) if (PS_TRS[i].id === c) return PS_TRS[i].n; return c; }
+function psSel(id) { return '<select id="' + id + '"><option value="">— اختر مدرّبك —</option>' + PS_TRS.map(function (t) { return '<option value="' + t.id + '">' + esc(t.n) + '</option>'; }).join('') + '</select>'; }
+function psCodeField(id) { return psClassGet() ? '<p class="note" style="flex:1 1 100%">سيُرسل إلى: <b>' + esc(psTName(psClassGet())) + '</b> <a href="#" data-ps="chg" style="color:var(--acc,#2a7)">تغيير</a></p>' : '<label class="fld" style="flex:1 1 100%"><span>مدرّبك (تختاره مرة واحدة فقط)</span>' + psSel(id) + '</label>'; }
 function psResolve(inputId) { var el = document.getElementById(inputId), c = psClassGet(); if (c) return c; c = psNorm((el && el.value) || ''); if (psClassOk(c)) { try { localStorage.setItem('netlab.pclass', c); } catch (e) { } return c; } return ''; }
 function psTopic(c) { return 'tmlp' + psNorm(c); }
 function psData() {
@@ -10238,20 +10241,20 @@ function psReportHtml() {
 }
 function psSend(btn) {
   var c = psResolve('psClass'), m = $('#psMsg');
-  if (!c) { m.textContent = 'اكتب معرّف مدرّبك (مثل naif) مرة واحدة.'; m.className = 'note exbad'; return; }
+  if (!c) { m.textContent = 'اختر مدرّبك من القائمة.'; m.className = 'note exbad'; return; }
   if (!repWho().i) { m.textContent = 'سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.'; m.className = 'note exbad'; return; }
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
-  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك للمدرّب ✔'; m.className = 'note exok'; })
+  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
     .catch(function () { m.textContent = 'تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'; m.className = 'note exbad'; });
 }
 function psSendReport(btn) {
   var m = document.getElementById('winMsg'), R = repData(); if (!R || !m) return;
   var c = psResolve('winCls');
   var bad = function (t) { m.textContent = t; m.className = 'note exbad'; };
-  if (!c) return bad('اكتب معرّف مدرّبك (مثل naif) مرة واحدة.');
+  if (!c) return bad('اختر مدرّبك من القائمة.');
   if (!R.who.i) return bad('سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.');
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
-  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة لمدرّبك ✔'; m.className = 'note exok'; })
+  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
     .catch(function () { bad('تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'); });
 }
 document.addEventListener('click', function (e) {
@@ -10260,6 +10263,7 @@ document.addEventListener('click', function (e) {
   var b = e.target.closest('#courseList [data-ps],#psT [data-ps],#win [data-ps]'); if (!b) return;
   var a = b.getAttribute('data-ps'); e.preventDefault();
   if (a === 'chg') { try { localStorage.removeItem('netlab.pclass'); } catch (x) { } var p = b.parentNode; if (p) p.outerHTML = psCodeField('winCls'); return; }
+  if (a === 'tchg') { try { localStorage.removeItem('netlab.tclass'); } catch (x) { } psTrainer(); return; }
   if (a === 'tset') { var v = psNorm(($('#psTid') || {}).value); if (psClassOk(v)) { try { localStorage.setItem('netlab.tclass', v); } catch (x) { } psTrainer(); } return; }
   if (a === 'rep') openReport(null, psReportHtml());
   else if (a === 'send') psSend(b);
@@ -10272,10 +10276,10 @@ document.addEventListener('click', function (e) {
 var PS_SEL = null, PS_BY = null;
 /* ---- trainer view ---- */
 var PSL = null;
-function psTClass() { var c = ''; try { c = localStorage.getItem('netlab.tclass') || ''; } catch (e) { } if (!c && typeof SESS !== 'undefined' && SESS.id) c = psNorm(SESS.id); return psNorm(c); }
+function psTClass() { var c = ''; try { c = localStorage.getItem('netlab.tclass') || ''; } catch (e) { } if (!c && typeof SESS !== 'undefined' && SESS.id && psTName(SESS.id) !== psNorm(SESS.id)) c = psNorm(SESS.id); return psNorm(c); }
 function psTrainer() {
   var c = psTClass(), el = $('#psT'); if (!el) return;
-  el.innerHTML = '<div class="panel"><h3>معرّف مدرّبك</h3>' + (c ? '<p class="note">قل لطلابك فقط: «اكتبوا هذا المعرّف مرة واحدة عند أول إرسال». لا روابط ولا رموز.</p><div class="psbig" dir="ltr">' + esc(c) + '</div><div class="row2"><button class="btn pri" data-ps="cpl">نسخ المعرّف</button></div>' : '<p class="note">اختر معرّفاً قصيراً بالأحرف الإنجليزية (3–24 حرفاً أو أرقام) وأعطه لطلابك.</p><div class="row2"><input id="psTid" class="ltr" placeholder="مثال: naif" style="flex:1"><button class="btn pri" data-ps="tset">حفظ</button></div>') + '</div>' + '<div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب وتقاريرهم</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>';
+  el.innerHTML = '<div class="panel"><h3>مدرّبك</h3>' + (c ? '<p class="note">تظهر تقارير الطلاب الذين اختاروك: <b>' + esc(psTName(c)) + '</b> <a href="#" data-ps="tchg" style="color:var(--acc,#2a7)">تغيير</a></p>' : '<p class="note">اختر اسمك مرة واحدة ليصلك طلابك.</p><div class="row2">' + psSel('psTid') + '<button class="btn pri" data-ps="tset">حفظ</button></div>') + '</div>' + '<div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب وتقاريرهم</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>';
   clearInterval(PSL); if (c) { PSL = setInterval(function () { if (!document.getElementById('psOut')) return clearInterval(PSL); psPull(true); }, 30000); psPull(true); }
 }
 function psParse(text) {
