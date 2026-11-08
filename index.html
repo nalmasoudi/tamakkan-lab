@@ -2820,8 +2820,8 @@ C('p', 'show logging', function (d) {
 /* ===== Linux (Ubuntu) simulation: course 252 (Operating Systems 2) =====
    Hosts are 'pc' devices with d.os = 'linux' (own shell) or 'printer'.            */
 var LXDATE = 'Sat Oct 24 21:30:00 +03 2026';
-var LX_SVCS = { ssh: 'openssh-server', smbd: 'samba', nmbd: 'samba', cups: 'cups', apache2: 'apache2', vsftpd: 'vsftpd', nginx: 'nginx' };
-var LX_PORTS = { ssh: [22], smbd: [139, 445], cups: [631], apache2: [80], vsftpd: [21], nginx: [80] };
+var LX_SVCS = { telnet: 'telnetd', ssh: 'openssh-server', smbd: 'samba', nmbd: 'samba', cups: 'cups', apache2: 'apache2', vsftpd: 'vsftpd', nginx: 'nginx' };
+var LX_PORTS = { telnet: [23], ssh: [22], smbd: [139, 445], cups: [631], apache2: [80], vsftpd: [21], nginx: [80] };
 var LX_PKG = { samba: ['smbd', 'nmbd'], 'openssh-server': ['ssh'], cups: ['cups'], apache2: ['apache2'], vsftpd: ['vsftpd'], nginx: ['nginx'], smbclient: [], 'cifs-utils': [], 'net-tools': [], tree: [], htop: [], curl: [], wget: [], git: [], 'isc-dhcp-server': [], bind9: [], ufw: [], fail2ban: [], 'python3': [], 'build-essential': [] };
 var LX_DESC = { samba: 'SMB/CIFS file, print, and login server for Unix', 'openssh-server': 'secure shell (SSH) server', cups: 'Common UNIX Printing System' };
 
@@ -2852,8 +2852,8 @@ function lxInit(d) {
   F('/var/log/syslog', 'Oct 24 09:00:01 ' + L.host + ' systemd[1]: Started Daily apt download activities.\n', 'syslog', 'adm', 416); F('/var/log/auth.log', 'Oct 24 09:00:12 ' + L.host + ' login[512]: pam_unix(login:session): session opened for user student\n', 'syslog', 'adm', 416);
   F('/home/student/Documents/notes.txt', 'ملاحظات الدرس\nLinux is free and open source.\n', 'student', 'student', 420);
   F('/home/student/Desktop/test.txt', 'Printer test page\nLine 2\n', 'student', 'student', 420);
-  ['sshd_config'].forEach(function () { });
   lxSvcSync(d);
+  Object.keys(o.files || {}).forEach(function (p) { var dd = lxDir(p); while (dd && dd !== '/' && !L.fs[dd]) { L.fs[dd] = { t: 'd', o: 'root', g: 'root', m: 493, mt: 'Oct 24 09:00' }; dd = lxDir(dd); } L.fs[p] = { t: 'f', o: 'root', g: 'adm', m: 420, c: o.files[p], mt: 'Nov 18 09:00' }; });
   if (o.desktop) ubInit(d, o);
   else if (o.install) { d.lx.inst = { i: 0, v: {} }; d.lx.host = 'ubuntu'; }
 }
@@ -2867,6 +2867,7 @@ function lxSvcSync(d) {
   }
   if (L.pkgs.cups) { F('/etc/cups/cupsd.conf', 'LogLevel warn\nListen localhost:631\nListen /run/cups/cups.sock\nBrowsing No\n'); if (!L.svc.cups) L.svc.cups = { active: true, enabled: true }; }
   if (L.pkgs.apache2 && !L.svc.apache2) L.svc.apache2 = { active: true, enabled: true };
+  if (L.pkgs.telnetd && !L.svc.telnet) L.svc.telnet = { active: true, enabled: true };
   if (L.pkgs.vsftpd && !L.svc.vsftpd) L.svc.vsftpd = { active: true, enabled: true };
   if (L.pkgs.nginx && !L.svc.nginx) L.svc.nginx = { active: true, enabled: true };
 }
@@ -3239,8 +3240,8 @@ LXC.stat = function (c, a) {
 LXC.head = function (c, a, inp) { var fl = lxFlags(a, ['n']), n = fl.f.n ? +fl.f.n : 10, t = fl.p.length ? LXC.cat(c, fl.p) : inp || ''; return t.split('\n').slice(0, n).join('\n') + '\n'; };
 LXC.tail = function (c, a, inp) { var fl = lxFlags(a, ['n']), n = fl.f.n ? +fl.f.n : 10, t = (fl.p.length ? LXC.cat(c, fl.p) : inp || '').replace(/\n$/, ''); return t.split('\n').slice(-n).join('\n') + '\n'; };
 LXC.wc = function (c, a, inp) { var fl = lxFlags(a), t = fl.p.length ? LXC.cat(c, fl.p) : inp || '', l = (t.match(/\n/g) || []).length, w = t.split(/\s+/).filter(Boolean).length; if (fl.f.l) return l + '\n'; if (fl.f.w) return w + '\n'; return ' ' + l + '  ' + w + ' ' + t.length + (fl.p.length ? ' ' + fl.p[0] : '') + '\n'; };
-LXC.sort = function (c, a, inp) { var fl = lxFlags(a), t = (fl.p.length ? LXC.cat(c, fl.p) : inp || '').replace(/\n$/, '').split('\n').sort(); if (fl.f.r) t.reverse(); return t.join('\n') + '\n'; };
-LXC.uniq = function (c, a, inp) { var t = (inp || '').replace(/\n$/, '').split('\n'); return t.filter(function (x, i) { return i === 0 || x !== t[i - 1]; }).join('\n') + '\n'; };
+LXC.sort = function (c, a, inp) { var fl = lxFlags(a), t = (fl.p.length ? LXC.cat(c, fl.p) : inp || '').replace(/\n$/, '').split('\n'), num = fl.f.n; t = t.sort(function (x, y) { if (num) { var d = parseFloat(x) - parseFloat(y); if (d) return d; } return x < y ? -1 : x > y ? 1 : 0; }); if (fl.f.r) t.reverse(); if (fl.f.u) t = t.filter(function (x, i) { return i === 0 || x !== t[i - 1]; }); return t.join('\n') + '\n'; };
+LXC.uniq = function (c, a, inp) { var fl = lxFlags(a), t = (inp || '').replace(/\n$/, '').split('\n'), o = []; t.forEach(function (x) { if (o.length && o[o.length - 1][0] === x) o[o.length - 1][1]++; else o.push([x, 1]); }); return o.map(function (r) { return fl.f.c ? String(r[1]).padStart(7) + ' ' + r[0] : r[0]; }).join('\n') + '\n'; };
 LXC.cut = function (c, a, inp) { var fl = lxFlags(a, ['d', 'f']), d = fl.f.d || '\t', f = (fl.f.f || '1').split(',').map(Number); return (inp || '').replace(/\n$/, '').split('\n').map(function (l) { var p = l.split(d); return f.map(function (i) { return p[i - 1] || ''; }).join(d); }).join('\n') + '\n'; };
 LXC.grep = function (c, a, inp) {
   var fl = lxFlags(a), pat = fl.p[0], files = fl.p.slice(1);
@@ -3368,6 +3369,30 @@ function lxUfwAllows(L, port) {
   return L.ufw.rules.some(function (r) { return r.act === 'allow' && (r.port === port || (r.ports && r.ports.indexOf(port) >= 0)); }) && !L.ufw.rules.some(function (r) { return r.act === 'deny' && (r.port === port || (r.ports && r.ports.indexOf(port) >= 0)); });
 }
 
+/* ---- nmap (simulated) ---- */
+var LX_NAMES = { 21: ['ftp', 'vsftpd 3.0.5'], 22: ['ssh', 'OpenSSH 8.9p1 Ubuntu'], 23: ['telnet', 'Linux telnetd'], 80: ['http', 'Apache httpd 2.4.52'], 139: ['netbios-ssn', 'Samba smbd 4'], 445: ['microsoft-ds', 'Samba smbd 4'], 631: ['ipp', 'CUPS 2.4'] };
+LXC.nmap = function (c, a) {
+  var sn = a.indexOf('-sn') >= 0, sv = a.indexOf('-sV') >= 0, pp = null, tg = '';
+  for (var i = 0; i < a.length; i++) { if (a[i] === '-p') { pp = (a[i + 1] || '').split(',').map(Number).filter(Boolean); i++; } else if (a[i].charAt(0) !== '-') tg = a[i]; }
+  if (!tg) { c.err.push('Nmap 7.80 ( https://nmap.org )\nUsage: nmap [Scan Type(s)] [Options] {target specification}'); c.code = 1; return ''; }
+  var o = ['Starting Nmap 7.80 ( https://nmap.org ) at 2026-11-18 10:00 +03'], m = /^(\d+\.\d+\.\d+)\.0\/24$/.exec(tg);
+  if (m) {
+    if (!sn) { c.err.push('هذا التمرين: استخدم -sn لاكتشاف الأجهزة الحية في الشبكة (مثال: nmap -sn 192.168.10.0/24)'); c.code = 1; return ''; }
+    var up = 0;
+    for (var h = 1; h < 255; h++) { var ip = m[1] + '.' + h; if (ip === c.M.ifaces.FastEthernet0.ip || doPing(c.lab, c.M, ip).ok) { up++; o.push('Nmap scan report for ' + ip, 'Host is up (0.00' + (3 + h % 6) + 's latency).'); } }
+    o.push('Nmap done: 256 IP addresses (' + up + ' hosts up) scanned in 2.31 seconds'); return o.join('\n') + '\n';
+  }
+  if (!/^\d+\.\d+\.\d+\.\d+$/.test(tg)) { c.err.push('Failed to resolve "' + tg + '".'); c.code = 1; return ''; }
+  if (!doPing(c.lab, c.M, tg).ok) { o.push('Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn', 'Nmap done: 1 IP address (0 hosts up) scanned in 3.02 seconds'); return o.join('\n') + '\n'; }
+  o.push('Nmap scan report for ' + tg, 'Host is up (0.00041s latency).');
+  if (sn) { o.push('Nmap done: 1 IP address (1 host up) scanned in 0.12 seconds'); return o.join('\n') + '\n'; }
+  var ports = pp || [21, 22, 23, 25, 53, 80, 110, 139, 443, 445, 631, 3389], rows = [], cl = 0, fl = 0;
+  ports.forEach(function (p) { var r = lxConn(c, tg, p); if (r.ok) { var nm = LX_NAMES[p] || ['unknown', '']; rows.push(pad(p + '/tcp', 10) + pad('open', 8) + pad(nm[0], 14) + (sv ? nm[1] : '')); } else if (r.err === 'filtered') fl++; else cl++; });
+  if (cl + fl) o.push('Not shown: ' + (cl ? cl + ' closed ports' : '') + (cl && fl ? ', ' : '') + (fl ? fl + ' filtered ports' : ''));
+  if (rows.length) { o.push('PORT      STATE   SERVICE       ' + (sv ? 'VERSION' : '')); rows.forEach(function (r) { o.push(r); }); } else o.push('All scanned ports on ' + tg + ' are closed or filtered');
+  o.push('', 'Nmap done: 1 IP address (1 host up) scanned in 1.48 seconds'); return o.join('\n') + '\n';
+};
+
 /* ---- packages & services ---- */
 LXC.apt = function (c, a) {
   var L = c.L, fl = lxFlags(a), cmd = fl.p[0], pk = fl.p.slice(1);
@@ -3424,9 +3449,10 @@ LXC.ufw = function (c, a) {
   if (v === 'status') {
     if (!L.ufw.on) return 'Status: inactive\n';
     var o = 'Status: active\n\nTo                         Action      From\n--                         ------      ----\n';
-    L.ufw.rules.forEach(function (r) { o += pad(r.label, 27) + pad(r.act.toUpperCase(), 12) + 'Anywhere\n'; });
+    L.ufw.rules.forEach(function (r) { o += pad(r.label, 27) + pad(r.act.toUpperCase(), 12) + (r.from || 'Anywhere') + '\n'; });
     return o;
   }
+  if (v === 'deny' && a[1] === 'from' && /^\d+\.\d+\.\d+\.\d+$/.test(a[2] || '')) { L.ufw.rules.push({ act: 'deny', label: 'Anywhere', from: a[2], ports: [] }); return (L.ufw.on ? 'Rule added\n' : 'Rules updated\n'); }
   if (v === 'allow' || v === 'deny') {
     var x = a[1] || '', r = { act: v, label: x, ports: [] };
     var names = { ssh: [22], samba: [139, 445], http: [80], https: [443], ftp: [21], cups: [631], openssh: [22], 'openssh-server': [22], 'apache': [80], 'apache full': [80, 443], dns: [53] };
@@ -3826,6 +3852,10 @@ function lxCheck(l, d, c) {
     case 'pkg': return !!L.pkgs[c.p];
     case 'svc': return !!L.svc[c.s] && L.svc[c.s].active && (!c.en || L.svc[c.s].enabled);
     case 'ufw': return L.ufw.on && L.ufw.rules.some(function (r) { return r.act === 'allow' && r.ports.indexOf(c.port) >= 0; });
+    case 'fcont': { var fn = L.fs[c.p]; return !!fn && new RegExp(c.re).test(lxContent(L, fn)); }
+    case 'ufwdeny': return L.ufw.rules.some(function (r) { return r.act === 'deny' && r.from === c.ip; });
+    case 'svcoff': return !L.svc[c.s] || !L.svc[c.s].active;
+    case 'listen': return lxListen({ lx: L }).some(function (x) { return x.p === c.port; }) === (c.v !== false);
     case 'ufwany': return L.ufw.on || !c.on;
     case 'share': { var s = lxSmbParse(d)[c.n]; if (!s) return false; if (c.path && s.kv.path !== c.path) return false; if (c.w !== undefined && lxShareWritable(s) !== c.w) return false; if (c.guest !== undefined && lxShareGuest(s) !== c.guest) return false; return true; }
     case 'smbuser': return c.u in L.smbpw;
@@ -6336,6 +6366,7 @@ var COURSES = [
   { id: 'sec-232', title: 'أمن الشبكات المتقدم', code: '232 شبكا', desc: 'شبكات IPsec VPN وجدار الحماية ASA والوصول عن بعد.' }
 ];
 COURSES.push({ id: 'project', title: 'مادة المشروع', code: 'مشروع', desc: 'تطبّق فيها كل التجارب في المنصة. بعد إنهاء أي تجربة أصدر تقريرها المختصر وأرسله لمدرّبك برمز الشعبة.' });
+COURSES.push({ id: 'selected', title: 'موضوعات مختارة', code: 'مختارة', desc: 'تمارين عملية في أساسيات الهكر الأخلاقي والدفاع: استطلاع الشبكة، تقوية الخوادم، وتحليل السجلات. كلها محاكاة آمنة.' });
 var EC = ['enable', 'configure terminal'];
 function T(dev, t, h, ok) { return { dev: dev, t: t, h: h, ok: ok }; }
 function ipc(d, i, ip, m) { return { k: 'ipcfg', d: d, i: i, ip: ip, m: m }; }
@@ -6388,6 +6419,18 @@ var S231 = {
     ];
   }
 };
+
+function SEL_AUTHLOG() {
+  var h = 'ubuntu-server', o = [], p = function (n) { return ('0' + n).slice(-2); }, pid = 2200;
+  function ln(hh, mm, ss, msg) { o.push('Nov 18 ' + p(hh) + ':' + p(mm) + ':' + p(ss) + ' ' + h + ' ' + msg); }
+  ln(1, 58, 3, 'sshd[2190]: Accepted password for student from 192.168.10.20 port 40122 ssh2');
+  ln(1, 58, 3, 'sshd[2190]: pam_unix(sshd:session): session opened for user student');
+  ln(2, 10, 41, 'sshd[2196]: Failed password for student from 192.168.10.20 port 40130 ssh2');
+  for (var i = 0; i < 24; i++) ln(2, 14 + (i >> 2), (i * 11) % 60, 'sshd[' + (pid + i) + ']: Failed password for ' + (i % 3 ? 'root' : 'admin') + ' from 203.0.113.45 port ' + (51200 + i * 7) + ' ssh2');
+  for (var k = 0; k < 3; k++) ln(2, 21, 5 + k * 9, 'sshd[' + (2300 + k) + ']: Failed password for root from 198.51.100.7 port ' + (40010 + k) + ' ssh2');
+  ln(2, 30, 1, 'sshd[2310]: Accepted password for student from 192.168.10.20 port 40222 ssh2');
+  return o.join('\n') + '\n';
+}
 var LABS = [
 /* ---------- مبادئ شبكات ---------- */
   {
@@ -7163,7 +7206,59 @@ var LABS = [
       T('PC-C', 'PC-C: ping إلى PC-B (192.168.1.3) عبر النفق', ['ping 192.168.1.3'], [pingc('PC-C', '192.168.1.3')]),
       T('ASA', 'ASA: راجع الجلسة (show vpn-sessiondb remote)', ['end', 'show vpn-sessiondb remote'], [ranc('ASA', 'show vpn-sessiondb <*x>')])
     ]
-  }
+  },
+  {
+    id: 'sel-recon', course: 'selected', noenv: true, title: 'استطلاع الشبكة: اكتشاف الأجهزة والمنافذ المفتوحة (nmap)', level: 'مبتدئ', min: 25, qn: 'تمرين 1',
+    desc: 'أول خطوة في أي اختبار اختراق أخلاقي هي جمع المعلومات. من جهاز المدقق (Auditor) اكتشف الأجهزة الحية في الشبكة، ثم افحص منافذ الخادم لتعرف الخدمات المكشوفة، ثم سجّل أخطر ما وجدت.',
+    obj: ['يكتشف الأجهزة الحية باستخدام nmap -sn.', 'يفحص المنافذ المفتوحة والخدمات وإصداراتها.', 'يحدد الخدمات غير الآمنة (Telnet وFTP) ويكتب نتيجة الاستطلاع.'],
+    info: ['Auditor (جهاز التدقيق): 192.168.10.5 ، المستخدم student وكلمة السر student', 'الشبكة المستهدفة (داخل المختبر فقط): 192.168.10.0/24', 'Server: 192.168.10.10 ، Web: 192.168.10.20', 'تنبيه: الفحص هنا محاكاة تعليمية. لا تفحص شبكة لا تملك تفويضاً بفحصها.'],
+    devs: [['Auditor', 'pc', { os: 'linux', host: 'auditor', ip: '192.168.10.5', mask: '255.255.255.0', gw: '192.168.10.1' }], ['Server', 'pc', { os: 'linux', host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['openssh-server', 'telnetd', 'vsftpd', 'apache2'] }], ['Web', 'pc', { os: 'linux', host: 'web01', ip: '192.168.10.20', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['openssh-server', 'apache2'] }], S('SW1', ['F0/1', 'F0/2', 'F0/3'])],
+    links: [L('SW1', 'F0/1', 'Auditor', 'Fa0'), L('SW1', 'F0/2', 'Server', 'Fa0'), L('SW1', 'F0/3', 'Web', 'Fa0')],
+    pos: { 'Auditor': [120, 70], 'SW1': [330, 150], 'Server': [540, 70], 'Web': [330, 260] },
+    tasks: [
+      T('Auditor', 'تأكد من اتصالك بالخادم 192.168.10.10', ['ping -c 2 192.168.10.10'], [pingc('Auditor', '192.168.10.10')]),
+      T('Auditor', 'اكتشف الأجهزة الحية في الشبكة 192.168.10.0/24 (فحص بدون منافذ)', ['nmap -sn 192.168.10.0/24'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: 'nmap -sn 192\\.168\\.10\\.0/24' }]),
+      T('Auditor', 'افحص المنافذ المفتوحة على الخادم 192.168.10.10', ['nmap 192.168.10.10'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: '^nmap 192\\.168\\.10\\.10' }]),
+      T('Auditor', 'اكتشف أسماء الخدمات وإصداراتها على المنافذ 21 و22 و23 و80 للخادم (-sV)', ['nmap -sV -p 21,22,23,80 192.168.10.10'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: 'nmap -sV.*192\\.168\\.10\\.10' }]),
+      T('Auditor', 'افحص الخادم الثاني 192.168.10.20 وقارن عدد منافذه المفتوحة بالخادم الأول', ['nmap 192.168.10.20'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: '^nmap 192\\.168\\.10\\.20' }]),
+      T('Auditor', 'سجّل في الملف findings.txt الخدمتين غير المشفّرتين الخطيرتين على الخادم (telnet و ftp)', ['echo "192.168.10.10: telnet (23) و ftp (21) غير مشفّرتين" > findings.txt', 'cat findings.txt'], [{ k: 'lx', d: 'Auditor', t: 'fcont', p: '/home/student/findings.txt', re: 'telnet[\\s\\S]*ftp|ftp[\\s\\S]*telnet' }])
+    ]
+  },
+  {
+    id: 'sel-harden', course: 'selected', noenv: true, title: 'تقوية خادم لينكس (Hardening): إغلاق الخدمات الخطرة وتأمين SSH', level: 'متوسط', min: 35, qn: 'تمرين 2',
+    desc: 'الخادم يعمل بإعدادات ضعيفة: Telnet وFTP مفتوحان، وSSH يسمح بدخول root، والجدار الناري معطّل. قلّل سطح الهجوم: أغلق الخدمات غير الضرورية، امنع دخول root، وفعّل الجدار الناري، ثم تحقق بفحص من جهاز المدقق.',
+    obj: ['يعرض المنافذ المفتوحة على الخادم.', 'يوقف ويعطّل الخدمات غير المشفّرة.', 'يمنع دخول root عبر SSH ويفعّل الجدار الناري بأقل المنافذ.'],
+    info: ['Server: 192.168.10.10 ، المستخدم student وكلمة السر student (يملك sudo)', 'Auditor: 192.168.10.5 ، المستخدم student وكلمة السر student', 'المطلوب أن يبقى مفتوحاً: SSH (22) و Web (80) فقط'],
+    devs: [['Server', 'pc', { os: 'linux', host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['openssh-server', 'telnetd', 'vsftpd', 'apache2'], files: { '/etc/ssh/sshd_config': '#Port 22\nPermitRootLogin yes\nPasswordAuthentication yes\nX11Forwarding yes\n' } }], ['Auditor', 'pc', { os: 'linux', host: 'auditor', ip: '192.168.10.5', mask: '255.255.255.0', gw: '192.168.10.1' }], S('SW1', ['F0/1', 'F0/2'])],
+    links: [L('SW1', 'F0/1', 'Server', 'Fa0'), L('SW1', 'F0/2', 'Auditor', 'Fa0')],
+    pos: { 'Server': [120, 90], 'SW1': [330, 150], 'Auditor': [540, 90] },
+    tasks: [
+      T('Auditor', 'قبل التقوية: افحص الخادم من جهاز المدقق وسجّل المنافذ المفتوحة', ['nmap 192.168.10.10'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: '^nmap 192\\.168\\.10\\.10' }]),
+      T('Server', 'على الخادم: اعرض المنافذ التي تستمع للاتصالات', ['ss -tln'], [{ k: 'lx', d: 'Server', t: 'ran', c: '^(sudo )?(ss|netstat)' }]),
+      T('Server', 'أوقف خدمة Telnet وعطّلها نهائياً (بيانات الدخول تُرسل نصاً واضحاً)', ['sudo systemctl disable --now telnet', 'systemctl status telnet'], [{ k: 'lx', d: 'Server', t: 'svcoff', s: 'telnet' }]),
+      T('Server', 'أوقف خدمة FTP (vsftpd) وعطّلها نهائياً', ['sudo systemctl disable --now vsftpd'], [{ k: 'lx', d: 'Server', t: 'svcoff', s: 'vsftpd' }]),
+      T('Server', 'امنع دخول root عبر SSH: غيّر PermitRootLogin إلى no ثم أعد تشغيل الخدمة', ['sudo nano /etc/ssh/sshd_config', ':s/PermitRootLogin yes/PermitRootLogin no/', ':wq', 'sudo systemctl restart ssh'], [{ k: 'lx', d: 'Server', t: 'fcont', p: '/etc/ssh/sshd_config', re: 'PermitRootLogin no' }]),
+      T('Server', 'فعّل الجدار الناري واسمح فقط بـ SSH (22) وWeb (80)', ['sudo ufw allow ssh', 'sudo ufw allow 80', 'sudo ufw enable', 'sudo ufw status'], [{ k: 'lx', d: 'Server', t: 'ufw', port: 22 }, { k: 'lx', d: 'Server', t: 'ufw', port: 80 }, { k: 'lx', d: 'Server', t: 'ufwany', on: true }]),
+      T('Auditor', 'بعد التقوية: أعد الفحص بـ -sV وتأكد أن Telnet وFTP لم يعودا ظاهرين', ['nmap -sV 192.168.10.10'], [{ k: 'lx', d: 'Auditor', t: 'ran', c: 'nmap -sV.*192\\.168\\.10\\.10' }, { k: 'lx', d: 'Server', t: 'listen', port: 23, v: false }, { k: 'lx', d: 'Server', t: 'listen', port: 21, v: false }])
+    ]
+  },
+  {
+    id: 'sel-logs', course: 'selected', noenv: true, title: 'تحليل سجلات الدخول: اكتشاف هجوم تخمين كلمات المرور وحجب المهاجم', level: 'متوسط', min: 30, qn: 'تمرين 3',
+    desc: 'سجل المصادقة على الخادم يحتوي محاولات دخول فاشلة كثيرة. حلّل السجل بأوامر grep وcut وsort وuniq لتحدد عنوان المهاجم، ثم احجبه بالجدار الناري، وسجّل نتيجة التحقيق.',
+    obj: ['يقرأ سجل المصادقة /var/log/auth.log ويفلتر المحاولات الفاشلة.', 'يحدد أكثر العناوين محاولةً بأوامر الأنابيب (|).', 'يحجب عنوان المهاجم بقاعدة ufw ويوثّق الحادثة.'],
+    info: ['Server: 192.168.10.10 ، المستخدم student وكلمة السر student (يملك sudo)', 'ملف السجل: /var/log/auth.log', 'تلميح: السطر الفاشل مثل: Failed password for root from 203.0.113.45 port 51234 ssh2'],
+    devs: [['Server', 'pc', { os: 'linux', host: 'ubuntu-server', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', pkgs: ['openssh-server'], files: { '/var/log/auth.log': SEL_AUTHLOG() } }], S('SW1', ['F0/1'])],
+    links: [L('SW1', 'F0/1', 'Server', 'Fa0')],
+    pos: { 'Server': [200, 90], 'SW1': [420, 150] },
+    tasks: [
+      T('Server', 'اعرض عدد أسطر سجل المصادقة ثم اقرأ آخره', ['wc -l /var/log/auth.log', 'tail -n 10 /var/log/auth.log'], [{ k: 'lx', d: 'Server', t: 'ran', c: 'auth\\.log' }]),
+      T('Server', 'احسب عدد محاولات الدخول الفاشلة (Failed password)', ['grep "Failed password" /var/log/auth.log | wc -l'], [{ k: 'lx', d: 'Server', t: 'ran', c: 'grep.*Failed password.*auth\\.log' }]),
+      T('Server', 'حدد أكثر العناوين محاولةً للدخول (رتّبها تنازلياً بالعدد)', ['grep "Failed password" /var/log/auth.log | cut -d" " -f11 | sort | uniq -c | sort -rn'], [{ k: 'lx', d: 'Server', t: 'ran', c: 'uniq -c' }]),
+      T('Server', 'اكتب عنوان المهاجم (الأكثر محاولات) في الملف attacker.txt', ['echo "203.0.113.45" > attacker.txt', 'cat attacker.txt'], [{ k: 'lx', d: 'Server', t: 'fcont', p: '/home/student/attacker.txt', re: '203\\.0\\.113\\.45' }]),
+      T('Server', 'اسمح بـ SSH أولاً حتى لا تقطع اتصالك، ثم احجب عنوان المهاجم', ['sudo ufw allow ssh', 'sudo ufw deny from 203.0.113.45'], [{ k: 'lx', d: 'Server', t: 'ufwdeny', ip: '203.0.113.45' }]),
+      T('Server', 'فعّل الجدار الناري وتحقق من القواعد', ['sudo ufw enable', 'sudo ufw status'], [{ k: 'lx', d: 'Server', t: 'ufw', port: 22 }, { k: 'lx', d: 'Server', t: 'ufwany', on: true }, { k: 'lx', d: 'Server', t: 'ran', c: 'ufw status' }])
+    ]
+  },
 ];
 
 var SAMPLE_LAB = {
@@ -7260,7 +7355,7 @@ function loadCustom() {
   return Array.isArray(arr) ? arr : [];
 }
 var ACCESS = { vis: null, extra: [] };
-function visC(cid) { return cid === 'project' || !ACCESS.vis || ACCESS.vis(cid); }
+function visC(cid) { return cid === 'project' || cid === 'selected' || !ACCESS.vis || ACCESS.vis(cid); }
 function allLabs() { return LABS.filter(function (l) { return visC(labCourse(l)); }).concat(loadCustom(), ACCESS.extra); }
 function allCourses() {
   var cs = COURSES.filter(function (c) { return visC(c.id); }), ids = {};
@@ -7861,6 +7956,79 @@ var LEARN = [
       ['p', 'خطوات المثبّت الرئيسية بالترتيب، وما ينبغي أن تفهمه في كل خطوة:'],
       ['ol', ['<b>اللغة ولوحة المفاتيح:</b> English مناسب لأن الأوامر والمراجع بها.', '<b>الشبكة:</b> الخادم يحتاج عنواناً <b>ثابتاً</b>. اختر Manual واكتب العنوان/البادئة والبوابة.', '<b>القرص:</b> Use an entire disk يقسّم تلقائياً. ينبّهك لأن المحتوى سيُمسح.', '<b>الملف الشخصي:</b> اسم الخادم، واسم المستخدم، وكلمة سر (لا تُترك فارغة).', '<b>OpenSSH:</b> ثبّته إن أردت إدارة الخادم عن بعد.', '<b>إعادة التشغيل:</b> أزل وسيط التنصيب ثم ادخل بالمستخدم الذي أنشأته.']],
       ['warn', 'المحاكي يمثّل المعالج بأسئلة وتحقق، ولا يحاكي الإقلاع من ISO.']
+    ] }
+  ] },
+  { id: 'selected', title: 'موضوعات مختارة: أساسيات الهكر الأخلاقي', desc: 'تفهم كيف يفكر المهاجم لتدافع بشكل أفضل: استطلاع الشبكة، تقوية الخوادم، وتحليل السجلات. كلها تمارين محاكاة آمنة.', lessons: [
+    { id: 'sel-intro', title: 'من الصفر: ما هو الهكر الأخلاقي ولماذا نتعلمه؟', min: 6, b: [
+      ['p', '<b>الهكر الأخلاقي</b> هو أن تفحص أنظمة جهةٍ ما <b>بإذنٍ مكتوب منها</b> لتجد الثغرات قبل أن يجدها المخترق الحقيقي، ثم تساعدها على إصلاحها. الأدوات واحدة، لكن الفرق في <b>الإذن</b> والهدف.'],
+      ['warn', 'فحص شبكة أو جهاز لا تملكه ولا تملك تفويضاً بفحصه جريمة في نظام مكافحة الجرائم المعلوماتية السعودي، حتى لو كان فحصاً بسيطاً. تدرّب هنا فقط داخل المحاكي أو على أجهزتك أنت.'],
+      ['h', 'مصطلحات تحتاجها قبل البدء'],
+      ['ul', ['<b>عنوان IP:</b> رقم يعرّف الجهاز في الشبكة، مثل <code>192.168.10.10</code>.', '<b>المنفذ (Port):</b> باب رقمه من 0 إلى 65535 يستقبل نوعاً معيناً من الخدمات. الجهاز عمارة والمنفذ باب شقة.', '<b>الخدمة (Service):</b> برنامج يعمل خلف المنفذ ويرد على الطلبات، مثل خادم الويب على المنفذ 80.', '<b>سطح الهجوم:</b> كل المنافذ والخدمات المفتوحة التي يمكن أن يحاول المهاجم الدخول منها. كلما قلّت قلّ الخطر.', '<b>الثغرة:</b> ضعف في إعداد أو برنامج يمكن استغلاله، مثل خدمة غير مشفّرة أو كلمة سر ضعيفة.']],
+      ['h', 'مراحل اختبار الاختراق الأخلاقي'],
+      ['ol', ['<b>الاستطلاع:</b> جمع معلومات عن الهدف (الأجهزة والمنافذ والخدمات). التمرين 1.', '<b>التقييم:</b> البحث عن الضعف في ما وجدناه. التمرين 2.', '<b>التقوية والإصلاح:</b> إغلاق الثغرات. التمرين 2.', '<b>المراقبة والتحليل:</b> قراءة السجلات لاكتشاف الهجوم والرد عليه. التمرين 3.']],
+      ['tip', 'في هذه المادة تلعب دور <b>المدقق</b> ودور <b>مدير النظام</b> معاً: تكتشف الضعف ثم تصلحه. هذا هو الهدف الحقيقي للهكر الأخلاقي: الدفاع.']
+    ] },
+    { id: 'sel-nmap', title: 'استطلاع الشبكة بأداة nmap', min: 10, lab: 'sel-recon', b: [
+      ['p', '<b>nmap</b> أشهر أداة لاستطلاع الشبكات. تسأل كل جهاز: هل أنت حي؟ وأي أبوابك (منافذك) مفتوحة؟ ثم تعرض لك الجواب.'],
+      ['h', 'الخطوة 1: هل الجهاز متصل؟'],
+      ['code', 'ping -c 2 192.168.10.10     ← أرسل طلبين واكتب هل رد الجهاز'],
+      ['h', 'الخطوة 2: اكتشاف كل الأجهزة الحية في الشبكة'],
+      ['code', 'nmap -sn 192.168.10.0/24     ← -sn تعني: اكتشف الأجهزة فقط بدون فحص المنافذ'],
+      ['p', 'العلامة <code>/24</code> تعني فحص العناوين من 192.168.10.1 إلى 192.168.10.254. النتيجة قائمة بالأجهزة التي رددت (Host is up).'],
+      ['h', 'الخطوة 3: فحص منافذ جهاز واحد'],
+      ['code', 'nmap 192.168.10.10          ← افحص المنافذ الشائعة'],
+      ['p', 'ستظهر لك قائمة مثل:'],
+      ['code', 'PORT      STATE   SERVICE\n21/tcp    open    ftp\n22/tcp    open    ssh\n23/tcp    open    telnet\n80/tcp    open    http'],
+      ['ul', ['<b>PORT:</b> رقم المنفذ.', '<b>STATE open:</b> مفتوح ويستقبل اتصالات. <b>closed</b> مغلق، و<b>filtered</b> يحجبه جدار ناري.', '<b>SERVICE:</b> اسم الخدمة المتوقعة خلف المنفذ.']],
+      ['h', 'الخطوة 4: معرفة إصدار الخدمة'],
+      ['code', 'nmap -sV -p 21,22,23,80 192.168.10.10\n   -sV   ← اكتشف اسم البرنامج وإصداره\n   -p    ← افحص هذه المنافذ فقط (مفصولة بفاصلة)'],
+      ['p', 'معرفة الإصدار مهمة لأن المهاجم يبحث عن ثغرات معروفة لهذا الإصدار بالذات.'],
+      ['h', 'كيف أحكم أن المنفذ خطير؟'],
+      ['ul', ['<b>21 FTP</b> و<b>23 Telnet:</b> يرسلان اسم المستخدم وكلمة السر <b>نصاً واضحاً</b> على الشبكة، فمن يتنصت يقرؤها. غير آمنين.', '<b>22 SSH:</b> بديل مشفّر آمن عن Telnet، لكنه يحتاج إعداداً سليماً.', '<b>80 HTTP:</b> موقع ويب عادي، مقبول إن كان مقصوداً.', 'القاعدة: <b>أي منفذ مفتوح بلا حاجة هو سطح هجوم زائد.</b>']],
+      ['h', 'الخطوة 5: وثّق ما وجدت'],
+      ['code', 'echo "192.168.10.10: telnet و ftp غير مشفّرتين" > findings.txt\ncat findings.txt      ← اعرض الملف للتأكد'],
+      ['tip', 'علامة <code>&gt;</code> تكتب ناتج الأمر داخل ملف. المدقق المحترف لا يكتفي بالاكتشاف بل يكتب تقريراً بما وجد.']
+    ] },
+    { id: 'sel-harden', title: 'تقوية الخادم: تقليل سطح الهجوم', min: 12, lab: 'sel-harden', b: [
+      ['p', '<b>التقوية (Hardening)</b> تعني جعل الخادم أصعب على المهاجم: نغلق ما لا نحتاجه، ونقيّد ما نحتاجه. نبدأ من نتيجة الفحص في التمرين السابق.'],
+      ['h', '1) ما الذي يستمع الآن على الخادم؟'],
+      ['code', 'ss -tln          ← اعرض المنافذ التي تنتظر اتصالات (t=TCP, l=listening, n=أرقام)'],
+      ['h', '2) أوقف الخدمات غير المشفّرة'],
+      ['code', 'sudo systemctl disable --now telnet\nsudo systemctl disable --now vsftpd\nsystemctl status telnet      ← يجب أن تظهر inactive'],
+      ['ul', ['<code>sudo</code>: تشغيل الأمر بصلاحية مدير النظام.', '<code>disable</code>: لا تعمل الخدمة عند إعادة تشغيل الجهاز.', '<code>--now</code>: أوقفها الآن أيضاً. بدونها تبقى تعمل حتى إعادة التشغيل.']],
+      ['h', '3) امنع دخول root عبر SSH'],
+      ['p', 'اسم <code>root</code> معروف للجميع، فيجرّبه المهاجمون أولاً. نمنع دخوله مباشرة، ويدخل المدير بمستخدم عادي ثم يستخدم sudo.'],
+      ['code', 'sudo nano /etc/ssh/sshd_config                       ← افتح ملف الإعداد\n:s/PermitRootLogin yes/PermitRootLogin no/                ← استبدل yes بـ no\n:wq                                                      ← احفظ واخرج\nsudo systemctl restart ssh                               ← أعد تشغيل الخدمة لتقرأ الإعداد الجديد'],
+      ['tip', 'داخل المحاكي سطر <code>:s/القديم/الجديد/</code> هو طريقة التعديل السريعة، و<code>:wq</code> للحفظ والخروج.'],
+      ['h', '4) فعّل الجدار الناري بأقل المنافذ'],
+      ['code', 'sudo ufw allow ssh      ← اسمح بالمنفذ 22 أولاً حتى لا تقطع اتصالك بنفسك\nsudo ufw allow 80       ← اسمح بالويب\nsudo ufw enable         ← شغّل الجدار\nsudo ufw status         ← اعرض القواعد'],
+      ['p', 'مبدأ الجدار الناري: <b>امنع كل شيء، واسمح فقط بما تحتاجه.</b>'],
+      ['h', '5) تحقق من النتيجة'],
+      ['p', 'من جهاز المدقق أعد الفحص:'],
+      ['code', 'nmap -sV 192.168.10.10'],
+      ['p', 'يجب أن يظهر <b>22 و80 فقط</b>. اختفاء 21 و23 يعني أن سطح الهجوم صغر. تأكد دائماً من النتيجة بفحص ثانٍ بعد أي تغيير أمني.'],
+      ['warn', 'لا تفعّل الجدار الناري قبل السماح بـ SSH على خادم تديره عن بعد، وإلا تُقفل عن جهازك.']
+    ] },
+    { id: 'sel-logs', title: 'تحليل السجلات واكتشاف هجوم تخمين كلمات المرور', min: 12, lab: 'sel-logs', b: [
+      ['p', 'كل خادم يكتب <b>سجلاً</b> بما يحدث عليه. سجل المصادقة <code>/var/log/auth.log</code> يسجّل كل محاولة دخول، ناجحة أو فاشلة. المهاجم الذي يخمّن كلمات المرور يترك أثراً واضحاً: عشرات المحاولات الفاشلة من نفس العنوان.'],
+      ['h', 'شكل سطر في السجل'],
+      ['code', 'Nov 18 02:14:07 ubuntu-server sshd[2211]: Failed password for root from 203.0.113.45 port 51234 ssh2\n  1   2     3          4          5      6      7      8   9    10        11'],
+      ['p', 'الحقول مفصولة بمسافات. الحقل رقم <b>11</b> هو عنوان IP الذي حاول الدخول، وهذا ما سنستخرجه.'],
+      ['h', 'الخطوة 1: اقرأ السجل'],
+      ['code', 'wc -l /var/log/auth.log            ← كم سطراً فيه؟\ntail -n 10 /var/log/auth.log        ← آخر 10 أسطر'],
+      ['h', 'الخطوة 2: اعزل المحاولات الفاشلة'],
+      ['code', 'grep "Failed password" /var/log/auth.log | wc -l'],
+      ['ul', ['<code>grep "نص" ملف</code>: اعرض الأسطر التي فيها هذا النص فقط.', '<code>|</code> (الأنبوب): خذ ناتج الأمر الأول وأعطه للأمر الثاني.', '<code>wc -l</code>: عدّ الأسطر. فالنتيجة عدد المحاولات الفاشلة.']],
+      ['h', 'الخطوة 3: من أكثر من حاول؟'],
+      ['code', 'grep "Failed password" /var/log/auth.log | cut -d" " -f11 | sort | uniq -c | sort -rn'],
+      ['p', 'اقرأه كخط إنتاج، كل أمر يمرر ناتجه للتالي:'],
+      ['ol', ['<code>grep</code>: خذ المحاولات الفاشلة فقط.', '<code>cut -d" " -f11</code>: من كل سطر خذ الحقل 11 (العنوان) باعتبار الفاصل مسافة.', '<code>sort</code>: رتّب العناوين لتتجاور المتشابهة.', '<code>uniq -c</code>: اجمع المتشابهة وأظهر عددها.', '<code>sort -rn</code>: رتّب بالعدد من الأكبر إلى الأصغر.']],
+      ['p', 'ستظهر لك نتيجة بهذا الشكل:'],
+      ['code', '     24 203.0.113.45\n      3 198.51.100.7\n      1 192.168.10.20'],
+      ['p', 'العنوان الأول بـ 24 محاولة هو المهاجم. العنوان الأخير 192.168.10.20 هو مستخدم شرعي أخطأ مرة واحدة في كلمة السر، وهذا طبيعي.'],
+      ['h', 'الخطوة 4: وثّق ثم احجب'],
+      ['code', 'echo "203.0.113.45" > attacker.txt\nsudo ufw allow ssh                    ← أولاً حتى لا تُقفل\nsudo ufw deny from 203.0.113.45       ← احجب هذا العنوان\nsudo ufw enable\nsudo ufw status                       ← تأكد من ظهور DENY'],
+      ['tip', 'في الواقع نستخدم أيضاً أدوات تحجب تلقائياً بعد عدة محاولات فاشلة (مثل fail2ban)، وكلمات سر قوية ومفاتيح SSH بدل كلمات المرور. لكن الفكرة واحدة: <b>اقرأ السجل، حدد المصدر، ثم اقطعه.</b>']
     ] }
   ] }
 ];
@@ -8512,6 +8680,7 @@ $('#tasks').addEventListener('click', function (e) {
   else { pre.hidden = true; b.setAttribute('data-lv', '0'); b.textContent = '💡 تلميح'; }
 });
 function hintMask(lines) {
+  if (window.CUR && CUR.lab && CUR.lab.def && CUR.lab.def.course === 'selected') return lines.filter(Boolean).join('\n');
   return lines.filter(Boolean).map(function (l) {
     var tk = String(l).trim().split(/\s+/), keep = [], cut = false;
     for (var i = 0; i < tk.length; i++) { if (i >= 3 || /[0-9.\/:=]/.test(tk[i]) || (i > 0 && /^-/.test(tk[i]))) { cut = true; break; } keep.push(tk[i]); }
