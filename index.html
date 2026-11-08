@@ -556,7 +556,7 @@ body.repopen{display:none!important}html:has(#rep){height:auto!important;overflo
 .rp-h{color:#a60}.rp-note{font-size:12px;color:#445;margin:6px 0}
 .rp-kv{width:100%;border-collapse:collapse;font-size:12px}.rp-kv th,.rp-kv td{border:1px solid #d5dce2;padding:4px 6px;text-align:right;vertical-align:top}.rp-kv th{width:26%;background:#f4f6f8}.rp-kv td{direction:ltr;text-align:left;unicode-bidi:plaintext;word-break:break-word}
 #rep pre{margin:0;padding:6px;background:#f4f6f8;border:1px solid #d5dce2;font:11px/1.4 var(--font-mono);white-space:pre-wrap;word-break:break-all;direction:ltr;text-align:left;max-height:none}
-.rp-dev{break-inside:avoid-page;margin-bottom:6px}.rp-box{height:90px;border:1px solid #889;border-radius:4px}.rp-sign{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px}
+.rp-dev{break-inside:avoid-page;margin-bottom:6px}.rp-box{height:46px;border:1px solid #889;border-radius:4px}.rp-sign{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:12px}
 .rp-ver{margin-top:14px;padding:8px;border:1px dashed #889;font-size:11px}.rp-code{font:10px/1.35 var(--font-mono);word-break:break-all;margin-top:4px;user-select:all}
 @media print{
  @page{size:A4;margin:12mm}
@@ -614,6 +614,15 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 .mode[data-go="courses"] .mi svg *{stroke:#fff}.mode[data-go="courses"] .mi svg [stroke="var(--accent)"]{stroke:#E6CF98}
 .mode[data-go="learn"]{background:#F6EFDD;border-color:#E3D4A9}.mode[data-go="learn"] .mi{background:#ECDDB4;color:#6F5524}
 .mode[data-go="ws"]{background:#E6EBF1;border-color:#CBD5E1}.mode[data-go="ws"] .mi{background:#D3DCE8;color:#0B1626}
+.mode[data-go="pass"]{background:#fff;border-color:#B89B5E}.mode[data-go="pass"] .mi{background:#F1E7CC;color:#6F5524}.mode[data-go="pass"] b{color:#0B1626}.mode[data-go="pass"] span{color:#56616C}
+.ps-top{display:flex;gap:16px;align-items:center}.ps-ring{flex:none;width:76px;height:76px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;position:relative}.ps-ring:before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--surface)}.ps-ring b{position:relative;font-family:var(--font-display,inherit);font-size:1.05rem}
+.ps-sec{margin-top:16px}.ps-hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.ps-hd h3{margin:0;font-size:1rem}
+.ps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
+.stamp{position:relative;text-align:right;display:flex;flex-direction:column;gap:4px;min-height:84px;padding:10px 44px 10px 12px;border-radius:12px;border:1.5px dashed var(--line);background:var(--surface);color:var(--muted);font:inherit;font-size:.82rem;line-height:1.5;cursor:pointer}
+.stamp i{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:50%;border:1.5px dashed var(--line);display:grid;place-items:center;font-style:normal;font-weight:700}
+.stamp.on{border:1.5px solid var(--gold);color:var(--fg)}.stamp.on i{background:var(--gold);border:0;color:#0B1626}.stamp small{color:var(--muted);font-size:.72rem}
+.win-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}.win-act input{flex:1 1 150px;min-width:0;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit}.win-act .note{flex-basis:100%;margin:0}
+.psbig{font:700 1.7rem var(--font-mono,monospace);letter-spacing:.14em;margin:6px 0 10px}
 .mode[data-go="exam"]{background:#fff;border-color:#B89B5E}.mode[data-go="exam"] .mi{background:#F1E7CC;color:#6F5524}
 .mode[data-go="learn"] b,.mode[data-go="ws"] b,.mode[data-go="exam"] b{color:#0B1626}.mode[data-go="learn"] span,.mode[data-go="ws"] span,.mode[data-go="exam"] span{color:#4A5560}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mode[data-go="learn"]{background:#2A2618;border-color:#4A4122}:root:not([data-theme="light"]) .mode[data-go="ws"]{background:#14263A;border-color:#26405C}:root:not([data-theme="light"]) .mode[data-go="exam"]{background:#111D2D;border-color:#7A6A42}:root:not([data-theme="light"]) .mode[data-go="learn"] b,:root:not([data-theme="light"]) .mode[data-go="ws"] b,:root:not([data-theme="light"]) .mode[data-go="exam"] b{color:#fff}:root:not([data-theme="light"]) .mode[data-go="learn"] span,:root:not([data-theme="light"]) .mode[data-go="ws"] span,:root:not([data-theme="light"]) .mode[data-go="exam"] span{color:#B6C1CC}:root:not([data-theme="light"]) .mode .mi{background:rgba(212,183,121,.15);color:#D4B779}}
@@ -684,6 +693,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     </details>
   </section>
 
+  <section id="pass" hidden></section>
   <section id="examHome" hidden></section>
   <section id="examT" hidden></section>
   <section id="acct" hidden></section>
@@ -4122,6 +4132,7 @@ function wsCheck(l, d, c) {
     case 'link': return !!ad && ad.links.some(function (k) { return k.gpo === c.g && (ad.ous[k.target] ? ad.ous[k.target].name : k.target).toLowerCase() === c.ou.toLowerCase(); });
     case 'gpset': { if (!ad || !ad.gpos[c.g]) return false; var s = ad.gpos[c.g].set[c.p]; return !!s && s.s === (c.s || 'enabled') && (c.v === undefined || String(s.v) === String(c.v)); }
     case 'pwpol': return !!ad && ad.policy.minLen >= (c.min || 0);
+    case 'shareacc': return W.shares.some(function (s) { return s.name.toLowerCase() === c.n.toLowerCase() && (s.acc || []).some(function (x) { return x.who.toLowerCase().replace(/^.*\\/, '') === c.who.toLowerCase() && x.lv === c.lv; }); });
     case 'share': return W.shares.some(function (s) { return s.name.toLowerCase() === c.n.toLowerCase() && (!c.path || s.path.toLowerCase() === c.path.toLowerCase()); });
     case 'folder': return !!W.fs && !!W.fs[c.p.toLowerCase()];
     case 'joined': return W.joinedAd && W.domain.toLowerCase() === c.dom.toLowerCase() && !W.joinPending;
@@ -4138,7 +4149,7 @@ function wsCheck(l, d, c) {
 
 /* ---------- persistent course environment (saved on this device) ---------- */
 var WS_ENVP = 'netlab.wsenv.';
-function wsEnvOn(lab) { return !!(lab && lab.def && lab.def.course === 'os-251' && lab.def.id !== 'win-install' && !(typeof EX !== 'undefined' && EX && EX.active)); }
+function wsEnvOn(lab) { return !!(lab && lab.def && lab.def.course === 'os-251' && lab.def.id !== 'win-install' && !lab.def.noenv && !(typeof EX !== 'undefined' && EX && EX.active)); }
 function wsEnvKey(lab, d) { return SK(WS_ENVP + lab.def.course + '.' + d.win.kind); }
 function wsEnvRestore(lab) {
   if (!wsEnvOn(lab) || typeof localStorage === 'undefined') return;
@@ -4676,7 +4687,13 @@ wsCmd('gpresult', '', function (d) {
 wsCmd('systeminfo', '', function (d) { var W = d.win; wsOut(d, 'Host Name:                 ' + W.name.toUpperCase() + '\nOS Name:                   Microsoft Windows Server 2019 Standard\nOS Version:                10.0.17763 N/A Build 17763\nSystem Type:               x64-based PC\nDomain:                    ' + (W.domain || 'WORKGROUP') + '\nTime Zone:                 ' + (WS_TZS.filter(function (x) { return x[0] === W.tz; })[0] || ['', ''])[1]); }); WSC.systeminfo.raw = true;
 wsCmd('Get-Service', 'Name', function (d) { var W = d.win, rows = [['Running', 'Dnscache', 'DNS Client'], ['Running', 'LanmanServer', 'Server']]; if (W.roles.dns) rows.push(['Running', 'DNS', 'DNS Server']); if (W.roles.dhcp) rows.push(['Running', 'DHCPServer', 'DHCP Server']); if (W.ad) rows.push(['Running', 'NTDS', 'Active Directory Domain Services']); wsTable(d, ['Status', 'Name', 'DisplayName'], rows); });
 wsCmd('New-Item', 'Path;ItemType;Name', function (d, a) { var p = wsSan(a.Path || a.Name); if (!/^[A-Za-z]:\\/.test(p)) return wsErr(d, 'New-Item : Cannot find path \'' + p + '\' because it does not exist.'); d.win.fs = d.win.fs || {}; d.win.fs[p.toLowerCase()] = 1; wsOut(d, '\n    Directory: ' + p.replace(/\\[^\\]*$/, '') + '\n\nMode   Name\n----   ----\nd----- ' + p.replace(/^.*\\/, '') + '\n'); });
-wsCmd('New-SmbShare', 'Name;Path;FullAccess;ChangeAccess;ReadAccess', function (d, a) { var e = WSA.share(d, wsSan(a.Name), wsSan(a.Path)); if (e) wsErr(d, 'New-SmbShare : ' + e); else wsTable(d, ['Name', 'ScopeName', 'Path', 'Description'], [[a.Name, '*', a.Path, '']]); });
+WSA.acl = function (d, name, who, lv) {
+  var sh = d.win.shares.filter(function (x) { return x.name.toLowerCase() === String(name).toLowerCase(); })[0]; if (!sh) return 'No MSFT_SmbShare objects found with property \'Name\' equal to \'' + name + '\'.';
+  sh.acc = (sh.acc || []).filter(function (x) { return x.who.toLowerCase() !== String(who).toLowerCase(); }); sh.acc.push({ who: String(who), lv: lv }); return '';
+};
+wsCmd('Grant-SmbShareAccess', 'Name;AccountName;AccessRight;Force*;Confirm*', function (d, a) { var lv = /^full/i.test(a.AccessRight) ? 'Full' : /^change/i.test(a.AccessRight) ? 'Change' : /^read/i.test(a.AccessRight) ? 'Read' : ''; if (!lv) return wsErr(d, 'Grant-SmbShareAccess : Cannot process argument transformation on parameter \'AccessRight\'. Use Full, Change or Read.'); var bad = ''; [].concat(a.AccountName || []).forEach(function (w) { bad = bad || WSA.acl(d, wsSan(a.Name), wsSan(w), lv); }); if (bad) wsErr(d, 'Grant-SmbShareAccess : ' + bad); else wsTable(d, ['Name', 'AccountName', 'AccessControlType', 'AccessRight'], [].concat(a.AccountName || []).map(function (w) { return [a.Name, w, 'Allow', lv]; })); });
+wsCmd('Get-SmbShareAccess', 'Name', function (d, a) { var sh = d.win.shares.filter(function (x) { return x.name.toLowerCase() === String(wsSan(a.Name)).toLowerCase(); })[0]; if (!sh) return wsErr(d, 'Get-SmbShareAccess : No MSFT_SmbShare objects found with property \'Name\' equal to \'' + wsSan(a.Name) + '\'.'); wsTable(d, ['Name', 'AccountName', 'AccessControlType', 'AccessRight'], (sh.acc && sh.acc.length ? sh.acc : [{ who: 'Everyone', lv: 'Read' }]).map(function (x) { return [sh.name, x.who, 'Allow', x.lv]; })); });
+wsCmd('New-SmbShare', 'Name;Path;FullAccess;ChangeAccess;ReadAccess', function (d, a) { var e = WSA.share(d, wsSan(a.Name), wsSan(a.Path)); if (!e) { var nm = wsSan(a.Name); [['FullAccess', 'Full'], ['ChangeAccess', 'Change'], ['ReadAccess', 'Read']].forEach(function (p) { [].concat(a[p[0]] || []).forEach(function (w) { WSA.acl(d, nm, wsSan(w), p[1]); }); }); } if (e) wsErr(d, 'New-SmbShare : ' + e); else wsTable(d, ['Name', 'ScopeName', 'Path', 'Description'], [[a.Name, '*', a.Path, '']]); });
 wsCmd('Get-SmbShare', '', function (d) { wsTable(d, ['Name', 'ScopeName', 'Path', 'Description'], [['ADMIN$', '*', 'C:\\Windows', 'Remote Admin'], ['C$', '*', 'C:\\', 'Default share'], ['IPC$', '*', '', 'Remote IPC']].concat(d.win.shares.map(function (s) { return [s.name, '*', s.path, '']; }))); });
 wsCmd('Add-Computer', 'DomainName;Credential;Restart*;NewName;Force*', function (d, a) {
   var W = d.win, dom = wsSan(a.DomainName); if (W.kind !== 'client' && W.kind !== 'server') return;
@@ -6317,6 +6334,7 @@ var COURSES = [
   { id: 'pc-asm', title: 'تجميع الحاسب وتشغيله', code: '121 حاسب', desc: 'تجميع الحاسب الشخصي خطوة بخطوة (المعالج والمبرد والذاكرة والتخزين والكيبلات)، التشغيل وفحص POST، ضبط BIOS، واستكشاف أعطال الإقلاع.' },
   { id: 'sec-232', title: 'أمن الشبكات المتقدم', code: '232 شبكا', desc: 'شبكات IPsec VPN وجدار الحماية ASA والوصول عن بعد.' }
 ];
+COURSES.push({ id: 'project', title: 'مادة المشروع', code: 'مشروع', desc: 'تطبّق فيها كل التجارب في المنصة. بعد إنهاء أي تجربة أصدر تقريرها المختصر وأرسله لمدرّبك برمز الشعبة.' });
 var EC = ['enable', 'configure terminal'];
 function T(dev, t, h, ok) { return { dev: dev, t: t, h: h, ok: ok }; }
 function ipc(d, i, ip, m) { return { k: 'ipcfg', d: d, i: i, ip: ip, m: m }; }
@@ -7032,6 +7050,41 @@ var LABS = [
     ]
   },
   {
+    id: 'win-exam1', course: 'os-251', noenv: true, noban: true, title: 'السؤال 1 – نظم تشغيل (1): نطاق ومشاركات (تنصيب + AD + DHCP + صلاحيات)', level: 'متقدم', min: 140, qn: 'السؤال رقم (1) – 251 داعم',
+    desc: 'تنصيب ويندوز سيرفر، إنشاء النطاق aljoufvtc.edu.sa وخدمة DHCP للشبكة 192.168.1.0/26، إنشاء مجموعتي المدربين والمتدربين، ضبط صلاحيات المجلدات المشتركة، ثم ربط الجهاز بالنطاق والتحقق.',
+    obj: ['ينصّب النظام وينشئ النطاق وخدمة DHCP.', 'ينشئ المجموعات ويوزّع صلاحيات المجلدات المشتركة.', 'يربط الأجهزة بالنطاق ويتحقق من الإعدادات.'],
+    info: ['الخادم Server: كلمة سر Administrator هي P@ssw0rd', 'الشبكة 192.168.1.0/26 (القناع 255.255.255.192) — الخادم 192.168.1.1 والبوابة 192.168.1.62', 'اسم النطاق: aljoufvtc.edu.sa ، كلمة سر DSRM: P@ssw0rd123', 'نطاق DHCP: من 192.168.1.10 إلى 192.168.1.60 مع الخيارات Router وDNS', 'المجموعتان: Trainers (المدربون) و Trainees (المتدربون)', 'المدربون: صلاحية Change على المشاركة EmpShare ، المتدربون: Read على المشاركة Students', 'PC1: عميل يحصل على عنوانه من DHCP ثم ينضم إلى النطاق', 'الأوامر: Grant-SmbShareAccess و Get-SmbShareAccess لإدارة صلاحيات المشاركة'],
+    devs: [['Server', 'pc', { os: 'win', install: true }], ['PC1', 'pc', { os: 'wclient', pcname: 'DESKTOP-4F7K2LQ', pre: ['login'] }], S('SW1', ['F0/1', 'F0/2'])],
+    links: [L('SW1', 'F0/1', 'Server', 'Fa0'), L('SW1', 'F0/2', 'PC1', 'Fa0')],
+    pos: { 'Server': [110, 80], 'SW1': [260, 150], 'PC1': [410, 80] },
+    mk: [6, 6, 6, 6, 6, 3, 3, 4, 2, 4, 4, 5, 5, 4, 4, 6, 6, 4, 6, 1, 2, 4, 3],
+    tasks: [
+      T('Server', 'التنصيب: اللغة والكيبورد — اضغط Next ثم Install now', ['(واجهة رسومية) Next ثم Install now'], [{ k: 'win', d: 'Server', t: 'step', n: 2 }]),
+      T('Server', 'التنصيب: اختر النسخة Standard (Desktop Experience) واقبل شروط الرخصة', ['(واجهة رسومية) اختر Desktop Experience ثم Next، علّم I accept ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 4 }]),
+      T('Server', 'التنصيب: Custom ثم أنشئ القسم (New ثم Apply) واختر Partition 2 ثم Next', ['(واجهة رسومية) Custom ثم New ثم Apply ثم Partition 2 ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 6 }]),
+      T('Server', 'اضغط Restart now ثم اضبط كلمة سر Administrator: P@ssw0rd', ['(واجهة رسومية) Restart now ثم أدخل P@ssw0rd مرتين ثم Finish'], [{ k: 'win', d: 'Server', t: 'installed' }]),
+      T('Server', 'سجّل الدخول بالمستخدم Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin' }]),
+      T('Server', 'اضبط عنوان الخادم 192.168.1.1 بطول بادئة 26 (القناع 255.255.255.192) والبوابة 192.168.1.62 و DNS 192.168.1.1', ['New-NetIPAddress -InterfaceAlias Ethernet0 -IPAddress 192.168.1.1 -PrefixLength 26 -DefaultGateway 192.168.1.62', 'Set-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses 192.168.1.1'], [{ k: 'win', d: 'Server', t: 'ip', ip: '192.168.1.1', dns: '192.168.1.1' }]),
+      T('Server', 'ثبّت دور Active Directory Domain Services مع أدوات الإدارة', ['Install-WindowsFeature AD-Domain-Services -IncludeManagementTools'], [{ k: 'win', d: 'Server', t: 'role', r: 'adds' }]),
+      T('Server', 'رقِّ الخادم إلى Domain Controller في غابة جديدة باسم aljoufvtc.edu.sa', ['Install-ADDSForest -DomainName aljoufvtc.edu.sa -SafeModeAdministratorPassword (ConvertTo-SecureString "P@ssw0rd123" -AsPlainText -Force) -Force'], [{ k: 'win', d: 'Server', t: 'dc', dom: 'aljoufvtc.edu.sa' }]),
+      T('Server', 'بعد إعادة التشغيل سجّل الدخول بحساب النطاق ALJOUFVTC\\Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin', dom: true }]),
+      T('Server', 'ثبّت دور DHCP Server ثم اعتمده في Active Directory', ['Install-WindowsFeature DHCP -IncludeManagementTools', 'Add-DhcpServerInDC -DnsName server.aljoufvtc.edu.sa -IPAddress 192.168.1.1'], [{ k: 'win', d: 'Server', t: 'role', r: 'dhcp' }, { k: 'win', d: 'Server', t: 'dhcpauth' }]),
+      T('Server', 'أنشئ نطاق DHCP من 192.168.1.10 إلى 192.168.1.60 (قناع 255.255.255.192) وفعّله، واضبط الخيارات: Router 192.168.1.62 و DNS 192.168.1.1', ['Add-DhcpServerv4Scope -Name Main -StartRange 192.168.1.10 -EndRange 192.168.1.60 -SubnetMask 255.255.255.192 -State Active', 'Set-DhcpServerv4OptionValue -ScopeId 192.168.1.0 -Router 192.168.1.62 -DnsServer 192.168.1.1 -DnsDomain aljoufvtc.edu.sa'], [{ k: 'win', d: 'Server', t: 'scope', start: '192.168.1.10', end: '192.168.1.60' }, { k: 'win', d: 'Server', t: 'dopt', router: '192.168.1.62', dns: '192.168.1.1' }]),
+      T('Server', 'أنشئ مجموعة المدربين باسم Trainers (Global)', ['New-ADGroup -Name Trainers -GroupScope Global'], [{ k: 'win', d: 'Server', t: 'group', g: 'Trainers' }]),
+      T('Server', 'أنشئ مجموعة المتدربين باسم Trainees (Global)', ['New-ADGroup -Name Trainees -GroupScope Global'], [{ k: 'win', d: 'Server', t: 'group', g: 'Trainees' }]),
+      T('Server', 'أنشئ المجلد C:\\EmpShare وشاركه باسم EmpShare', ['New-Item -Path C:\\EmpShare -ItemType Directory', 'New-SmbShare -Name EmpShare -Path C:\\EmpShare'], [{ k: 'win', d: 'Server', t: 'share', n: 'EmpShare', path: 'C:\\EmpShare' }]),
+      T('Server', 'أنشئ المجلد C:\\Students وشاركه باسم Students', ['New-Item -Path C:\\Students -ItemType Directory', 'New-SmbShare -Name Students -Path C:\\Students'], [{ k: 'win', d: 'Server', t: 'share', n: 'Students', path: 'C:\\Students' }]),
+      T('Server', 'امنح مجموعة Trainers صلاحية Change (إضافة وتعديل) على المشاركة EmpShare', ['Grant-SmbShareAccess -Name EmpShare -AccountName ALJOUFVTC\\Trainers -AccessRight Change -Force'], [{ k: 'win', d: 'Server', t: 'shareacc', n: 'EmpShare', who: 'Trainers', lv: 'Change' }]),
+      T('Server', 'امنح مجموعة Trainees صلاحية Read (قراءة فقط) على المشاركة Students', ['Grant-SmbShareAccess -Name Students -AccountName ALJOUFVTC\\Trainees -AccessRight Read -Force'], [{ k: 'win', d: 'Server', t: 'shareacc', n: 'Students', who: 'Trainees', lv: 'Read' }]),
+      T('PC1', 'من PC1: جدّد العنوان ليحصل على عنوان من خادم DHCP', ['ipconfig /release', 'ipconfig /renew', 'ipconfig /all'], [{ k: 'win', d: 'PC1', t: 'lease', net: '192.168.1.0', mask: '255.255.255.192' }]),
+      T('PC1', 'اضمم PC1 إلى النطاق aljoufvtc.edu.sa بحساب ALJOUFVTC\\Administrator (كلمة السر P@ssw0rd) ثم أعد التشغيل وسجّل الدخول بحساب النطاق', ['Add-Computer -DomainName aljoufvtc.edu.sa -Credential ALJOUFVTC\\Administrator', 'P@ssw0rd', 'Restart-Computer'], [{ k: 'win', d: 'PC1', t: 'joined', dom: 'aljoufvtc.edu.sa' }, { k: 'win', d: 'PC1', t: 'loggedin', dom: true }]),
+      T('Server', 'التحقق: اسمح بـ ping على الخادم (قاعدة Echo Request ICMPv4)', ['Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)"'], [{ k: 'win', d: 'Server', t: 'icmp' }]),
+      T('PC1', 'التحقق: من PC1 اختبر الاتصال بالخادم 192.168.1.1', ['ping 192.168.1.1'], [{ k: 'win', d: 'PC1', t: 'pinged', ip: '192.168.1.1' }]),
+      T('Server', 'التحقق: اعرض صلاحيات المشاركتين EmpShare و Students', ['Get-SmbShareAccess -Name EmpShare', 'Get-SmbShareAccess -Name Students'], [{ k: 'win', d: 'Server', t: 'ran', c: 'Get-SmbShareAccess.*EmpShare' }, { k: 'win', d: 'Server', t: 'ran', c: 'Get-SmbShareAccess.*Students' }]),
+      T('Server', 'التحقق: اعرض المجموعتين التي أنشأتهما', ['Get-ADGroup -Filter *'], [{ k: 'win', d: 'Server', t: 'ran', c: 'Get-ADGroup' }])
+    ]
+  },
+  {
     id: 'ipsec-s2s', course: 'sec-232', title: 'شبكة VPN موقع إلى موقع (IPsec) بين R1 وR3', level: 'متقدم', min: 100, qn: 'السؤال 1',
     desc: 'اضبط العناوين والتوجيه، ثم أنشئ نفق IPsec بين R1 وR3 عبر R2 حتى يتصل PC-A بـ PC-C بتشفير. (R2 مضبوط مسبقاً.)',
     obj: ['يشرح الغرض من الشبكات الخاصة الإفتراضية VPNs', 'يشرح كيفية تشغيل IPsec VPNs', 'يعد VPN  موقع الى موقع باستخدام سطر الأوامر'],
@@ -7206,7 +7259,7 @@ function loadCustom() {
   return Array.isArray(arr) ? arr : [];
 }
 var ACCESS = { vis: null, extra: [] };
-function visC(cid) { return !ACCESS.vis || ACCESS.vis(cid); }
+function visC(cid) { return cid === 'project' || !ACCESS.vis || ACCESS.vis(cid); }
 function allLabs() { return LABS.filter(function (l) { return visC(labCourse(l)); }).concat(loadCustom(), ACCESS.extra); }
 function allCourses() {
   var cs = COURSES.filter(function (c) { return visC(c.id); }), ids = {};
@@ -7828,7 +7881,7 @@ function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&'
 var VIEW = 'home';
 function show(v) {
   VIEW = v;
-  ['home', 'courses', 'learn', 'lab', 'examHome', 'examT', 'examS', 'acct'].forEach(function (s) { $('#' + s).hidden = (s !== (v === 'ws' ? 'lab' : v)); });
+  ['home', 'courses', 'learn', 'lab', 'examHome', 'examT', 'examS', 'acct', 'pass'].forEach(function (s) { $('#' + s).hidden = (s !== (v === 'ws' ? 'lab' : v)); });
   var b = $('#homeBtn');
   b.hidden = v === 'home';
   b.textContent = v === 'lab' ? 'المواد' : 'الرئيسية';
@@ -7845,7 +7898,7 @@ $('#homeBtn').addEventListener('click', function () {
 document.querySelectorAll('[data-go]').forEach(function (b) {
   b.addEventListener('click', function () {
     var g = b.getAttribute('data-go');
-    if (g === 'learn') { LSEL = null; renderLearn(); show('learn'); } else if (g === 'courses') { CSEL = null; renderCourses(); show('courses'); } else if (g === 'exam') { show('examHome'); } else openWs();
+    if (g === 'learn') { LSEL = null; renderLearn(); show('learn'); } else if (g === 'courses') { CSEL = null; renderCourses(); show('courses'); } else if (g === 'exam') { show('examHome'); } else if (g === 'pass') { renderPass(); show('pass'); } else openWs();
   });
 });
 
@@ -7901,16 +7954,18 @@ function labCard(l) {
 var CSEL = null;
 function renderCourses() {
   var labs = allLabs(), cs = allCourses(), sel = cs.filter(function (c) { return c.id === CSEL; })[0];
+  var labsOf = function (cid) { return cid === 'project' ? labs.filter(function (l) { return String(l.id).indexOf('exam') < 0; }) : labs.filter(function (l) { return labCourse(l) === cid; }); };
   if (!sel) {
     CSEL = null;
     $('#courseList').innerHTML = '<div class="labs">' + cs.map(function (c) {
-      var ls = labs.filter(function (l) { return labCourse(l) === c.id; }), done = ls.filter(function (l) { return DONE[l.id]; }).length;
+      var ls = labsOf(c.id), done = ls.filter(function (l) { return DONE[l.id]; }).length;
       return '<article class="lab-card"><div class="meta">' + (c.code ? '<span class="chip">' + esc(c.code) + '</span>' : '') + (ls.length && done === ls.length ? '<span class="chip done">مكتمل</span>' : '') + '</div><h2>' + esc(c.title) + '</h2>' + (c.desc ? '<p>' + esc(c.desc) + '</p>' : '') +
         '<div class="meta"><span>' + ls.length + ' تجارب</span><span>أنجزت ' + done + '</span></div><button class="btn pri" data-course="' + esc(c.id) + '">افتح المادة</button></article>';
     }).join('') + '</div>';
     return;
   }
-  var ls = labs.filter(function (l) { return labCourse(l) === sel.id; });
+  if (sel.id === 'project') { $('#courseList').innerHTML = '<button class="btn" data-course="">‹ كل المواد</button>' + psProjectHtml(labs); return; }
+  var ls = labsOf(sel.id);
   $('#courseList').innerHTML = '<button class="btn" data-course="">‹ كل المواد</button><section class="course"><h3>' + esc(sel.title) + '</h3>' + (sel.desc ? '<p>' + esc(sel.desc) + '</p>' : '') +
     (ls.length ? '<div class="labs">' + ls.map(function (l) {
       return labCard(l).replace('<button class="btn pri"', '<details class="info"><summary>المهام (' + l.tasks.length + ')</summary><ol style="padding-inline-start:20px;margin:6px 0">' + l.tasks.map(function (t) { return '<li>' + esc(t.t) + '</li>'; }).join('') + '</ol></details><button class="btn pri"');
@@ -8475,8 +8530,8 @@ function checkTasks() {
   $('#progTxt').textContent = n + ' من ' + total;
   $('#progBar').style.width = (n / total * 100) + '%';
   if (n === total) {
-    $('#win').innerHTML = '<div class="win">أحسنت! أكملت مختبر «' + esc(lab.def.title) + '».</div>';
-    if (!(window.EX && EX.active) && !DONE[lab.def.id]) { DONE[lab.def.id] = 1; saveDone(); }
+    $('#win').innerHTML = '<div class="win">أحسنت! أكملت مختبر «' + esc(lab.def.title) + '».</div><div class="win-act"><button type="button" class="btn pri" data-w="rep">📄 تقرير التجربة</button><button type="button" class="btn" data-w="send">📤 إرسال للمدرّب</button>' + (psClassOk(psClassGet()) ? '' : '<input id="winCls" class="ltr" placeholder="رمز الشعبة PRJXXXXXX" autocapitalize="characters">') + '<p class="note" id="winMsg"></p></div>';
+    if (!(window.EX && EX.active) && !DONE[lab.def.id]) { DONE[lab.def.id] = 1; saveDone(); if (window.passStamp) passStamp(lab.def.id); }
   }
   qRender();
 }
@@ -9510,7 +9565,7 @@ function variantDef(P, id) {
   if (P.m) def.mk = P.m;
   def.exam = true; def.title = P.t || base.title;
   var dev = def.devs.filter(function (x) { return x[1] === 'router'; })[0] || def.devs.filter(function (x) { return x[1] === 'switch'; })[0];
-  if (dev) def.tasks.push({ t: 'اضبط رسالة banner motd على ' + dev[0] + ' بحيث تتضمن رقمك الأكاديمي (' + id + ')', dev: dev[0], h: ['enable', 'configure terminal', 'banner motd #' + id + '#'], ok: [{ k: 'bannerhas', d: dev[0], s: String(id) }] });
+  if (dev && !def.noban) def.tasks.push({ t: 'اضبط رسالة banner motd على ' + dev[0] + ' بحيث تتضمن رقمك الأكاديمي (' + id + ')', dev: dev[0], h: ['enable', 'configure terminal', 'banner motd #' + id + '#'], ok: [{ k: 'bannerhas', d: dev[0], s: String(id) }] });
   return def;
 }
 
@@ -9671,7 +9726,7 @@ function labOptions() {
 function renderTrainer(tab) {
   tab = tab || 'new';
   show('examT');
-  var now = Date.now(), t = '<div class="labhead"><h2>لوحة المدرّب</h2></div><div class="seg2" id="exTabs"><button data-act="tab" data-t="new" aria-selected="' + (tab === 'new') + '">اختبار جديد</button><button data-act="tab" data-t="imp" aria-selected="' + (tab === 'imp') + '">استيراد النتائج</button></div>';
+  var now = Date.now(), t = '<div class="labhead"><h2>لوحة المدرّب</h2></div><div class="seg2" id="exTabs"><button data-act="tab" data-t="new" aria-selected="' + (tab === 'new') + '">اختبار جديد</button><button data-act="tab" data-t="imp" aria-selected="' + (tab === 'imp') + '">استيراد النتائج</button><button data-act="tab" data-t="pass" aria-selected="' + (tab === 'pass') + '">الجواز</button></div>';
   if (tab === 'new') {
     t += '<div class="panel"><label class="fld"><span>التجربة</span><select id="tLab">' + labOptions() + '</select></label>' +
       '<label class="fld"><span>عنوان الاختبار (يظهر للطالب)</span><input id="tTitle"></label>' +
@@ -9683,6 +9738,8 @@ function renderTrainer(tab) {
       '<label class="fld"><span>استبدال أرقام أو أسماء (سطر لكل تغيير: القديم ← الجديد)</span><textarea id="tSub" rows="3" class="ltr" spellcheck="false" placeholder="192.168.0.1 -> 10.10.5.1&#10;R1 -> Riyadh"></textarea></label>' +
       '<div class="fld"><span>درجة كل مهمة</span><div id="tMk"></div><p class="note" id="tMkT"></p></div></details>' +
       '<p class="note" id="tMsg"></p><button class="btn pri" style="width:100%" data-act="mk">إنشاء رابط الاختبار</button></div><div id="tOut"></div>';
+  } else if (tab === 'pass') {
+    t += '<div id="psT"></div>';
   } else {
     var exs = loadExams().filter(function (x) { return x.q; }).reverse();
     t += '<div class="panel"><h3>النتائج المباشرة</h3>' + (exs.length ? '<label class="fld"><span>الاختبار</span><select id="iEx">' + exs.map(function (x) { return '<option value="' + esc(x.q) + '">' + esc(x.t) + ' — ' + esc(x.e) + '</option>'; }).join('') + '</select></label><button class="btn pri" style="width:100%" data-act="pull">جلب نتائج الطلاب الآن</button><p class="note" id="iSt">تصل النتائج تلقائياً عند تسليم الطلاب، وتتحدّث هنا كل نصف دقيقة. تبقى على الخادم 12 ساعة، فاجلبها في نفس اليوم.</p>' : '<p class="note">أنشئ اختباراً من هذا الجهاز ليظهر هنا.</p>') + '</div>';
@@ -9692,6 +9749,7 @@ function renderTrainer(tab) {
       '</div><div id="iOut"></div>';
   }
   $('#examT').innerHTML = t;
+  if (tab === 'pass') psTrainer();
   clearInterval(EX.poll); if (tab === 'imp' && $('#iEx')) { EX.poll = setInterval(function () { if (!document.getElementById('iEx')) return clearInterval(EX.poll); pullResults(true); }, 30000); }
   if (tab === 'new') { var sel = $('#tLab'); var sync = function () { var o = sel.options[sel.selectedIndex]; $('#tTitle').value = o.textContent; $('#tDur').value = Math.max(20, Math.round((+o.getAttribute('data-min') || 30) * 1.5 / 5) * 5); }; sel.addEventListener('change', sync); sync();
     var drawMk = function () {
@@ -10004,21 +10062,12 @@ function repHtml(R) {
   x.push('<div class="rp-head"><img class="rp-logo" alt="" src="' + ((document.getElementById('heroLogo') || {}).src || '') + '"><div><h1>تقرير إنجاز التدريب العملي</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div><div class="rp-score"><b>' + R.earn + '</b><span>من ' + R.mk.total + '</span><em>' + R.pc + '% — ' + repGrade(R.pc) + '</em></div></div>');
   x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td><input id="rpName" value="' + ea(R.who.n) + '" placeholder="اكتب اسمك" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td><th>الرقم الأكاديمي</th><td><input id="rpId" dir="ltr" inputmode="numeric" value="' + ea(R.who.i) + '" placeholder="000000000" ' + (SESS.role !== 'guest' ? 'readonly' : '') + '></td></tr>' +
     '<tr><th>المقرر</th><td>' + esc(R.course ? R.course.title + ' (' + R.course.code + ')' : labCourse(R.def)) + '</td><th>التجربة</th><td>' + esc(R.def.title) + (R.def.qn ? '<br><small>' + esc(R.def.qn) + '</small>' : '') + '</td></tr>' +
-    '<tr><th>تاريخ إصدار التقرير</th><td>' + esc(D.g) + '<br><small>' + esc(D.h) + '</small></td><th>وقت الإصدار</th><td dir="ltr" style="text-align:right">' + D.t + '</td></tr>' +
-    '<tr><th>بدء التجربة</th><td>' + esc(S.iso) + '</td><th>المدة</th><td>' + esc(repDur(R.now - R.t0)) + '</td></tr></table>');
+    '<tr><th>الإصدار</th><td>' + esc(D.g) + ' ' + D.t + '</td><th>البدء / المدة</th><td>' + esc(S.iso) + ' — ' + esc(repDur(R.now - R.t0)) + '</td></tr></table>');
   x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + R.rows.map(function (r) {
     return '<tr class="' + (r.ok ? 'ok' : 'no') + '"><td>' + (r.i + 1) + '</td><td>' + (r.dev ? '<code>' + esc(r.dev) + '</code> ' : '') + esc(r.t) + (r.h ? ' <small class="rp-h">(' + 'استُخدم تلميح' + ')</small>' : '') + '</td><td>' + (r.ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (r.ok ? r.p : 0) + ' / ' + r.p + '</td></tr>';
   }).join('') + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + R.earn + ' / ' + R.mk.total + '</td></tr></tfoot></table>');
-  x.push('<p class="rp-note">توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + ' — المهام المتحققة ' + R.rows.filter(function (r) { return r.ok; }).length + ' وغير المتحققة ' + R.rows.filter(function (r) { return !r.ok; }).length + ' من ' + R.N + ' — التلميحات المستخدمة: ' + R.hints  + ' — مرجع دليل المهام: ' + repFp(R.def) + '</p>');
-  x.push('<h3>الحالة النهائية للأجهزة</h3>');
-  R.lab.order.forEach(function (n) {
-    var d = R.lab.devs[n], st = []; try { st = repState(d); } catch (e) { }
-    if (!st.length) return;
-    x.push('<div class="rp-dev"><h4>' + esc(n) + '</h4><table class="rp-kv">' + st.map(function (kv) { return '<tr><th>' + esc(kv[0]) + '</th><td>' + (/\n/.test(kv[1]) && kv[0].indexOf('running') >= 0 ? '<pre>' + esc(kv[1]) + '</pre>' : esc(kv[1]).replace(/\n/g, '<br>')) + '</td></tr>'; }).join('') + '</table></div>');
-  });
-  var cm = '';
-  R.lab.order.forEach(function (n) { var c = repCmds(R.lab.devs[n]); if (c.length) cm += '<div class="rp-dev"><h4>' + esc(n) + ' — الأوامر المُدخلة (' + c.length + ')</h4><pre>' + esc(c.join('\n')) + '</pre></div>'; });
-  x.push('<h3>سجل الأوامر</h3>' + (cm || '<p class="rp-note">لم تُسجَّل أوامر نصية لهذه التجربة (العمل كان بالواجهة الرسومية).</p>'));
+  var cn = 0; R.lab.order.forEach(function (n) { cn += repCmds(R.lab.devs[n]).length; });
+  x.push('<p class="rp-note"><b>ملخص:</b> المهام المتحققة ' + R.rows.filter(function (q) { return q.ok; }).length + ' من ' + R.N + ' — الأوامر المُدخلة: ' + cn + ' — التلميحات المستخدمة: ' + R.hints + ' — توزيع الدرجات: ' + (R.mk.eq ? 'متساوٍ' : 'حسب المقرر') + '</p>');
   x.push('<h3>ملاحظات المدرب</h3><div class="rp-box"></div><div class="rp-sign"><span>اسم المدرب: ____________________</span><span>التوقيع: ____________</span><span>الدرجة النهائية: ______</span></div>');
   R.code = repCode(R);
   x.push('<div class="rp-ver"><b>رمز التحقق</b> (يُستخدم للتأكد من أن التقرير غير معدَّل):<div dir="ltr" class="rp-code">' + esc(R.code) + '</div></div>');
@@ -10129,6 +10178,168 @@ document.addEventListener('click', function (e) {
   else if (e.target.closest('#guideBtn')) { if (CUR.lab) openGuide(CUR.lab.def); }
   else { var g = e.target.closest('[data-guide]'); if (g) openGuide(labDefById(g.getAttribute('data-guide'))); }
 });
+
+/* جواز المشروع: خريطة تقدّم الطالب عبر كل التجارب، تقرير واحد برمز تحقق، وإرسال للمدرّب برمز الشعبة */
+var PS_KEY = 'netlab.stamps';
+function psStamps() { try { return JSON.parse(localStorage.getItem(SK(PS_KEY)) || '{}'); } catch (e) { return {}; } }
+window.passStamp = function (id) { var s = psStamps(); if (s[id]) return; s[id] = Date.now(); try { localStorage.setItem(SK(PS_KEY), JSON.stringify(s)); } catch (e) { } };
+function psClassGet() { try { return localStorage.getItem('netlab.pclass') || ''; } catch (e) { return ''; } }
+function psClassOk(c) { return /^PRJ[A-Z0-9]{6}$/.test(String(c || '').trim().toUpperCase()); }
+function psTopic(c) { return 'tmlp' + String(c).trim().toLowerCase(); }
+function psData() {
+  var labs = allLabs().filter(function (l) { return String(l.id).indexOf('exam') < 0; }), st = psStamps(), out = [];
+  allCourses().forEach(function (c) {
+    var ls = labs.filter(function (l) { return labCourse(l) === c.id; });
+    if (ls.length) out.push({ c: c, ls: ls.map(function (l) { return { id: l.id, t: l.title, done: !!DONE[l.id], ts: st[l.id] || 0 }; }) });
+  });
+  return out;
+}
+function psTotals(D) { var n = 0, d = 0; D.forEach(function (c) { c.ls.forEach(function (l) { n++; if (l.done) d++; }); }); return { n: n, d: d, pc: n ? Math.round(d / n * 100) : 0 }; }
+function psCode(D) {
+  var w = repWho(), T = psTotals(D), ids = []; D.forEach(function (c) { c.ls.forEach(function (l) { if (l.done) ids.push(l.id); }); });
+  var js = JSON.stringify({ v: 1, i: w.i || '', n: w.n || '', d: ids, N: T.n, t: Date.now() });
+  return 'NP1.' + b64e(js) + '.' + sign(js);
+}
+function psDay(ts) { if (!ts) return ''; var d = new Date(ts); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+
+/* ---- student view (داخل مادة المشروع) ---- */
+function psProjectHtml(labs) {
+  var D = psData(), T = psTotals(D), w = repWho(), cls = psClassGet();
+  var h = '<section class="course"><h3>مادة المشروع</h3><p>طبّق كل تجارب المنصة. بعد إنهاء أي تجربة اضغط «📄 تقرير التجربة» ثم «📤 إرسال للمدرّب».</p></section>' +
+    '<div class="panel ps-top"><div class="ps-ring" style="--p:' + T.pc + '"><b>' + T.pc + '%</b></div><div><h3>' + esc(w.n || w.i || 'طالب') + (w.i && w.n ? ' <span class="mono">' + esc(w.i) + '</span>' : '') + '</h3><p class="note">أنجزت <b>' + T.d + '</b> من <b>' + T.n + '</b> تجربة.</p>' +
+    (WHO ? '' : '<p class="note exbad">سجّل دخولك برقمك التدريبي من الصفحة الرئيسية ليُحفظ تقدّمك على هذا الجهاز.</p>') + '</div></div>' +
+    '<div class="panel" style="margin-top:12px"><label class="fld"><span>رمز الشعبة من مدرّبك (مثال: PRJ7K3QXA)</span><input id="psClass" class="ltr" value="' + esc(cls) + '" placeholder="PRJXXXXXX" autocapitalize="characters"></label>' +
+    '<div class="row2" style="margin-top:10px"><button class="btn" data-ps="send">إرسال ملخص تقدّمي</button><button class="btn" data-ps="rep">📄 تقرير الجواز</button></div><p class="note" id="psMsg"></p></div>';
+  D.forEach(function (c) {
+    var ls = labs.filter(function (l) { return String(l.id).indexOf('exam') < 0 && labCourse(l) === c.c.id; }), d = ls.filter(function (l) { return DONE[l.id]; }).length;
+    h += '<section class="ps-sec"><div class="ps-hd"><h3>' + esc(c.c.title) + (c.c.code ? ' <span class="chip">' + esc(c.c.code) + '</span>' : '') + '</h3><span class="note">' + d + ' / ' + ls.length + '</span></div><div class="labs">' +
+      ls.map(function (l) { return labCard(l).replace('<button class="btn pri"', '<button class="btn pri"'); }).join('') + '</div></section>';
+  });
+  return h;
+}
+function psReportHtml() {
+  var D = psData(), T = psTotals(D), w = repWho(), now = Date.now(), dt = repDT(now), x = [], rows = '', k = 0;
+  D.forEach(function (c) {
+    rows += '<tr><td colspan="3" style="background:#eef2f0;font-weight:700">' + esc(c.c.title) + (c.c.code ? ' (' + esc(c.c.code) + ')' : '') + '</td></tr>';
+    c.ls.forEach(function (l) { k++; rows += '<tr class="' + (l.done ? 'ok' : 'no') + '"><td>' + k + '</td><td>' + esc(l.t) + '</td><td>' + (l.done ? '✔ منجزة' + (l.ts ? ' — ' + psDay(l.ts) : '') : '✘ غير منجزة') + '</td></tr>'; });
+  });
+  var code = psCode(D);
+  x.push('<div class="rp-head"><img class="rp-logo" alt="" src="' + ((document.getElementById('heroLogo') || {}).src || '') + '"><div><h1>تقرير جواز المشروع</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div></div>');
+  x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td>' + esc(w.n || '—') + '</td><th>الرقم الأكاديمي</th><td dir="ltr" style="text-align:right">' + esc(w.i || '—') + '</td></tr>' +
+    '<tr><th>تاريخ الإصدار</th><td>' + esc(dt.g) + '</td><th>نسبة الإنجاز</th><td><b>' + T.d + ' / ' + T.n + '</b> (' + T.pc + '% — ' + repGrade(T.pc) + ')</td></tr></table>');
+  x.push('<h3>التجارب المنجزة وغير المنجزة</h3><table class="rp-tasks"><thead><tr><th>#</th><th>التجربة</th><th>الحالة</th></tr></thead><tbody>' + rows + '</tbody><tfoot><tr><td colspan="2">المجموع</td><td>' + T.d + ' / ' + T.n + '</td></tr></tfoot></table>');
+  x.push('<h3>ملاحظات المدرب</h3><div class="rp-box"></div><div class="rp-sign"><span>اسم المدرب: ____________________</span><span>التوقيع: ____________</span><span>الدرجة النهائية: ______</span></div>');
+  x.push('<div class="rp-ver"><b>رمز الجواز</b> (للتحقق من سلامة التقرير):<div dir="ltr" class="rp-code">' + esc(code) + '</div></div>');
+  return { html: x.join(''), text: 'جواز المشروع — ' + (w.n || w.i) + '\nالإنجاز: ' + T.d + ' / ' + T.n + ' (' + T.pc + '%)\n' + code, code: code, ttl: 'جواز المشروع - ' + (w.n || w.i || 'طالب') };
+}
+function psSend(btn) {
+  var c = ($('#psClass').value || '').trim().toUpperCase(), m = $('#psMsg');
+  if (!psClassOk(c)) { m.textContent = 'رمز الشعبة غير صحيح. يبدأ بـ PRJ ويتبعه 6 خانات.'; m.className = 'note exbad'; return; }
+  if (!repWho().i) { m.textContent = 'سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.'; m.className = 'note exbad'; return; }
+  try { localStorage.setItem('netlab.pclass', c); } catch (e) { }
+  m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
+  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك للمدرّب ✔'; m.className = 'note exok'; })
+    .catch(function () { m.textContent = 'تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'; m.className = 'note exbad'; });
+}
+function psSendReport(btn) {
+  var m = document.getElementById('winMsg'), inp = document.getElementById('winCls'), R = repData(); if (!R || !m) return;
+  var c = ((inp && inp.value) || psClassGet()).trim().toUpperCase();
+  var bad = function (t) { m.textContent = t; m.className = 'note exbad'; };
+  if (!psClassOk(c)) return bad('رمز الشعبة غير صحيح. يبدأ بـ PRJ ويتبعه 6 خانات.');
+  if (!R.who.i) return bad('سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.');
+  try { localStorage.setItem('netlab.pclass', c); } catch (e) { }
+  m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
+  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة لمدرّبك ✔'; m.className = 'note exok'; })
+    .catch(function () { bad('تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'); });
+}
+document.addEventListener('click', function (e) {
+  var w = e.target.closest('#win [data-w]');
+  if (w) { if (w.getAttribute('data-w') === 'rep') openReport(); else psSendReport(w); return; }
+  var b = e.target.closest('#courseList [data-ps],#psT [data-ps]'); if (!b) return;
+  var a = b.getAttribute('data-ps');
+  if (a === 'rep') openReport(null, psReportHtml());
+  else if (a === 'send') psSend(b);
+  else if (a === 'gen') { var c = 'PRJ' + rid(6); try { localStorage.setItem('netlab.tclass', c); } catch (x) { } psTrainer(); }
+  else if (a === 'cpc') copyText(psTClass(), b);
+  else if (a === 'pull') psPull(false);
+  else if (a === 'csv') copyText(psCsv(), b);
+  else if (a === 'stu') { PS_SEL = b.getAttribute('data-i'); psShow(); }
+  else if (a === 'rep1') { var P = PS_BY && PS_BY[b.getAttribute('data-i')]; var Q = P && P.rep[b.getAttribute('data-l')]; if (Q) openReport(null, psRepFromP(Q)); }
+});
+var PS_SEL = null, PS_BY = null;
+/* ---- trainer view ---- */
+var PSL = null;
+function psTClass() { try { return localStorage.getItem('netlab.tclass') || ''; } catch (e) { return ''; } }
+function psTrainer() {
+  var c = psTClass(), el = $('#psT'); if (!el) return;
+  el.innerHTML = '<div class="panel"><h3>رمز الشعبة</h3>' + (c ? '<p class="note">أعطِ الطلاب هذا الرمز، وهم يكتبونه في «جواز المشروع» ثم يضغطون «إرسال تقدّمي».</p><div class="psbig" dir="ltr">' + esc(c) + '</div><div class="row2"><button class="btn pri" data-ps="cpc">نسخ الرمز</button><button class="btn" data-ps="gen">رمز جديد</button></div>' :
+    '<p class="note">أنشئ رمزاً واحداً للشعبة، ثم وزّعه على الطلاب.</p><button class="btn pri" style="width:100%" data-ps="gen">إنشاء رمز الشعبة</button>') + '</div>' +
+    (c ? '<div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>' : '');
+  clearInterval(PSL); if (c) { PSL = setInterval(function () { if (!document.getElementById('psOut')) return clearInterval(PSL); psPull(true); }, 30000); psPull(true); }
+}
+function psParse(text) {
+  var seen = {}, by = {};
+  var ent = function (i, n) { return by[i] || (by[i] = { i: i, n: n || '', d: {}, t: 0, rep: {} }); };
+  (text.match(/N[PR]1\.[A-Za-z0-9_-]+\.[0-9a-f]+/g) || []).forEach(function (c) {
+    if (seen[c]) return; seen[c] = 1; var p = c.split('.');
+    try {
+      var js = b64d(p[1]); if (sign(js) !== p[2]) return; var P = JSON.parse(js); if (!P.i) return;
+      var E = ent(P.i, P.n); if (P.n) E.n = P.n;
+      if (p[0] === 'NP1') { P.d.forEach(function (x) { E.d[x] = 1; }); E.t = Math.max(E.t, P.t); }
+      else { if (P.k && P.N && P.k.length === P.N) E.d[P.l] = 1; E.t = Math.max(E.t, P.t1 || 0); if (!E.rep[P.l] || E.rep[P.l].t1 < P.t1) { P.__c = c; E.rep[P.l] = P; } }
+    } catch (e) { }
+  });
+  return by;
+}
+function psTable(by) {
+  var ids = Object.keys(by).sort(), cols = []; psData().forEach(function (c) { cols.push({ t: c.c.title, ids: c.ls.map(function (l) { return l.id; }) }); });
+  var rows = ids.map(function (i) {
+    var P = by[i], set = P.d;
+    var cells = cols.map(function (c) { return c.ids.filter(function (x) { return set[x]; }).length + '/' + c.ids.length; });
+    var tot = cols.reduce(function (a, c) { return a + c.ids.length; }, 0), dn = cols.reduce(function (a, c) { return a + c.ids.filter(function (x) { return set[x]; }).length; }, 0);
+    return { i: i, n: P.n || '', cells: cells, dn: dn, tot: tot, pc: tot ? Math.round(dn / tot * 100) : 0, t: P.t, nr: Object.keys(P.rep).length };
+  });
+  return { cols: cols, rows: rows };
+}
+function psRepFromP(P) {
+  var def = LABS.filter(function (l) { return l.id === P.l; })[0]; if (!def) return { html: '<p>التجربة غير موجودة في هذه النسخة.</p>', text: '', code: P.__c || '', ttl: 'تقرير' };
+  var mk = repPts(def), D = repDT(P.t1), S = repDT(P.t0), done = {}; P.k.forEach(function (i) { done[i] = 1; });
+  var course = COURSES.filter(function (c) { return c.id === labCourse(def); })[0], x = [];
+  x.push('<div class="rp-head"><img class="rp-logo" alt="" src="' + ((document.getElementById('heroLogo') || {}).src || '') + '"><div><h1>تقرير إنجاز التدريب العملي</h1><div class="rp-sub">«تمكّن لاب» – المختبر الذكي</div></div><div class="rp-score"><b>' + P.m + '</b><span>من ' + P.M + '</span></div></div>');
+  x.push('<table class="rp-info"><tr><th>اسم الطالب</th><td>' + esc(P.n || '—') + '</td><th>الرقم الأكاديمي</th><td dir="ltr" style="text-align:right">' + esc(P.i) + '</td></tr><tr><th>المقرر</th><td>' + esc(course ? course.title : '') + '</td><th>التجربة</th><td>' + esc(def.title) + '</td></tr><tr><th>الإصدار</th><td>' + esc(D.g) + ' ' + D.t + '</td><th>البدء / المدة</th><td>' + esc(S.iso) + ' — ' + esc(repDur(P.t1 - P.t0)) + '</td></tr></table>');
+  x.push('<h3>نتيجة المهام</h3><table class="rp-tasks"><thead><tr><th>#</th><th>المهمة</th><th>الحالة</th><th>الدرجة</th></tr></thead><tbody>' + def.tasks.map(function (t, i) { var ok = !!done[i]; return '<tr class="' + (ok ? 'ok' : 'no') + '"><td>' + (i + 1) + '</td><td>' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + '</td><td>' + (ok ? '✔ متحققة' : '✘ غير متحققة') + '</td><td>' + (ok ? mk.pts[i] : 0) + ' / ' + mk.pts[i] + '</td></tr>'; }).join('') + '</tbody><tfoot><tr><td colspan="3">المجموع</td><td>' + P.m + ' / ' + P.M + '</td></tr></tfoot></table>');
+  x.push('<p class="rp-note"><b>ملخص:</b> المهام المتحققة ' + P.k.length + ' من ' + P.N + ' — التلميحات المستخدمة: ' + (P.h || 0) + '</p>');
+  x.push('<div class="rp-ver"><b>رمز التحقق:</b><div dir="ltr" class="rp-code">' + esc(P.__c || '') + '</div></div>');
+  return { html: x.join(''), text: 'تقرير ' + def.title + ' — ' + (P.n || P.i) + '\n' + P.m + ' / ' + P.M, code: P.__c || '', ttl: 'تقرير - ' + (P.n || P.i) };
+}
+function psShow() {
+  var A = PS_LAST, o = $('#psOut'); if (!o || !A) return;
+  var h = A.rows.length ? '<div class="tblwrap"><table class="extbl"><thead><tr><th>الطالب</th>' + A.cols.map(function (x) { return '<th>' + esc(x.t) + '</th>'; }).join('') + '<th>الكل</th></tr></thead><tbody>' +
+    A.rows.map(function (r) { return '<tr><td class="num"><button type="button" class="btn" style="padding:3px 8px;font-size:12px" data-ps="stu" data-i="' + esc(r.i) + '">' + esc(r.i) + '</button><br><span style="font-family:var(--font-body)">' + esc(r.n) + '</span>' + (r.nr ? '<br><small>تقارير: ' + r.nr + '</small>' : '') + '</td>' + r.cells.map(function (x) { return '<td class="num">' + x + '</td>'; }).join('') + '<td class="num"><b>' + r.pc + '%</b></td></tr>'; }).join('') + '</tbody></table></div><button class="btn" style="margin-top:10px" data-ps="csv">نسخ CSV</button>' : '<p class="note">لم يصل أي شيء بعد.</p>';
+  var P = PS_SEL && PS_BY && PS_BY[PS_SEL];
+  if (P) {
+    var labs = Object.keys(P.rep).sort();
+    h += '<h3 style="margin-top:16px">تقارير ' + esc(P.n || P.i) + '</h3>' + (labs.length ? '<ul class="chk" style="list-style:none;padding:0">' + labs.map(function (l) { var q = P.rep[l], def = LABS.filter(function (z) { return z.id === l; })[0]; return '<li style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)"><span>' + esc(def ? def.title : l) + '<br><small>' + q.m + ' / ' + q.M + ' — ' + repDur(q.t1 - q.t0) + '</small></span><button class="btn" data-ps="rep1" data-i="' + esc(P.i) + '" data-l="' + esc(l) + '">تقرير</button></li>'; }).join('') + '</ul>' : '<p class="note">لم يرسل تقارير تجارب بعد.</p>');
+  }
+  o.innerHTML = h;
+}
+function psPull(quiet) {
+  var c = psTClass(), st = $('#psSt'); if (!c) return; if (!quiet && st) st.textContent = 'جارٍ الجلب…';
+  var key = 'netlab.ppull.' + c, old = ''; try { old = localStorage.getItem(key) || ''; } catch (x) { }
+  fetch('https://ntfy.sh/' + psTopic(c) + '/json?poll=1&since=all').then(function (r) { return r.text(); }).then(function (tx) {
+    var ms = tx.split('\n').filter(Boolean).map(function (l) { try { return JSON.parse(l); } catch (x) { return null; } }).filter(function (v) { return v && v.event === 'message'; }).map(function (v) { return v.message; });
+    var all = old + '\n' + ms.join('\n'); try { localStorage.setItem(key, all.slice(-600000)); } catch (x) { }
+    PS_BY = psParse(all); PS_LAST = psTable(PS_BY); psShow();
+    if (st) st.textContent = 'آخر تحديث ' + new Date().toLocaleTimeString('ar-SA') + ' — الطلاب: ' + PS_LAST.rows.length;
+  }).catch(function () { if (st) st.textContent = 'تعذّر الاتصال. تحقق من الإنترنت.'; });
+}
+var PS_LAST = null;
+function psCsv() {
+  var A = PS_LAST; if (!A) return ''; var q = function (s) { s = String(s == null ? '' : s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  var rows = [['الرقم', 'الاسم'].concat(A.cols.map(function (c) { return c.t; }), ['المنجز', 'الكل', 'النسبة'])];
+  A.rows.forEach(function (r) { rows.push([r.i, r.n].concat(r.cells, [r.dn, r.tot, r.pc + '%'])); });
+  return rows.map(function (r) { return r.map(q).join(','); }).join('\r\n');
+}
 
 /* ===== Accounts (no server): encrypted vault =====
    vault = { v:1, pub:[courseIds], adm:{s,iv,ct}, tr:[{h,s,iv,ct}] }
