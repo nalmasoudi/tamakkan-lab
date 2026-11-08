@@ -8530,7 +8530,7 @@ function checkTasks() {
   $('#progTxt').textContent = n + ' من ' + total;
   $('#progBar').style.width = (n / total * 100) + '%';
   if (n === total) {
-    $('#win').innerHTML = '<div class="win">أحسنت! أكملت مختبر «' + esc(lab.def.title) + '».</div><div class="win-act"><button type="button" class="btn pri" data-w="rep">📄 تقرير التجربة</button><button type="button" class="btn" data-w="send">📤 إرسال للمدرّب</button>' + (psClassOk(psClassGet()) ? '' : '<input id="winCls" class="ltr" placeholder="رمز الشعبة PRJXXXXXX" autocapitalize="characters">') + '<p class="note" id="winMsg"></p></div>';
+    $('#win').innerHTML = '<div class="win">أحسنت! أكملت مختبر «' + esc(lab.def.title) + '».</div><div class="win-act"><button type="button" class="btn pri" data-w="rep">📄 تقرير التجربة</button><button type="button" class="btn" data-w="send">📤 إرسال للمدرّب</button><p class="note" id="winMsg"></p></div>';
     if (!(window.EX && EX.active) && !DONE[lab.def.id]) { DONE[lab.def.id] = 1; saveDone(); if (window.passStamp) passStamp(lab.def.id); }
   }
   qRender();
@@ -10183,7 +10183,8 @@ document.addEventListener('click', function (e) {
 var PS_KEY = 'netlab.stamps';
 function psStamps() { try { return JSON.parse(localStorage.getItem(SK(PS_KEY)) || '{}'); } catch (e) { return {}; } }
 window.passStamp = function (id) { var s = psStamps(); if (s[id]) return; s[id] = Date.now(); try { localStorage.setItem(SK(PS_KEY), JSON.stringify(s)); } catch (e) { } };
-function psClassGet() { try { return localStorage.getItem('netlab.pclass') || ''; } catch (e) { return ''; } }
+var PS_DEFAULT = 'PRJAZM7K3';
+function psClassGet() { return PS_DEFAULT; }
 function psClassOk(c) { return /^PRJ[A-Z0-9]{6}$/.test(String(c || '').trim().toUpperCase()); }
 function psTopic(c) { return 'tmlp' + String(c).trim().toLowerCase(); }
 function psData() {
@@ -10204,12 +10205,11 @@ function psDay(ts) { if (!ts) return ''; var d = new Date(ts); return d.getFullY
 
 /* ---- student view (داخل مادة المشروع) ---- */
 function psProjectHtml(labs) {
-  var D = psData(), T = psTotals(D), w = repWho(), cls = psClassGet();
+  var D = psData(), T = psTotals(D), w = repWho();
   var h = '<section class="course"><h3>مادة المشروع</h3><p>طبّق كل تجارب المنصة. بعد إنهاء أي تجربة اضغط «📄 تقرير التجربة» ثم «📤 إرسال للمدرّب».</p></section>' +
     '<div class="panel ps-top"><div class="ps-ring" style="--p:' + T.pc + '"><b>' + T.pc + '%</b></div><div><h3>' + esc(w.n || w.i || 'طالب') + (w.i && w.n ? ' <span class="mono">' + esc(w.i) + '</span>' : '') + '</h3><p class="note">أنجزت <b>' + T.d + '</b> من <b>' + T.n + '</b> تجربة.</p>' +
     (WHO ? '' : '<p class="note exbad">سجّل دخولك برقمك التدريبي من الصفحة الرئيسية ليُحفظ تقدّمك على هذا الجهاز.</p>') + '</div></div>' +
-    '<div class="panel" style="margin-top:12px"><label class="fld"><span>رمز الشعبة من مدرّبك (مثال: PRJ7K3QXA)</span><input id="psClass" class="ltr" value="' + esc(cls) + '" placeholder="PRJXXXXXX" autocapitalize="characters"></label>' +
-    '<div class="row2" style="margin-top:10px"><button class="btn" data-ps="send">إرسال ملخص تقدّمي</button><button class="btn" data-ps="rep">📄 تقرير الجواز</button></div><p class="note" id="psMsg"></p></div>';
+    '<div class="panel" style="margin-top:12px"><div class="row2"><button class="btn" data-ps="send">إرسال ملخص تقدّمي</button><button class="btn" data-ps="rep">📄 تقرير الجواز</button></div><p class="note" id="psMsg"></p></div>';
   D.forEach(function (c) {
     var ls = labs.filter(function (l) { return String(l.id).indexOf('exam') < 0 && labCourse(l) === c.c.id; }), d = ls.filter(function (l) { return DONE[l.id]; }).length;
     h += '<section class="ps-sec"><div class="ps-hd"><h3>' + esc(c.c.title) + (c.c.code ? ' <span class="chip">' + esc(c.c.code) + '</span>' : '') + '</h3><span class="note">' + d + ' / ' + ls.length + '</span></div><div class="labs">' +
@@ -10233,21 +10233,17 @@ function psReportHtml() {
   return { html: x.join(''), text: 'جواز المشروع — ' + (w.n || w.i) + '\nالإنجاز: ' + T.d + ' / ' + T.n + ' (' + T.pc + '%)\n' + code, code: code, ttl: 'جواز المشروع - ' + (w.n || w.i || 'طالب') };
 }
 function psSend(btn) {
-  var c = ($('#psClass').value || '').trim().toUpperCase(), m = $('#psMsg');
-  if (!psClassOk(c)) { m.textContent = 'رمز الشعبة غير صحيح. يبدأ بـ PRJ ويتبعه 6 خانات.'; m.className = 'note exbad'; return; }
+  var c = PS_DEFAULT, m = $('#psMsg');
   if (!repWho().i) { m.textContent = 'سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.'; m.className = 'note exbad'; return; }
-  try { localStorage.setItem('netlab.pclass', c); } catch (e) { }
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
   fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك للمدرّب ✔'; m.className = 'note exok'; })
     .catch(function () { m.textContent = 'تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'; m.className = 'note exbad'; });
 }
 function psSendReport(btn) {
-  var m = document.getElementById('winMsg'), inp = document.getElementById('winCls'), R = repData(); if (!R || !m) return;
-  var c = ((inp && inp.value) || psClassGet()).trim().toUpperCase();
+  var m = document.getElementById('winMsg'), R = repData(); if (!R || !m) return;
+  var c = PS_DEFAULT;
   var bad = function (t) { m.textContent = t; m.className = 'note exbad'; };
-  if (!psClassOk(c)) return bad('رمز الشعبة غير صحيح. يبدأ بـ PRJ ويتبعه 6 خانات.');
   if (!R.who.i) return bad('سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.');
-  try { localStorage.setItem('netlab.pclass', c); } catch (e) { }
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
   fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة لمدرّبك ✔'; m.className = 'note exok'; })
     .catch(function () { bad('تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'); });
@@ -10269,12 +10265,10 @@ document.addEventListener('click', function (e) {
 var PS_SEL = null, PS_BY = null;
 /* ---- trainer view ---- */
 var PSL = null;
-function psTClass() { try { return localStorage.getItem('netlab.tclass') || ''; } catch (e) { return ''; } }
+function psTClass() { return PS_DEFAULT; }
 function psTrainer() {
   var c = psTClass(), el = $('#psT'); if (!el) return;
-  el.innerHTML = '<div class="panel"><h3>رمز الشعبة</h3>' + (c ? '<p class="note">أعطِ الطلاب هذا الرمز، وهم يكتبونه في «جواز المشروع» ثم يضغطون «إرسال تقدّمي».</p><div class="psbig" dir="ltr">' + esc(c) + '</div><div class="row2"><button class="btn pri" data-ps="cpc">نسخ الرمز</button><button class="btn" data-ps="gen">رمز جديد</button></div>' :
-    '<p class="note">أنشئ رمزاً واحداً للشعبة، ثم وزّعه على الطلاب.</p><button class="btn pri" style="width:100%" data-ps="gen">إنشاء رمز الشعبة</button>') + '</div>' +
-    (c ? '<div class="panel" style="margin-top:14px"><h3>تقدّم الطلاب</h3><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>' : '');
+  el.innerHTML = '<div class="panel"><h3>تقدّم الطلاب وتقاريرهم</h3><p class="note">لا يحتاج الطلاب أي رمز. تصلك تقاريرهم تلقائياً هنا عند ضغطهم «إرسال للمدرّب».</p><button class="btn pri" style="width:100%" data-ps="pull">جلب التقدّم الآن</button><p class="note" id="psSt">تُحفظ التقارير على الخادم 12 ساعة، فاجلبها في نفس اليوم. وتتحدث القائمة كل نصف دقيقة وأنت في هذه الصفحة.</p><div id="psOut"></div></div>';
   clearInterval(PSL); if (c) { PSL = setInterval(function () { if (!document.getElementById('psOut')) return clearInterval(PSL); psPull(true); }, 30000); psPull(true); }
 }
 function psParse(text) {
