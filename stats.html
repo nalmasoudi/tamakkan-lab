@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تمكّن لاب – إحصاءات الاستخدام</title>
+<style>
+:root { --bg:#F4F6F8; --surface:#FCFCFB; --fg:#13212B; --muted:#55636E; --line:#DDE3E8; --mark:#1E6FB0; --navy:#0f3a5f; }
+@media (prefers-color-scheme: dark) { :root { --bg:#0B141B; --surface:#121D26; --fg:#E3EAF0; --muted:#93A3AF; --line:#24333F; --mark:#4C95D6; --navy:#9CC3E6; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.6 system-ui, "Segoe UI", Tahoma, sans-serif; }
+.wrap { max-width:1000px; margin:0 auto; padding:16px; }
+h1 { font-size:1.35rem; margin:4px 0 2px; color:var(--navy); }
+.sub { color:var(--muted); font-size:.85rem; margin:0 0 16px; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:16px; }
+.tile { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+.tile b { display:block; font-size:1.9rem; line-height:1.15; font-variant-numeric:tabular-nums; }
+.tile span { color:var(--muted); font-size:.85rem; }
+.card { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:16px; }
+.card h2 { font-size:1rem; margin:0 0 10px; }
+.chart { position:relative; }
+svg { display:block; width:100%; height:auto; overflow:visible; }
+.tip { position:absolute; pointer-events:none; background:var(--fg); color:var(--bg); font-size:.8rem; padding:4px 8px; border-radius:6px; white-space:nowrap; transform:translate(-50%,-115%); display:none; }
+.bars .row { display:grid; grid-template-columns:minmax(110px,190px) 1fr auto; gap:10px; align-items:center; margin:6px 0; }
+.bars .lbl { font-size:.88rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bars .trk { height:12px; }
+.bars .bar { height:12px; background:var(--mark); border-radius:0 4px 4px 0; min-width:2px; }
+.bars .val { font-size:.85rem; color:var(--muted); font-variant-numeric:tabular-nums; min-width:5ch; text-align:left; }
+table { width:100%; border-collapse:collapse; font-size:.85rem; }
+th, td { padding:6px; border-bottom:1px solid var(--line); text-align:right; }
+td.n { font-variant-numeric:tabular-nums; }
+details summary { cursor:pointer; color:var(--muted); font-size:.85rem; margin-top:8px; }
+.msg { color:var(--muted); padding:30px 0; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>تمكّن لاب – إحصاءات الاستخدام</h1>
+  <p class="sub" id="sub">قسم الحاسب وتقنية المعلومات – الكلية التقنية بأضم</p>
+  <div id="app"><p class="msg">جارٍ تحميل الإحصاءات…</p></div>
+</div>
+<script>
+/* ضع هنا نفس رابط Google Apps Script (ينتهي بـ /exec) */
+var API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZDUwocbEPzbtibKult3CIvuNoTXvrfEl9Wty6sdNVK/exec';
+
+var COURSE_NAMES = {
+  'net-111': 'مبادئ شبكات', 'rs1-121': 'التوجيه والتحويل (1)', 'rs2-222': 'التوجيه والتحويل (2)', 'wan-241': 'ربط الشبكات',
+  'sec-231': 'مقدمة في أمن الشبكات', 'sec-232': 'أمن الشبكات المتقدم', 'os-251': 'نظم تشغيل (1) - ويندوز سيرفر',
+  'os-252': 'نظم تشغيل (2) - لينكس', 'pc-asm': 'تجميع الحاسب وتشغيله', 'project': 'مادة المشروع', 'selected': 'موضوعات مختارة'
+};
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function fmt(n) { return Number(n || 0).toLocaleString('ar-SA'); }
+var app = document.getElementById('app'), CW = 900, CH = 220;
+
+function tiles(s) {
+  var t = [[s.devices, 'متدرب (جهاز) استخدم المنصة'], [s.users, 'متدرب مسجّل برقمه'], [s.opens, 'مرة فُتحت فيها تجربة'],
+    [s.tasks, 'مهمة عملية أُنجزت'], [s.labsCompleted, 'تجربة أُكملت بالكامل'], [s.exams, 'اختبار عملي سُلّم']];
+  return '<div class="tiles">' + t.map(function (x) { return '<div class="tile"><b>' + fmt(x[0]) + '</b><span>' + x[1] + '</span></div>'; }).join('') + '</div>';
+}
+
+function lineChart(days) {
+  if (!days.length) return '<p class="msg">لا توجد بيانات يومية بعد.</p>';
+  CW = Math.max(300, Math.round(app.clientWidth - 30)); CH = CW < 500 ? 180 : 220;
+  var W = CW, H = CH, pl = 36, pr = 10, pt = 12, pb = 26, max = Math.max.apply(null, days.map(function (d) { return d.users; }).concat([1]));
+  var raw = max / 4, mag = Math.pow(10, Math.floor(Math.log10(raw || 1))), step = Math.max(1, [1, 2, 5, 10].map(function (m) { return m * mag; }).filter(function (v) { return v >= raw; })[0]), top = Math.ceil(max / step) * step, nt = Math.round(top / step);
+  var x = function (i) { return days.length === 1 ? (pl + W - pr) / 2 : pl + i * (W - pl - pr) / (days.length - 1); };
+  var y = function (v) { return pt + (H - pt - pb) * (1 - v / top); };
+  var g = '';
+  for (var k = 0; k <= nt; k++) { var v = step * k, yy = y(v); g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--line)" stroke-width="1"/><text x="' + (pl - 6) + '" y="' + (yy + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + fmt(Math.round(v)) + '</text>'; }
+  var lab = ''; var every = Math.max(1, Math.ceil(days.length / (CW < 500 ? 4 : 7)));
+  days.forEach(function (d, i) { if (i % every === 0 || (i === days.length - 1 && (days.length - 1) % every >= every / 2)) lab += '<text x="' + x(i) + '" y="' + (H - 6) + '" font-size="11" fill="var(--muted)" text-anchor="middle">' + d.d.slice(5) + '</text>'; });
+  var path = days.map(function (d, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(d.users).toFixed(1); }).join(' ');
+  var last = days[days.length - 1];
+  return '<div class="chart" id="lc"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="عدد المتدربين النشطين يومياً">' + g + lab +
+    '<path d="' + path + '" fill="none" stroke="var(--mark)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<circle cx="' + x(days.length - 1) + '" cy="' + y(last.users) + '" r="4" fill="var(--mark)" stroke="var(--surface)" stroke-width="2"/>' +
+    '<line id="xh" y1="' + pt + '" y2="' + (H - pb) + '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" visibility="hidden"/>' +
+    '<circle id="xd" r="5" fill="var(--mark)" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>' +
+    '<rect id="hit" x="' + pl + '" y="' + pt + '" width="' + (W - pl - pr) + '" height="' + (H - pt - pb) + '" fill="transparent"/></svg><div class="tip" id="tp"></div></div>';
+}
+function wireLine(days) {
+  var svg = document.querySelector('#lc svg'); if (!svg) return;
+  var hit = svg.querySelector('#hit'), xh = svg.querySelector('#xh'), xd = svg.querySelector('#xd'), tp = document.getElementById('tp');
+  var W = CW, pl = 36, pr = 10;
+  function move(ev) {
+    var r = svg.getBoundingClientRect(), cx = (ev.clientX - r.left) / r.width * W;
+    var i = days.length === 1 ? 0 : Math.round((cx - pl) / ((W - pl - pr) / (days.length - 1))); i = Math.max(0, Math.min(days.length - 1, i));
+    var d = days[i], xx = days.length === 1 ? (pl + W - pr) / 2 : pl + i * (W - pl - pr) / (days.length - 1);
+    var yy = +svg.querySelector('path').getAttribute('d').split(/[ML]/).filter(Boolean)[i].split(' ')[1];
+    xh.setAttribute('x1', xx); xh.setAttribute('x2', xx); xh.setAttribute('visibility', 'visible');
+    xd.setAttribute('cx', xx); xd.setAttribute('cy', yy); xd.setAttribute('visibility', 'visible');
+    tp.style.display = 'block'; tp.style.left = (xx / W * r.width) + 'px'; tp.style.transform = 'translate(' + (xx / W > 0.6 ? '-100%' : xx / W < 0.4 ? '0%' : '-50%') + ',-115%)'; tp.style.top = (yy / CH * r.height) + 'px';
+    tp.textContent = d.d + ' · ' + fmt(d.users) + ' متدرب · ' + fmt(d.tasks) + ' مهمة';
+  }
+  function out() { xh.setAttribute('visibility', 'hidden'); xd.setAttribute('visibility', 'hidden'); tp.style.display = 'none'; }
+  hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move); hit.addEventListener('pointerleave', out);
+}
+function bars(list, key, unit) {
+  if (!list.length) return '<p class="msg">لا توجد بيانات بعد.</p>';
+  var max = Math.max.apply(null, list.map(function (c) { return c[key]; }).concat([1]));
+  return '<div class="bars">' + list.map(function (c) {
+    var name = COURSE_NAMES[c.id] || c.id;
+    return '<div class="row" title="' + esc(name) + ': ' + fmt(c[key]) + ' ' + unit + '"><span class="lbl">' + esc(name) + '</span><div class="trk"><div class="bar" style="width:' + (c[key] / max * 100) + '%"></div></div><span class="val">' + fmt(c[key]) + '</span></div>';
+  }).join('') + '</div>';
+}
+
+function render(s) {
+  window._s = s;
+  var cs = (s.courses || []).slice().sort(function (a, b) { return b.tasks - a.tasks; });
+  document.getElementById('sub').textContent = 'قسم الحاسب وتقنية المعلومات – الكلية التقنية بأضم · آخر تحديث: ' + new Date(s.updated).toLocaleString('ar-SA');
+  app.innerHTML = tiles(s) +
+    '<div class="card"><h2>المتدربون النشطون يومياً</h2>' + lineChart(s.days || []) + '</div>' +
+    '<div class="card"><h2>المهام المنجزة حسب المادة</h2>' + bars(cs, 'tasks', 'مهمة') +
+    '<details><summary>عرض الجدول</summary><table><thead><tr><th>المادة</th><th>متدربون</th><th>فتح تجارب</th><th>مهام منجزة</th><th>تجارب مكتملة</th></tr></thead><tbody>' +
+    cs.map(function (c) { return '<tr><td>' + esc(COURSE_NAMES[c.id] || c.id) + '</td><td class="n">' + fmt(c.users) + '</td><td class="n">' + fmt(c.opens) + '</td><td class="n">' + fmt(c.tasks) + '</td><td class="n">' + fmt(c.done) + '</td></tr>'; }).join('') +
+    '</tbody></table></details></div>';
+  wireLine(s.days || []);
+}
+
+var _rt; window.addEventListener('resize', function () { clearTimeout(_rt); _rt = setTimeout(function () { if (window._s) render(window._s); }, 200); });
+if (!API) app.innerHTML = '<p class="msg">لم يُضبط رابط الخادم بعد. ضع رابط Google Apps Script في المتغير API داخل هذا الملف.</p>';
+else fetch(API).then(function (r) { return r.json(); }).then(render).catch(function () { app.innerHTML = '<p class="msg">تعذّر تحميل الإحصاءات. تحقق من الرابط والاتصال.</p>'; });
+</script>
+</body>
+</html>

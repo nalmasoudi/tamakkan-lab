@@ -6647,11 +6647,11 @@ var LABS = [
       T('R2', 'R2: PPP مع PAP (إرسال اسم المستخدم)', ['interface s0/0/1', 'encapsulation ppp', 'ppp pap sent-username R2 password cisco'], [].concat(ic('R2', 's0/0/1', 'encapsulation ppp', 'ppp pap sent-username R2 password cisco'))),
       T('R3', 'R3: تحقق بالأمر show interfaces s0/0/0 (LCP Open)', ['end', 'show interfaces s0/0/0'], [ranc('R3', 'show interfaces <*i>'), { k: 'up', d: 'R3', i: 's0/0/0' }, { k: 'up', d: 'R3', i: 's0/1/0' }]),
       T('R1', 'R1: فعّل EIGRP رقم 1', ['router eigrp 1', 'network 192.168.10.0', 'network 10.1.1.0 0.0.0.3', 'no auto-summary', 'passive-interface f0/0'], bc('R1', 'router eigrp 1', 'network 192.168.10.0', 'network 10.1.1.0 0.0.0.3', 'no auto-summary')),
-      T('R3', 'R3: فعّل EIGRP رقم 1', ['router eigrp 1', 'network 10.1.1.0 0.0.0.3', 'network 10.2.2.0 0.0.0.3', 'no auto-summary'], bc('R3', 'router eigrp 1', 'network 10.1.1.0 0.0.0.3', 'network 10.2.2.0 0.0.0.3', 'no auto-summary')),
+      T('R3', 'R3: فعّل EIGRP رقم 1', ['configure terminal', 'router eigrp 1', 'network 10.1.1.0 0.0.0.3', 'network 10.2.2.0 0.0.0.3', 'no auto-summary'], bc('R3', 'router eigrp 1', 'network 10.1.1.0 0.0.0.3', 'network 10.2.2.0 0.0.0.3', 'no auto-summary')),
       T('R2', 'R2: فعّل EIGRP رقم 1', ['router eigrp 1', 'network 192.168.30.0', 'network 10.2.2.0 0.0.0.3', 'no auto-summary', 'passive-interface f0/0'], bc('R2', 'router eigrp 1', 'network 192.168.30.0', 'network 10.2.2.0 0.0.0.3', 'no auto-summary')),
       pcTask('PC', '192.168.10.10', '255.255.255.0', '192.168.10.1'), pcTask('Laptop', '192.168.30.10', '255.255.255.0', '192.168.30.1'),
       T('PC', 'تحقق: ping من PC إلى Laptop عبر EIGRP', ['ping 192.168.30.10'], [pingc('PC', '192.168.30.10')]),
-      T('R3', 'R3: اعرض جيران EIGRP', ['show ip eigrp neighbors'], [ranc('R3', 'show ip eigrp neighbors'), { k: 'eigrpnbr', d: 'R3', n: 2 }])
+      T('R3', 'R3: اعرض جيران EIGRP', ['end', 'show ip eigrp neighbors'], [ranc('R3', 'show ip eigrp neighbors'), { k: 'eigrpnbr', d: 'R3', n: 2 }])
     ]
   },
   {
@@ -7297,6 +7297,8 @@ function ifaceSection(d, n) {
   }
   return out.join('\n').toLowerCase().replace(/[ \t]+/g, ' ');
 }
+/* عزل المقاطع اللاتينية (عناوين IP والمنافذ والأوامر) داخل النص العربي حتى لا ينقلب ترتيبها */
+function bd(x) { return String(x).replace(/[A-Za-z0-9][A-Za-z0-9.\/:_()\-]*(?: [A-Za-z0-9][A-Za-z0-9.\/:_()\-]*)*/g, function (m) { return '\u2066' + m + '\u2069'; }); }
 function evalCheck(l, c, ti) {
   if (c.k === 'form') return !!(l.formOk && l.formOk[ti]);
   var d = l.devs[c.d]; if (!d) return false;
@@ -8137,7 +8139,7 @@ function renderCourses() {
   var ls = labsOf(sel.id);
   $('#courseList').innerHTML = '<button class="btn" data-course="">‹ كل المواد</button><section class="course"><h3>' + esc(sel.title) + '</h3>' + (sel.desc ? '<p>' + esc(sel.desc) + '</p>' : '') +
     (ls.length ? '<div class="labs">' + ls.map(function (l) {
-      return labCard(l).replace('<button class="btn pri"', '<details class="info"><summary>المهام (' + l.tasks.length + ')</summary><ol style="padding-inline-start:20px;margin:6px 0">' + l.tasks.map(function (t) { return '<li>' + esc(t.t) + '</li>'; }).join('') + '</ol></details><button class="btn pri"');
+      return labCard(l).replace('<button class="btn pri"', '<details class="info"><summary>المهام (' + l.tasks.length + ')</summary><ol style="padding-inline-start:20px;margin:6px 0">' + l.tasks.map(function (t) { return '<li>' + esc(bd(t.t)) + '</li>'; }).join('') + '</ol></details><button class="btn pri"');
     }).join('') + '</div>' : '<div class="none">لا توجد تجارب في هذه المادة بعد.</div>') + '</section>';
 }
 $('#courseList').addEventListener('click', function (e) {
@@ -8653,7 +8655,7 @@ function renderTasks() {
       hint = hint.concat(ans.map(function (x) { return x.label + ' = ' + x.a; }));
     }
     var dv = t.dev && lab.devs[t.dev] ? '<button class="devtag" data-dev="' + esc(t.dev) + '">' + esc(t.dev) + '</button>' : '';
-    return '<li class="task" data-i="' + i + '" data-done="0"><span class="chk"></span><div><p>' + dv + esc(t.t) + '</p>' + form +
+    return '<li class="task" data-i="' + i + '" data-done="0"><span class="chk"></span><div><p>' + dv + esc(bd(t.t)) + '</p>' + form +
       ((window.EX && EX.active) ? '' : '<button class="hintbtn" data-h="' + i + '" data-lv="0">💡 تلميح</button><pre class="hint" hidden data-mask="' + esc(t.subnet ? 'راجع شرح «تقسيم العناوين» في قسم الشروحات ثم احسب بنفسك.' : hintMask(t.h)) + '"></pre>') + '</div></li>';
   }).join('');
 }
@@ -8718,7 +8720,7 @@ function qRender() {
   }
   var t = tasks[QI], done = lab.done.has(QI);
   document.getElementById('qNum').textContent = (QI + 1) + '/' + tasks.length;
-  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + t.t; bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
+  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + bd(t.t); bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
   applyFix();
 }
 document.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('#qbar') && document.body.classList.contains('lab-kb')) e.preventDefault(); });
@@ -8839,6 +8841,7 @@ function topoSvg(lab, labels, kk, mini) {
     s += '<g data-dev="' + esc(n) + '" style="cursor:pointer">' + (cur ? '<rect x="' + (p[0] - 38) + '" y="' + (p[1] - 30) + '" width="76" height="64" rx="12" fill="#2f86c8" fill-opacity=".13" stroke="#2f86c8" stroke-width="2" stroke-dasharray="5 3"/>' : '') + ptIcon(d, n, p[0], p[1], id, cloud(n)) + '<rect x="' + (p[0] - 36) + '" y="' + (p[1] - 28) + '" width="72" height="60" fill="transparent"/></g>';
   });
   lab.order.forEach(function (n) { var p = pos[n]; bx0 = Math.min(bx0, p[0] - 40); by0 = Math.min(by0, p[1] - 34); bx1 = Math.max(bx1, p[0] + 40); by1 = Math.max(by1, p[1] + 36); });
+  if (!(bx1 > bx0) || !(by1 > by0)) { bx0 = 0; by0 = 0; bx1 = 200; by1 = 100; }
   vx = bx0 - 10; vy = by0 - 8; vw = bx1 - bx0 + 20; vh = by1 - by0 + 16;
   if (lab._freeze) { vx = lab._freeze.vx; vy = lab._freeze.vy; vw = lab._freeze.vw; vh = lab._freeze.vh; }
   lab._tp = { vx: vx, vy: vy, vw: vw, vh: vh, pos: pos, k: KX };
@@ -9997,8 +10000,20 @@ function analyze(text, rosterTxt, max) {
   rows.forEach(function (r) { var k = r.R.e + '|' + r.R.dv; if (r.R.dv && r.R.dv !== 'nostore') (devMap[k] = devMap[k] || []).push(r.R.i); });
   var ros = null; if (rosterTxt.trim()) { ros = {}; rosterTxt.split(/[\s,;]+/).forEach(function (x) { x = normId(x); if (x) ros[x] = 1; }); }
   rows.forEach(function (r) {
-    var R = r.R, f = [], N = R.N || 1, per = R.k.length / N;
+    var R = r.R, f = [], N = R.N || 1;
     var add = function (txt, sev) { f.push({ t: txt, s: sev }); };
+    /* إعادة التصحيح: نعيد تنفيذ أوامر المتدرب على نسخة الاختبار المسجلة عند المدرب، فلا تُعتمد الدرجة المكتوبة في الرمز */
+    var g0 = reg.filter(function (x) { return x.e === R.e; })[0];
+    if (g0 && g0.P && Array.isArray(R.cm)) {
+      try {
+        var kk = Array.from(headlessLab(g0.P, { i: R.i, cm: R.cm }).done).sort(function (a, b) { return a - b; });
+        if (kk.join(',') !== (R.k || []).join(',')) {
+          if (R.cm.length >= 700 && kk.length < (R.k || []).length) add('سجل الأوامر طويل؛ تعذر التحقق الكامل من الدرجة', 'w');
+          else { add('الدرجة في الرمز (' + (R.k || []).length + ') لا تطابق الأوامر المنفذة؛ اعتُمدت ' + kk.length, 'r'); R.k = kk; }
+        }
+      } catch (e) { add('تعذر إعادة التصحيح', 'w'); }
+    }
+    var per = R.k.length / N;
     if (!r.sig) add('الرمز معدَّل أو تالف', 'r');
     if (R.pv) add('نتيجة تجريبية', 'w');
     var g = reg.filter(function (x) { return x.e === R.e; })[0];
@@ -10264,7 +10279,7 @@ function guideHtml(def) {
   x.push('<h3>خطوات التنفيذ</h3><p class="rp-note">رقم المهمة والنص والدرجة مطابقة تماماً لما يظهر في التقرير الذي تصدره التجربة. ضع علامة ✔ في المربع بعد إنجاز كل مهمة.</p>');
   def.tasks.forEach(function (t, i) {
     var steps = [];
-    x.push('<div class="rp-task"><div class="rp-th"><span class="rp-n">' + (i + 1) + '</span><div class="rp-tt">' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(t.t) + '</div><div class="rp-tm">' + mk.pts[i] + ' درجة</div><div class="rp-cb">☐</div></div>' +
+    x.push('<div class="rp-task"><div class="rp-th"><span class="rp-n">' + (i + 1) + '</span><div class="rp-tt">' + (t.dev ? '<code>' + esc(t.dev) + '</code> ' : '') + esc(bd(t.t)) + '</div><div class="rp-tm">' + mk.pts[i] + ' درجة</div><div class="rp-cb">☐</div></div>' +
       (steps.length ? '<div class="rp-st"><b>الخطوات / الأوامر المساعدة:</b><pre>' + esc(steps.join('\n')) + '</pre></div>' : '') + '</div>');
   });
   x.push('<table class="rp-tasks"><tfoot><tr><td>المجموع</td><td>' + mk.total + ' درجة — توزيع الدرجات: ' + (mk.eq ? 'متساوٍ على المهام' : 'حسب توزيع المقرر') + '</td></tr></tfoot></table>');
@@ -10414,7 +10429,7 @@ function psSend(btn) {
   if (!c) { m.textContent = 'اختر مدرّبك من القائمة.'; m.className = 'note exbad'; return; }
   if (!repWho().i) { m.textContent = 'سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.'; m.className = 'note exbad'; return; }
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
-  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: psCode(psData()) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
+  tlPost(psTopic(c), psCode(psData())).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقدّمك إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
     .catch(function () { m.textContent = 'تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'; m.className = 'note exbad'; });
 }
 function psSendReport(btn) {
@@ -10424,7 +10439,7 @@ function psSendReport(btn) {
   if (!c) return bad('اختر مدرّبك من القائمة.');
   if (!R.who.i) return bad('سجّل دخولك برقمك التدريبي من الصفحة الرئيسية قبل الإرسال.');
   m.textContent = 'جارٍ الإرسال…'; m.className = 'note';
-  fetch('https://ntfy.sh/' + psTopic(c), { method: 'POST', body: repCode(R) }).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
+  tlPost(psTopic(c), repCode(R)).then(function (r) { if (!r.ok) throw 0; m.textContent = 'تم إرسال تقرير التجربة إلى «' + psTName(c) + '» ✔'; m.className = 'note exok'; })
     .catch(function () { bad('تعذّر الإرسال. تحقق من الإنترنت وحاول مجدداً.'); });
 }
 document.addEventListener('click', function (e) {
@@ -10704,6 +10719,64 @@ $('#acct').addEventListener('click', async function (e) {
 $('#acct').addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.target.id === 'aPw' || e.target.id === 'aId') && $('#aId')) doLogin(); });
 applySess();
 
+
+
+/* إرسال رسالة للمدرب: عبر خادم الكلية إن وُجد، وإلا عبر الخدمة السابقة */
+function tlPost(topic, body) {
+  if (typeof TL_API === 'string' && TL_API) return fetch(TL_API, { method: 'POST', body: JSON.stringify({ k: 'msg', q: topic, body: body }) });
+  return fetch('https://ntfy.sh/' + topic, { method: 'POST', body: body });
+}
+/* ===================== الربط بالخادم والإحصاءات =====================
+   ضع هنا رابط Google Apps Script بعد نشره (ينتهي بـ /exec). إذا تُرك فارغاً تعمل المنصة كما كانت تماماً. */
+var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZDUwocbEPzbtibKult3CIvuNoTXvrfEl9Wty6sdNVK/exec';
+(function () {
+  if (!TL_API) return;
+  var QK = 'netlab.evq';
+  function q() { try { return JSON.parse(localStorage.getItem(QK) || '[]'); } catch (e) { return []; } }
+  function setQ(a) { try { localStorage.setItem(QK, JSON.stringify(a.slice(-500))); } catch (e) { } }
+  function post(o) { return fetch(TL_API, { method: 'POST', body: JSON.stringify(o) }).then(function (r) { if (!r.ok) throw 0; return r.text(); }); }
+  var busy = false;
+  function flush() {
+    if (busy || (navigator.onLine === false)) return;
+    var a = q(); if (!a.length) return;
+    busy = true;
+    post({ k: 'ev', list: a.slice(0, 100) }).then(function () { setQ(q().slice(a.slice(0, 100).length)); busy = false; if (q().length) setTimeout(flush, 500); }).catch(function () { busy = false; });
+  }
+  /* المعرّف: رمز الجهاز العشوائي، ورقم المتدرب مُجزّأً (hash) فلا يُرسل الرقم نفسه */
+  function ev(type, x) {
+    var o = { ev: type, t: Date.now(), dv: EXDEV, u: WHO ? 'u' + h53('tl|' + WHO, 11).toString(36) : '' };
+    Object.keys(x || {}).forEach(function (k) { o[k] = x[k]; });
+    var a = q(); a.push(o); setQ(a); flush();
+  }
+  window.TLEV = ev;
+  window.addEventListener('online', flush);
+  setInterval(flush, 60000);
+  var day = new Date().toISOString().slice(0, 10);
+  try { if (localStorage.getItem('netlab.evday') !== day) { localStorage.setItem('netlab.evday', day); ev('visit', {}); } } catch (e) { }
+  flush();
+
+  var _open = openLab;
+  openLab = function (id, defOverride, afterBuild) {
+    var r = _open.apply(this, arguments);
+    try { var L = CUR.lab && CUR.lab.def; if (L && !L.exam) ev('open', { lab: L.id || '', c: labCourse(L) }); } catch (e) { }
+    return r;
+  };
+  var _chk = checkTasks;
+  checkTasks = function () {
+    var L = CUR.lab, before = L ? L.done.size : 0, r = _chk.apply(this, arguments);
+    try { if (L && !L.def.exam && L.done.size > before) ev('task', { lab: L.def.id || '', c: labCourse(L.def), n: L.done.size - before, of: L.def.tasks.length, all: L.done.size === L.def.tasks.length ? 1 : 0 }); } catch (e) { }
+    return r;
+  };
+  /* النتائج تُرسل للخادم بدل الخدمة العامة */
+  sendResult = function (P, rec) {
+    if (rec.pv || EX.pv) return;
+    var st = function (t, c) { var x = document.getElementById('exSend'); if (x) { x.textContent = t; x.className = 'note ' + c; } };
+    st('جارٍ إرسال درجتك للمدرب…', '');
+    post({ k: 'res', e: P.e, q: P.q || '', i: rec.i, sub: rec.sub }).then(function () { rec.sent = 1; saveRec(rec); st('تم إرسال درجتك للمدرب تلقائياً ✔', 'exok'); ev('exam', { lab: P.l, sc: rec.sc, of: rec.N }); })
+      .catch(function () { st('تعذّر الإرسال (تحقق من الإنترنت). اضغط «إعادة الإرسال».', 'exbad'); });
+  };
+})();
 </script>
 </body>
 </html>
+
