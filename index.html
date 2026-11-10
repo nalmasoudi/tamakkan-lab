@@ -10010,7 +10010,7 @@ function renderExamHome() {
   $('#examHome').innerHTML = '<div class="labhead"><h2>التقييم</h2></div><div class="modes">' +
     '<button class="mode" data-act="stu"><b>أنا طالب</b><span>افتح رابط الاختبار الذي أرسله مدرّبك (أو الصقه هنا).</span></button>' +
     '<button class="mode" data-act="trn"><b>أنا مدرّب</b><span>أنشئ رابط اختبار لتجربة معيّنة، ثم استورد نتائج الطلاب وراجع التنبيهات.</span></button></div>' +
-    '<div class="panel" id="stuBox" style="margin-top:14px" hidden><label class="fld"><span>الصق رابط الاختبار</span><input id="stuLink" class="ltr" placeholder="https://…#x=…"></label><p class="note" id="stuMsg"></p><button class="btn pri" data-act="stugo">فتح الاختبار</button></div>';
+    '<div class="panel" id="stuBox" style="margin-top:14px" hidden><label class="fld"><span>رابط الاختبار أو رمزه</span><input id="stuLink" class="ltr" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="الصق الرابط أو اكتب رمز الاختبار"></label><p class="note" id="stuMsg"></p><button class="btn pri" data-act="stugo">فتح الاختبار</button></div>';
 }
 
 /* ---- trainer ---- */
@@ -11719,6 +11719,41 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     $('#ixFromCourse').addEventListener('click', function () { list(CSEL); });
   };
   window.IX = { list: list, open: open };
+})();
+
+/* ===================== روابط اختبار قصيرة عبر الخادم ===================== */
+(function () {
+  if (!TL_API) return;
+  function api(a, o) { o = o || {}; o.a = a; return fetch(TL_API, { method: 'POST', body: JSON.stringify(o) }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); }
+  function tok() { try { return sessionStorage.getItem('tl.ttok') || ''; } catch (e) { return ''; } }
+  var _mk = makeExam;
+  makeExam = function () {
+    var before = loadExams().length; _mk.apply(this, arguments);
+    var ex = loadExams(); if (ex.length === before || !tok()) return;
+    var P = ex[ex.length - 1].P, box = $('#tOut'), panel = box.querySelector('.panel');
+    panel.insertAdjacentHTML('beforeend', '<p class="note" id="exShort">جارٍ إنشاء رابط قصير…</p>');
+    api('ex_save', { tok: tok(), P: P }).then(function (r) {
+      var n = $('#exShort'); if (!r.ok) { if (n) n.textContent = 'تعذّر إنشاء الرابط القصير، استخدم الرابط الطويل أعلاه.'; return; }
+      var link = location.href.split('#')[0] + '#xe=' + r.code;
+      $('#oLink').value = link; box._link = link; box._q = String(box._q || '').replace(/https?:\/\/\S+/, link);
+      var pv = box.querySelector('[data-act=pv]'); if (pv) pv.setAttribute('data-l', link + '&pv=1');
+      if (n) { n.className = 'note exok'; n.innerHTML = '✔ رابط قصير جاهز، يعمل حتى لو نُسخ من الواتساب. ويقدر الطالب يكتب الرمز فقط: <b class="mono">' + esc(r.code) + '</b>'; }
+    }).catch(function () { var n = $('#exShort'); if (n) n.textContent = 'تعذّر الاتصال بالخادم، استخدم الرابط الطويل أعلاه.'; });
+  };
+  function fetchExam(code, pv) {
+    show('examS'); $('#examS').innerHTML = '<div class="labhead"><h2>الاختبار</h2></div><div class="panel"><p>جارٍ تحميل الاختبار…</p></div>';
+    api('ex_get', { code: code }).then(function (r) { if (r.ok) renderGate(r.P, pv); else msgView('الاختبار', esc(r.err)); })
+      .catch(function () { msgView('الاختبار', 'تعذّر الاتصال بالخادم. تحقق من الإنترنت وأعد فتح الرابط.'); });
+  }
+  var _sg = stuGo;
+  stuGo = function (link, msgEl) {
+    var s = String(link || '').replace(/[​-‏‪-‮⁦-⁩﻿\s]/g, '');
+    var m = /xe=([A-Za-z0-9]{4,12})/.exec(s) || /^([A-Za-z0-9]{6})$/.exec(s);
+    if (m) return fetchExam(m[1].toUpperCase(), /&pv=1/.test(s));
+    return _sg(s, msgEl);
+  };
+  function fromHash() { var m = /#xe=([A-Za-z0-9]{4,12})/.exec(location.hash || ''); if (m && !(window.EX && EX.active)) fetchExam(m[1].toUpperCase(), /&pv=1/.test(location.hash)); }
+  fromHash(); window.addEventListener('hashchange', fromHash);
 })();
 </script>
 </body>
