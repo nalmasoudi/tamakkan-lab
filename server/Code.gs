@@ -16,7 +16,8 @@ var SHEETS = {
   users:    ['الرقم التدريبي', 'الاسم', 'salt', 'hash', 'تاريخ التسجيل', 'آخر دخول', 'الشعب'],
   sections: ['رمز الشعبة', 'اسم الشعبة', 'المدرب', 'المواد', 'تاريخ الإنشاء', 'نشطة'],
   progress: ['الرقم التدريبي', 'التقدم', 'آخر تحديث'],
-  staff:    ['المعرف', 'الاسم', 'الدور', 'salt', 'hash', 'تاريخ الإنشاء']
+  staff:    ['المعرف', 'الاسم', 'الدور', 'salt', 'hash', 'تاريخ الإنشاء'],
+  exams:    ['رمز الاختبار', 'بيانات الاختبار', 'المدرب', 'تاريخ الإنشاء']
 };
 
 /* ---------- أدوات عامة ---------- */
@@ -205,9 +206,22 @@ function adStaff_(b) {
 }
 function secInfo_(b) { var s = section_(b.sec); return s ? { ok: true, section: publicSec_(s) } : { ok: false, err: 'رمز الشعبة غير صحيح.' }; }
 
+/* ---------- الاختبارات: روابط قصيرة ---------- */
+function exSave_(b) {
+  var s = staffOf_(b); if (!s) return { ok: false, auth: true };
+  var P = b.P || {}; if (!P.e || !P.l || P.v !== 1) return { ok: false, err: 'بيانات الاختبار ناقصة.' };
+  var code = str_(P.e, 12).toUpperCase(); if (findRow_('exams', 0, code)) return { ok: true, code: code };
+  sheet_('exams').appendRow([code, JSON.stringify(P).slice(0, 45000), s.id, new Date()]);
+  return { ok: true, code: code };
+}
+function exGet_(b) {
+  var f = findRow_('exams', 0, str_(b.code, 12).toUpperCase()); if (!f) return { ok: false, err: 'رمز الاختبار غير موجود. تأكد من الرابط أو الرمز.' };
+  try { return { ok: true, P: JSON.parse(f.r[1]) }; } catch (e) { return { ok: false, err: 'بيانات الاختبار تالفة.' }; }
+}
+
 /* ---------- نقاط الدخول ---------- */
 var ACTIONS = { st_register: stRegister_, st_login: stLogin_, st_me: stMe_, st_join: stJoin_, st_sync: stSync_, sec_info: secInfo_,
-  tr_state: trState_, tr_setup: trSetup_, tr_login: trLogin_, tr_sections: trSections_, tr_sec_save: trSecSave_, tr_roster: trRoster_, tr_resetpw: trResetPw_, ad_staff: adStaff_ };
+  tr_state: trState_, tr_setup: trSetup_, tr_login: trLogin_, tr_sections: trSections_, tr_sec_save: trSecSave_, tr_roster: trRoster_, tr_resetpw: trResetPw_, ad_staff: adStaff_, ex_save: exSave_, ex_get: exGet_ };
 
 function doPost(e) {
   var body;
