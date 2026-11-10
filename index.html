@@ -633,6 +633,71 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 .chip{background:rgba(63,107,86,.1);border-color:transparent;color:var(--accent)}.chip.done{background:rgba(46,125,87,.14);color:var(--ok)}
 .how{border-radius:14px;border:1px dashed var(--gold);background:rgba(184,155,94,.08)}
 
+
+/* ===== التعلّم التفاعلي ===== */
+#inter{padding-bottom:30px}
+.ix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.ix-card{display:flex;gap:12px;align-items:flex-start;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;width:100%;position:relative}
+.ix-card .ix-ic{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.5rem;background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.ix-card b{display:block;font-size:1rem;margin-bottom:2px}.ix-card span{color:var(--muted);font-size:.85rem;line-height:1.5}
+.ix-card .ix-ok{position:absolute;top:10px;left:12px;color:var(--ok);font-size:.8rem;font-weight:600}
+.ix-head{display:flex;align-items:center;gap:10px;margin:4px 0 12px}
+.ix-head h2{font-family:var(--font-display);font-size:1.2rem;margin:0}
+.ix-dots{display:flex;gap:4px;margin:0 0 12px;flex-wrap:wrap}.ix-dots i{width:22px;height:5px;border-radius:999px;background:var(--line)}.ix-dots i.on{background:var(--accent)}.ix-dots i.cur{background:var(--gold,#B89B5E)}
+.ix-stage{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px;overflow:hidden}
+.ix-stage svg{display:block;width:100%;height:auto}
+.ix-text{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;line-height:1.8}
+.ix-text p{margin:0 0 6px}.ix-text p:last-child{margin:0}
+.ix-q{background:color-mix(in srgb,var(--gold,#B89B5E) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--gold,#B89B5E) 40%,transparent);border-radius:14px;padding:14px;margin-bottom:12px}
+.ix-q>b{display:block;margin-bottom:8px}
+.ix-opts{display:grid;gap:8px}
+.ix-opt{text-align:start;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;min-height:44px;font-size:.95rem}
+.ix-opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.ix-opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));animation:ixShake .3s}
+.ix-why{margin-top:10px;font-size:.9rem;line-height:1.7}.ix-why.ok{color:var(--ok)}.ix-why.no{color:var(--bad)}
+@keyframes ixShake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.ix-nav{display:flex;gap:8px;justify-content:space-between}.ix-nav .btn{min-width:110px}
+.ix-tables{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+.ix-tbl{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:.8rem}
+.ix-tbl b{display:block;font-size:.8rem;color:var(--muted);margin-bottom:4px}
+.ix-tbl table{width:100%;border-collapse:collapse;direction:ltr}.ix-tbl td{padding:2px 4px;font-family:var(--font-mono);font-size:.72rem;border-top:1px solid var(--line)}
+.ix-tbl tr.new td{background:color-mix(in srgb,var(--gold,#B89B5E) 25%,transparent);animation:ixFlash 1.2s}
+@keyframes ixFlash{from{background:var(--gold,#B89B5E)}}
+.ix-pkt{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.78rem;direction:ltr;font-family:var(--font-mono)}
+.ix-pkt span:nth-child(odd){color:var(--muted)}.ix-pkt .chg{color:var(--bad);font-weight:700}
+/* subnet */
+.ix-bits{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;direction:ltr;margin:8px 0}
+.ix-oct{display:grid;grid-template-columns:repeat(8,1fr);gap:1px}
+.ix-oct i{font-style:normal;font-family:var(--font-mono);font-size:.78rem;text-align:center;padding:4px 0;border-radius:3px;background:color-mix(in srgb,var(--accent) 22%,var(--surface))}
+.ix-oct i.h{background:color-mix(in srgb,var(--gold,#B89B5E) 28%,var(--surface))}
+.ix-octv{direction:ltr;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;font-family:var(--font-mono);font-size:.85rem;font-weight:600}
+.ix-legend{display:flex;gap:12px;font-size:.8rem;color:var(--muted);margin:4px 0 10px}.ix-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-inline-end:4px}
+.ix-res{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ix-res div{background:var(--bg);border-radius:10px;padding:8px 10px}.ix-res span{display:block;color:var(--muted);font-size:.75rem}.ix-res b{font-family:var(--font-mono);direction:ltr;unicode-bidi:isolate;font-size:.95rem}
+.ix-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.ix-ipin{width:100%;font:16px var(--font-mono);direction:ltr;text-align:center;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.ix-score{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:8px}
+.ix-timer{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-bottom:10px}.ix-timer i{display:block;height:100%;background:var(--accent);transition:width 1s linear}
+.ix-big{text-align:center;padding:10px 0}.ix-big b{display:block;font-size:2.4rem;font-family:var(--font-display)}
+/* order & match */
+.ix-pool,.ix-slots{display:grid;gap:6px}
+.ix-chip{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;text-align:start;min-height:42px;font-size:.92rem}
+.ix-chip.sel{border-color:var(--gold,#B89B5E);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold,#B89B5E) 30%,transparent)}
+.ix-chip.ok{border-color:var(--ok)}.ix-chip.no{border-color:var(--bad);animation:ixShake .3s}
+.ix-slot{display:flex;gap:8px;align-items:center;border:1.5px dashed var(--line);border-radius:10px;padding:6px 8px;min-height:44px;background:var(--bg)}
+.ix-slot em{font-style:normal;flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);font-size:.8rem;font-weight:700}
+.ix-slot.fill{border-style:solid;background:var(--surface)}
+.ix-buckets{display:grid;gap:8px}
+.ix-bucket{border:1.5px dashed var(--line);border-radius:12px;padding:8px;background:var(--bg);text-align:start;width:100%}
+.ix-bucket>b{display:block;font-size:.85rem;margin-bottom:4px}
+.ix-bucket .ix-in{display:flex;flex-wrap:wrap;gap:4px}.ix-bucket .ix-in span{background:var(--surface);border:1px solid var(--ok);border-radius:999px;padding:1px 10px;font-size:.8rem}
+.ix-two{display:grid;gap:12px}
+@media (min-width:760px){.ix-two{grid-template-columns:1fr 1fr}}
+.ix-done{text-align:center;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.ix-done b{display:block;font-size:1.3rem;margin:6px 0}
+.ix-banner{display:flex;gap:10px;align-items:center;justify-content:space-between;background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:12px;padding:10px 12px;margin:10px 0}
+.ix-banner span{font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.ix-opt.no,.ix-chip.no{animation:none}}
 /* ===== الحسابات والشعب ===== */
 .tl-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:6px 0 16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
 .tl-invite{display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--gold,#B89B5E) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--gold,#B89B5E) 45%,transparent);border-radius:12px;padding:10px 12px;margin-bottom:12px}
@@ -11214,6 +11279,446 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   });
   if (ME && WHO !== ME.id) profSwitch(ME.id);
   renderProf(); renderAcctBar(); refreshMe();
+})();
+
+/* ===================== التعلّم التفاعلي ===================== */
+(function () {
+  function E(s) { return esc(s == null ? '' : s).replace(/"/g, '&quot;'); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MODS = [
+    { id: 'packet', c: 'net-111', ic: '📦', t: 'رحلة الحزمة', d: 'تابع الـ ping وهو يعبر السويتش والموجه، وشاهد جداول ARP وMAC تُبنى أمامك.' },
+    { id: 'subnet', c: 'net-111', ic: '🧮', t: 'مختبر Subnetting المرئي وسباق السرعة', d: 'حرّك البادئة وشاهد الخانات تتلوّن، ثم نافس في سباق بالمؤقت والنقاط.' },
+    { id: 'osi', c: 'net-111', ic: '🧱', t: 'طبقات OSI', d: 'رتّب الطبقات السبع، ثم ضع كل جهاز وبروتوكول في طبقته.' },
+    { id: 'cables', c: 'net-111', ic: '🔌', t: 'أي كيبل أستخدم؟', d: 'اختر الكيبل المناسب لكل توصيلة وافهم القاعدة.' },
+    { id: 'boot', c: 'pc-asm', ic: '⚡', t: 'إقلاع الجهاز خطوة بخطوة', d: 'من زر التشغيل إلى سطح المكتب: شاهد القطع تعمل بالترتيب، ثم رتّب المراحل بنفسك.' },
+    { id: 'diag', c: 'pc-asm', ic: '🩺', t: 'التشخيص والتوافق', d: 'اربط كل عرَض بسببه، واختر القطع المتوافقة مع اللوحة الأم.' }
+  ];
+  function isDone(id) { return !!DONE['i:' + id]; }
+  function ixDone(id) { if (!DONE['i:' + id]) { DONE['i:' + id] = 1; saveDone(); if (window.TLEV) TLEV('task', { lab: 'i:' + id, c: modOf(id).c, n: 1, of: 1, all: 1 }); } }
+  function modOf(id) { return MODS.filter(function (m) { return m.id === id; })[0]; }
+
+  /* ---------- القسم والتنقل ---------- */
+  var sec = document.createElement('section'); sec.id = 'inter'; sec.hidden = true; $('#learn').parentNode.insertBefore(sec, $('#learn'));
+  var _show = show, CUR_IX = null;
+  show = function (v) {
+    if (v === 'inter') { _show('home'); $('#home').hidden = true; sec.hidden = false; VIEW = 'inter'; var b = $('#homeBtn'); b.hidden = false; b.textContent = 'الرئيسية'; return; }
+    sec.hidden = true; CUR_IX = null; _show(v);
+  };
+  function list(course) {
+    var ms = MODS.filter(function (m) { return !course || m.c === course; });
+    var groups = course ? [[course, ms]] : [['net-111', ms.filter(function (m) { return m.c === 'net-111'; })], ['pc-asm', ms.filter(function (m) { return m.c === 'pc-asm'; })]];
+    sec.innerHTML = '<div class="labhead"><h2>التعلّم التفاعلي</h2></div><p class="tl-sub">توقّع، جرّب، ثم افهم السبب. كل وحدة تأخذ 5 إلى 10 دقائق.</p>' +
+      groups.map(function (g) {
+        var c = COURSES.filter(function (x) { return x.id === g[0]; })[0];
+        return '<h3 class="tl-group">' + E(c ? c.title : g[0]) + '</h3><div class="ix-grid">' + g[1].map(function (m) {
+          return '<button class="ix-card" data-ix="' + m.id + '"><span class="ix-ic">' + m.ic + '</span><span><b>' + E(m.t) + '</b><span>' + E(m.d) + '</span></span>' + (isDone(m.id) ? '<em class="ix-ok">✔ أنجزت</em>' : '') + '</button>';
+        }).join('') + '</div>';
+      }).join('');
+    show('inter');
+  }
+  function open(id) {
+    var m = modOf(id); CUR_IX = id; show('inter'); window.scrollTo(0, 0);
+    sec.innerHTML = '<button class="btn" data-ixback style="margin-bottom:8px">‹ كل الوحدات</button><div class="ix-head"><span class="ix-ic" style="font-size:1.6rem">' + m.ic + '</span><h2>' + E(m.t) + '</h2></div><div id="ixBody"></div>';
+    RUN[id]($('#ixBody'));
+  }
+  sec.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-ix]'); if (c) return open(c.getAttribute('data-ix'));
+    if (e.target.closest('[data-ixback]')) return list();
+  });
+  function finish(box, id, extra) {
+    ixDone(id);
+    var i = MODS.indexOf(modOf(id)), nx = MODS[i + 1] && MODS[i + 1].c === modOf(id).c ? MODS[i + 1] : null;
+    box.innerHTML = '<div class="ix-done"><div style="font-size:2.4rem">🎉</div><b>أحسنت! أنهيت «' + E(modOf(id).t) + '»</b>' + (extra || '') +
+      '<div class="tl-acts" style="justify-content:center">' + (nx ? '<button class="btn pri" data-ix="' + nx.id + '">التالي: ' + E(nx.t) + '</button>' : '') + '<button class="btn" data-ix="' + id + '">إعادة</button><button class="btn" data-ixback>كل الوحدات</button></div></div>';
+  }
+
+  /* ---------- محرّك سؤال مع شرح ---------- */
+  function ask(q, onOk) {
+    var order = shuffle(q.o.map(function (_, i) { return i; }));
+    var w = document.createElement('div'); w.className = 'ix-q';
+    w.innerHTML = '<b>🤔 ' + q.q + '</b><div class="ix-opts">' + order.map(function (i) { return '<button class="ix-opt" data-i="' + i + '">' + q.o[i] + '</button>'; }).join('') + '</div><div class="ix-why" hidden></div>';
+    var solved = false;
+    w.addEventListener('click', function (e) {
+      var b = e.target.closest('.ix-opt'); if (!b || solved) return;
+      var i = +b.getAttribute('data-i'), why = w.querySelector('.ix-why'); why.hidden = false;
+      if (i === q.a) { solved = true; b.classList.add('ok'); why.className = 'ix-why ok'; why.innerHTML = '✔ صحيح. ' + q.w; onOk && onOk(); }
+      else { w.dataset.wrong = '1'; b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); why.className = 'ix-why no'; why.innerHTML = '✘ ' + (q.h || 'ليس هذا. فكّر مرة أخرى.'); }
+    });
+    return w;
+  }
+
+  /* ---------- محرّك الخطوات ---------- */
+  function stepper(box, steps, scene, id) {
+    var i = 0, solved = {};
+    function render() {
+      var s = steps[i], st = scene.state(i);
+      box.innerHTML = '<div class="ix-dots">' + steps.map(function (_, k) { return '<i class="' + (k < i ? 'on' : k === i ? 'cur' : '') + '"></i>'; }).join('') + '</div>' +
+        '<div class="ix-stage">' + scene.svg(st) + '</div>' + (scene.side ? scene.side(st) : '') + '<div class="ix-text">' + s.t + '</div><div id="ixQ"></div>' +
+        '<div class="ix-nav"><button class="btn" id="ixPrev"' + (i ? '' : ' disabled') + '>السابق</button><button class="btn" id="ixRe" hidden>↻ إعادة الحركة</button><button class="btn pri" id="ixNext" disabled>' + (i === steps.length - 1 ? 'إنهاء' : 'التالي') + '</button></div>';
+      var go = function () {
+        $('#ixNext').disabled = true;
+        play(st.fly || [], box.querySelector('svg')).then(function () {
+          if (scene.state(i + 1 < steps.length ? i + 1 : i) && s.after) s.after(box);
+          $('#ixNext').disabled = false; $('#ixRe').hidden = !(st.fly && st.fly.length);
+        });
+      };
+      if (s.q && !solved[i]) $('#ixQ').appendChild(ask(s.q, function () { solved[i] = 1; go(); }));
+      else go();
+      $('#ixPrev').onclick = function () { i--; render(); };
+      $('#ixNext').onclick = function () { if (i === steps.length - 1) return steps.done ? steps.done(box) : finish(box, id); i++; render(); window.scrollTo(0, 0); };
+      $('#ixRe').onclick = function () { play(st.fly || [], box.querySelector('svg')); };
+    }
+    render();
+  }
+  /* تحريك الحزم على المسارات: fly = [[{p:['A','S1'], l:'ARP', c:'#..'} , ...parallel], ...sequential] */
+  var NODES = {};
+  function play(fly, svg) {
+    if (!svg || !fly.length) return Promise.resolve();
+    var layer = svg.querySelector('#ixFly'); if (!layer) return Promise.resolve(); layer.innerHTML = '';
+    if (RM) return Promise.resolve();
+    var seq = Promise.resolve();
+    fly.forEach(function (grp) {
+      seq = seq.then(function () {
+        return Promise.all(grp.map(function (f) {
+          return new Promise(function (res) {
+            var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.innerHTML = '<rect x="-24" y="-11" width="48" height="22" rx="11" fill="' + (f.c || '#B89B5E') + '"/><text y="4" font-size="10.5" text-anchor="middle" fill="#fff" font-weight="700">' + f.l + '</text>';
+            layer.appendChild(g);
+            var pts = f.p.map(function (n) { return NODES[n]; }), seg = 0, t0 = null, D = 520;
+            function frame(ts) {
+              if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / D), a = pts[seg], b = pts[seg + 1];
+              g.setAttribute('transform', 'translate(' + (a[0] + (b[0] - a[0]) * k) + ',' + (a[1] + (b[1] - a[1]) * k - 22) + ')');
+              if (k < 1) return requestAnimationFrame(frame);
+              seg++; t0 = null; if (seg < pts.length - 1) return requestAnimationFrame(frame);
+              setTimeout(function () { g.remove(); res(); }, 250);
+            }
+            requestAnimationFrame(frame);
+          });
+        }));
+      });
+    });
+    return seq;
+  }
+  function devIcon(kind, x, y, name, sub, hot) {
+    var ring = hot ? '<rect x="' + (x - 34) + '" y="' + (y - 26) + '" width="68" height="52" rx="10" fill="none" stroke="#B89B5E" stroke-width="2.5" stroke-dasharray="4 3"/>' : '';
+    var body = kind === 'pc' ? '<rect x="' + (x - 18) + '" y="' + (y - 16) + '" width="36" height="24" rx="3" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><rect x="' + (x - 8) + '" y="' + (y + 9) + '" width="16" height="4" fill="currentColor"/>'
+      : kind === 'sw' ? '<rect x="' + (x - 24) + '" y="' + (y - 11) + '" width="48" height="22" rx="4" fill="#2F6E8F"/><path d="M' + (x - 12) + ' ' + (y - 3) + 'h22l-4-4M' + (x + 12) + ' ' + (y + 4) + 'h-22l4 4" stroke="#fff" stroke-width="2" fill="none"/>'
+      : '<circle cx="' + x + '" cy="' + y + '" r="18" fill="#3F6B56"/><path d="M' + (x - 9) + ' ' + y + 'h18M' + x + ' ' + (y - 9) + 'v18" stroke="#fff" stroke-width="2.5"/>';
+    return ring + '<g style="color:var(--fg)">' + body + '</g><text x="' + x + '" y="' + (y + 32) + '" font-size="12" font-weight="700" text-anchor="middle" fill="var(--fg)">' + name + '</text>' + (sub ? '<text x="' + x + '" y="' + (y + 46) + '" font-size="10" text-anchor="middle" fill="var(--muted)" font-family="var(--font-mono)">' + sub + '</text>' : '');
+  }
+  function tbl(title, rows, fresh) {
+    return '<div class="ix-tbl"><b>' + title + '</b>' + (rows.length ? '<table>' + rows.map(function (r, k) { return '<tr' + (fresh && k === rows.length - 1 ? ' class="new"' : '') + '><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</table>' : '<span style="color:var(--muted)">فارغ</span>') + '</div>';
+  }
+
+  /* ---------- 1) رحلة الحزمة ---------- */
+  var RUN = {};
+  RUN.packet = function (box) {
+    var M = window.innerWidth < 600;
+    NODES = M ? { A: [70, 62], C: [290, 62], S1: [180, 125], R: [180, 222], S2: [180, 318], B: [180, 392] } : { A: [70, 150], C: [210, 40], S1: [210, 150], R: [380, 80], S2: [550, 150], B: [690, 150] };
+    var CY = '#2F6E8F', GO = '#B89B5E', OK = '#2E7D57', RD = '#BF3A2B';
+    var steps = [
+      { t: '<p><b>PC-A</b> يريد إرسال <b>ping</b> إلى <b>PC-B</b> على العنوان <code>192.168.2.20</code>.</p><p>أول قرار يتخذه أي جهاز قبل الإرسال: هل الوجهة داخل شبكتي أم خارجها؟</p>',
+        q: { q: 'هل PC-B في نفس شبكة PC-A؟', o: ['نعم، في نفس الشبكة', 'لا، في شبكة أخرى'], a: 1, w: 'PC-A في الشبكة <code>192.168.1.0/24</code> وPC-B في <code>192.168.2.0/24</code>. لذلك سيرسل PC-A الحزمة إلى <b>البوابة الافتراضية</b> <code>192.168.1.1</code>، وهي منفذ الموجه.', h: 'قارن الأجزاء الثلاثة الأولى من العنوانين (القناع /24).' } },
+      { t: '<p>PC-A يعرف <b>IP</b> البوابة، لكنه لا يعرف عنوانها الفيزيائي <b>MAC</b>. وبدون MAC لا يستطيع بناء الإطار.</p>',
+        q: { q: 'كيف يكتشف PC-A عنوان MAC للبوابة؟', o: ['يرسل طلب ARP لكل الأجهزة في شبكته (Broadcast)', 'يسأل PC-B مباشرة', 'يرسل الحزمة بدون MAC'], a: 0, w: 'طلب ARP يُرسل إلى <code>FF:FF:FF:FF:FF:FF</code>: «من يملك 192.168.1.1؟». والسويتش يمرّره لكل المنافذ، ويتعلّم في الطريق أن MAC الخاص بـ PC-A موجود على المنفذ Fa0/1.' } },
+      { t: '<p>طلب ARP وصل إلى <b>PC-C</b> وإلى <b>الموجه</b>.</p>',
+        q: { q: 'ماذا يفعل PC-C بطلب ARP؟', o: ['يتجاهله، لأن العنوان المطلوب ليس عنوانه', 'يرد عليه بعنوانه', 'يعيد إرساله للموجه'], a: 0, w: 'فقط صاحب العنوان المطلوب يرد. الموجه يرد برد ARP مباشر (Unicast) إلى PC-A، والسويتش يتعلّم الآن مكان MAC الموجه.' } },
+      { t: '<p>صار PC-A يعرف MAC البوابة، وسيجهّز الآن إطار ICMP (ping).</p>',
+        q: { q: 'ما عنوان MAC الوجهة الذي يكتبه PC-A في الإطار؟', o: ['MAC الخاص بـ PC-B', 'MAC الموجه (البوابة) 00:11', 'FF:FF:FF:FF:FF:FF'], a: 1, w: '<b>IP الوجهة</b> هو PC-B دائمًا، لكن <b>MAC الوجهة</b> هو أول قفزة فقط: الموجه. والسويتش يمرّر الإطار للموجه وحده، لأنه صار يعرف منفذه.', h: 'MAC يوصل الإطار داخل الشبكة المحلية فقط. من الجهاز التالي في الطريق؟' } },
+      { t: '<p>الموجه استقبل الحزمة على المنفذ G0/0.</p>',
+        q: { q: 'كيف يقرر الموجه من أي منفذ يرسل الحزمة؟', o: ['من جدول التوجيه، حسب شبكة الوجهة', 'من جدول MAC', 'يرسلها لكل المنافذ'], a: 0, w: 'الوجهة <code>192.168.2.20</code> تنتمي للشبكة <code>192.168.2.0/24</code>، وهي متصلة مباشرة بالمنفذ G0/1. والموجه ينقص <b>TTL</b> بواحد (128 ← 127).' } },
+      { t: '<p>قبل الإرسال من G0/1، يحتاج الموجه MAC الخاص بـ PC-B، فيرسل ARP في الشبكة الثانية ثم يرسل الحزمة.</p>',
+        q: { q: 'ما الذي تغيّر في الحزمة بعد عبور الموجه؟', o: ['عناوين IP المصدر والوجهة', 'عناوين MAC وقيمة TTL', 'لا شيء يتغير'], a: 1, w: 'عناوين <b>IP</b> ثابتة من الطرف للطرف. أما <b>MAC</b> فيتغير في كل قفزة: المصدر صار منفذ الموجه G0/1 والوجهة PC-B، وTTL صار 127.' } },
+      { t: '<p>PC-B استقبل الـ ping ويرد بـ <b>Echo Reply</b> إلى PC-A.</p>',
+        q: { q: 'هل يحتاج الموجه أن يرسل ARP عن PC-A مرة ثانية؟', o: ['لا، لأن عنوانه محفوظ في جدول ARP عند الموجه', 'نعم، في كل حزمة', 'نعم، لأن الرد بروتوكول مختلف'], a: 0, w: 'الموجه حفظ MAC الخاص بـ PC-A لما استقبل طلب ARP منه. جداول ARP وMAC تُبنى مرة وتُستخدم للحزم التالية، ولهذا أول ping قد يفشل أحيانًا (نقطة واحدة) والباقي ينجح.' } },
+      { t: '<p><b>الخلاصة:</b></p><p>① الجهاز يقرر: نفس الشبكة أم البوابة؟</p><p>② ARP يحوّل IP إلى MAC، ويُرسل Broadcast.</p><p>③ السويتش يتعلّم MAC من المصدر، ويمرّر حسب الوجهة.</p><p>④ الموجه يقرر بجدول التوجيه، ويغيّر MAC وينقص TTL.</p><p>⑤ IP ثابت من الطرف للطرف، وMAC يتغير في كل قفزة.</p>' }
+    ];
+    var ST = [
+      { hot: 'A', hdr: { t: '—' } },
+      { hot: 'A', mac1: [['AA:AA', 'Fa0/1']], hdr: { t: 'ARP Request', smac: 'AA:AA', dmac: 'FF:FF:FF:FF:FF:FF', q: 'من يملك 192.168.1.1؟' }, fly: [[{ p: ['A', 'S1'], l: 'ARP؟', c: GO }], [{ p: ['S1', 'C'], l: 'ARP؟', c: GO }, { p: ['S1', 'R'], l: 'ARP؟', c: GO }]], nm: 1 },
+      { hot: 'R', mac1: [['AA:AA', 'Fa0/1'], ['00:11', 'Gi0/1']], arpA: [['192.168.1.1', '00:11']], arpR: [['192.168.1.10', 'AA:AA']], hdr: { t: 'ARP Reply', smac: '00:11', dmac: 'AA:AA', q: '192.168.1.1 هو 00:11' }, fly: [[{ p: ['R', 'S1', 'A'], l: 'ARP ✓', c: OK }]], nm: 1, na: 1 },
+      { hot: 'A', hdr: { t: 'ICMP Echo', sip: '192.168.1.10', dip: '192.168.2.20', smac: 'AA:AA', dmac: '00:11', ttl: 128 }, fly: [[{ p: ['A', 'S1', 'R'], l: 'ping', c: CY }]] },
+      { hot: 'R', rt: 1, hdr: { t: 'ICMP Echo', sip: '192.168.1.10', dip: '192.168.2.20', smac: 'AA:AA', dmac: '00:11', ttl: 127, chg: { ttl: 1 } } },
+      { hot: 'R', rt: 1, mac2: [['00:22', 'Gi0/1'], ['BB:BB', 'Fa0/2']], arpR2: [['192.168.2.20', 'BB:BB']], hdr: { t: 'ICMP Echo', sip: '192.168.1.10', dip: '192.168.2.20', smac: '00:22', dmac: 'BB:BB', ttl: 127, chg: { smac: 1, dmac: 1 } }, fly: [[{ p: ['R', 'S2', 'B'], l: 'ARP؟', c: GO }], [{ p: ['B', 'S2', 'R'], l: 'ARP ✓', c: OK }], [{ p: ['R', 'S2', 'B'], l: 'ping', c: CY }]] },
+      { hot: 'B', rt: 1, hdr: { t: 'ICMP Echo Reply', sip: '192.168.2.20', dip: '192.168.1.10', smac: 'BB:BB', dmac: '00:22', ttl: 128 }, fly: [[{ p: ['B', 'S2', 'R'], l: 'reply', c: OK }], [{ p: ['R', 'S1', 'A'], l: 'reply', c: OK }]] },
+      { hot: '', rt: 1, hdr: { t: 'تم ✔', sip: '192.168.2.20', dip: '192.168.1.10' } }
+    ];
+    var scene = {
+      state: function (i) {
+        var s = { mac1: [], mac2: [], arpA: [], arpR: [], rt: 0 };
+        for (var k = 0; k <= i && k < ST.length; k++) Object.keys(ST[k]).forEach(function (key) { s[key] = ST[k][key]; });
+        s.arpR = (s.arpR || []).concat(i >= 5 ? [['192.168.2.20', 'BB:BB']] : []);
+        s.fly = ST[i].fly; s.nm = ST[i].nm; s.na = ST[i].na; return s;
+      },
+      svg: function (s) {
+        var L = function (a, b) { return '<line x1="' + NODES[a][0] + '" y1="' + NODES[a][1] + '" x2="' + NODES[b][0] + '" y2="' + NODES[b][1] + '" stroke="var(--muted)" stroke-width="2"/>'; };
+        var N = NODES, D = function (k, kind, name, sub, hot) { return devIcon(kind, N[k][0], N[k][1], name, sub, hot); };
+        var nets = M
+          ? '<rect x="8" y="8" width="344" height="172" rx="14" fill="color-mix(in srgb,#2F6E8F 6%,transparent)" stroke="color-mix(in srgb,#2F6E8F 30%,transparent)" stroke-dasharray="5 4"/><text x="344" y="24" font-size="11" fill="var(--muted)" text-anchor="end">الشبكة 192.168.1.0/24</text>' +
+            '<rect x="8" y="276" width="344" height="174" rx="14" fill="color-mix(in srgb,#3F6B56 6%,transparent)" stroke="color-mix(in srgb,#3F6B56 30%,transparent)" stroke-dasharray="5 4"/><text x="344" y="444" font-size="11" fill="var(--muted)" text-anchor="end">الشبكة 192.168.2.0/24</text>'
+          : '<rect x="20" y="8" width="300" height="200" rx="14" fill="color-mix(in srgb,#2F6E8F 6%,transparent)" stroke="color-mix(in srgb,#2F6E8F 30%,transparent)" stroke-dasharray="5 4"/><text x="30" y="26" font-size="11" fill="var(--muted)">الشبكة 192.168.1.0/24</text>' +
+            '<rect x="450" y="8" width="290" height="200" rx="14" fill="color-mix(in srgb,#3F6B56 6%,transparent)" stroke="color-mix(in srgb,#3F6B56 30%,transparent)" stroke-dasharray="5 4"/><text x="730" y="26" font-size="11" fill="var(--muted)" text-anchor="end">الشبكة 192.168.2.0/24</text>';
+        return '<svg viewBox="0 0 ' + (M ? '360 456' : '760 215') + '" style="direction:ltr" role="img" aria-label="شبكتان يربطهما موجه">' + nets +
+          L('A', 'S1') + L('S1', 'C') + L('S1', 'R') + L('R', 'S2') + L('S2', 'B') +
+          D('A', 'pc', 'PC-A', '.1.10 · AA:AA', s.hot === 'A') + D('C', 'pc', 'PC-C', '.1.30', false) +
+          D('S1', 'sw', 'SW1', '', false) + (M ? devIcon('r', N.R[0], N.R[1], '', '', s.hot === 'R') + '<text x="' + (N.R[0] + 30) + '" y="' + (N.R[1] - 4) + '" font-size="12" font-weight="700" fill="var(--fg)">R1</text><text x="' + (N.R[0] + 30) + '" y="' + (N.R[1] + 12) + '" font-size="10" fill="var(--muted)" font-family="var(--font-mono)">G0/0 .1.1 · G0/1 .2.1</text>' : D('R', 'r', 'R1', 'G0/0 .1.1 · G0/1 .2.1', s.hot === 'R')) +
+          D('S2', 'sw', 'SW2', '', false) + D('B', 'pc', 'PC-B', '.2.20 · BB:BB', s.hot === 'B') +
+          '<g id="ixFly"></g></svg>';
+      },
+      side: function (s) {
+        var h = s.hdr || {}, c = h.chg || {}, f = function (k, lab) { return h[k] === undefined ? '' : '<span>' + lab + '</span><span class="' + (c[k] ? 'chg' : '') + '">' + h[k] + '</span>'; };
+        return '<div class="ix-tables"><div class="ix-tbl"><b>الحزمة الآن: ' + E(h.t || '') + '</b><div class="ix-pkt">' + f('sip', 'Src IP') + f('dip', 'Dst IP') + f('smac', 'Src MAC') + f('dmac', 'Dst MAC') + f('ttl', 'TTL') + (h.q ? '<span>ARP</span><span>' + h.q + '</span>' : '') + '</div></div>' +
+          tbl('جدول MAC في SW1', s.mac1, s.nm) + tbl('جدول ARP في PC-A', s.arpA, s.na) + tbl('جدول ARP في R1', s.arpR, 0) +
+          (s.rt ? tbl('جدول توجيه R1', [['192.168.1.0/24', 'G0/0 C'], ['192.168.2.0/24', 'G0/1 C']], 0) : '') + (s.mac2.length ? tbl('جدول MAC في SW2', s.mac2, 1) : '') + '</div>';
+      }
+    };
+    stepper(box, steps, scene, 'packet');
+  };
+
+  /* ---------- 2) Subnetting ---------- */
+  function n2(ip) { var p = String(ip).trim().split('.'); if (p.length !== 4 || p.some(function (x) { return !/^\d{1,3}$/.test(x) || +x > 255; })) return null; return ((+p[0] << 24) >>> 0) + (+p[1] << 16) + (+p[2] << 8) + (+p[3]); }
+  function s2(n) { return [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.'); }
+  function maskN(p) { return p === 0 ? 0 : (0xFFFFFFFF << (32 - p)) >>> 0; }
+  function calc(ipn, p) { var m = maskN(p), net = (ipn & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0, hosts = p >= 31 ? (p === 31 ? 2 : 1) : Math.pow(2, 32 - p) - 2; return { m: s2(m), net: s2(net), bc: s2(bc), first: p >= 31 ? s2(net) : s2(net + 1), last: p >= 31 ? s2(bc) : s2(bc - 1), hosts: hosts, block: Math.pow(2, (32 - p) % 8 || 8) }; }
+  RUN.subnet = function (box) {
+    var ip = '192.168.10.77', p = 26;
+    box.innerHTML = '<div class="ix-two"><div><div class="ix-text"><p><b>كيف يعمل القناع؟</b> العنوان 32 خانة. الخانات <b style="color:var(--accent)">الخضراء</b> تحدد الشبكة، و<b style="color:var(--gold)">الذهبية</b> تحدد الأجهزة. كل خانة تنقلها للشبكة تقسم الأجهزة على 2.</p></div>' +
+      '<div class="ix-stage" style="padding:14px"><label class="fld"><span>عنوان IP</span><input class="ix-ipin" id="sbIp" value="' + ip + '" inputmode="decimal"></label>' +
+      '<label class="fld" style="margin:0"><span>البادئة: <b id="sbP" class="mono"></b> — القناع: <b id="sbM" class="mono"></b></span><input type="range" class="ix-range" style="direction:ltr" id="sbR" min="8" max="30" value="' + p + '"></label>' +
+      '<div class="ix-octv" id="sbOv"></div><div class="ix-bits" id="sbBits"></div><div class="ix-legend"><span><i style="background:color-mix(in srgb,var(--accent) 40%,var(--surface))"></i>الشبكة</span><span><i style="background:color-mix(in srgb,var(--gold,#B89B5E) 45%,var(--surface))"></i>الأجهزة</span></div>' +
+      '<div class="ix-res" id="sbRes"></div></div></div>' +
+      '<div><div class="ix-text"><p><b>🏁 سباق Subnetting</b></p><p>8 أسئلة، و30 ثانية لكل سؤال. الإجابة الصحيحة 10 نقاط، ومعها مكافأة سرعة.</p><p id="sbBest" style="color:var(--muted)"></p><button class="btn pri" id="sbGo" style="width:100%;margin-top:6px">ابدأ السباق</button></div><div id="sbRace"></div></div></div>';
+    function paint() {
+      var ipn = n2($('#sbIp').value); p = +$('#sbR').value;
+      $('#sbP').textContent = '/' + p; $('#sbM').textContent = s2(maskN(p));
+      if (ipn === null) { $('#sbRes').innerHTML = '<p class="tl-msg bad">اكتب عنوان IP صحيحًا.</p>'; return; }
+      var bits = ''; for (var i = 31; i >= 0; i--) bits += (ipn >>> i) & 1;
+      $('#sbOv').innerHTML = s2(ipn).split('.').map(function (x) { return '<span>' + x + '</span>'; }).join('');
+      $('#sbBits').innerHTML = [0, 1, 2, 3].map(function (o) { return '<div class="ix-oct">' + bits.slice(o * 8, o * 8 + 8).split('').map(function (b, k) { return '<i class="' + (o * 8 + k >= p ? 'h' : '') + '">' + b + '</i>'; }).join('') + '</div>'; }).join('');
+      var c = calc(ipn, p);
+      $('#sbRes').innerHTML = [['عنوان الشبكة', c.net], ['عنوان البث', c.bc], ['أول جهاز', c.first], ['آخر جهاز', c.last], ['عدد الأجهزة', c.hosts.toLocaleString('en')], ['حجم القفزة', c.block]].map(function (r) { return '<div><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
+    }
+    $('#sbIp').addEventListener('input', paint); $('#sbR').addEventListener('input', paint); paint();
+    var bestK = SK('ix.best.subnet'); function best() { var b = +(ls0(bestK) || 0); $('#sbBest').textContent = b ? 'أفضل نتيجة لك: ' + b + ' نقطة' : ''; } best();
+    $('#sbGo').onclick = function () { race($('#sbRace'), bestK, best); $('#sbGo').hidden = true; };
+  };
+  function ls0(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  function genQ() {
+    var p = 20 + Math.floor(Math.random() * 11), base = [[192, 168], [172, 16 + Math.floor(Math.random() * 16)], [10, Math.floor(Math.random() * 256)]][Math.floor(Math.random() * 3)];
+    var ipn = n2(base[0] + '.' + base[1] + '.' + Math.floor(Math.random() * 256) + '.' + (1 + Math.floor(Math.random() * 254))), c = calc(ipn, p), ips = s2(ipn) + '/' + p;
+    var types = [
+      function () { var blk = Math.pow(2, 32 - p), d = [s2(((n2(c.net) + blk) >>> 0)), s2(n2(c.net) - blk >>> 0), c.bc]; return { q: 'ما عنوان الشبكة للعنوان <code>' + ips + '</code>؟', a: c.net, d: d, w: 'نطبّق القناع ' + c.m + ' على العنوان، فنحصل على ' + c.net + '.' }; },
+      function () { var blk = Math.pow(2, 32 - p), d = [c.net, s2((n2(c.bc) + blk) >>> 0), s2((n2(c.bc) - 1) >>> 0)]; return { q: 'ما عنوان البث (Broadcast) للعنوان <code>' + ips + '</code>؟', a: c.bc, d: d, w: 'البث هو آخر عنوان في الشبكة ' + c.net + '، أي ' + c.bc + '.' }; },
+      function () { var h = c.hosts, d = [Math.pow(2, 32 - p), h / 2 - 1 > 0 ? (h + 2) / 2 - 2 : h + 2, (h + 2) * 2 - 2].map(String); return { q: 'كم جهازًا يمكن عنونته في الشبكة <code>/' + p + '</code>؟', a: String(h), d: d, w: '2 أس (32 − ' + p + ') = ' + (h + 2) + '، ونطرح عنواني الشبكة والبث = ' + h + '.' }; },
+      function () { var d = [s2(maskN(p - 1)), s2(maskN(p + 1 > 30 ? p - 2 : p + 1)), s2(maskN(p - 8 < 8 ? p - 3 : p - 8))]; return { q: 'ما القناع المكافئ للبادئة <code>/' + p + '</code>؟', a: c.m, d: d, w: p + ' خانة شبكة متتالية = ' + c.m + '.' }; }
+    ];
+    var q = types[Math.floor(Math.random() * types.length)]();
+    var opts = [q.a]; q.d.forEach(function (x) { if (opts.indexOf(x) < 0 && x !== q.a) opts.push(x); });
+    var num = /^\d+$/.test(q.a), k = 1;
+    while (opts.length < 4) { var r = num ? String(+q.a + 2 * k * (k % 2 ? 1 : -1) + (k > 2 ? 64 : 0)) : s2((n2(c.net) + Math.floor(Math.random() * 512)) >>> 0); k++; if (opts.indexOf(r) < 0 && +r !== 0) opts.push(r); }
+    q.o = shuffle(opts.slice(0, 4)); return q;
+  }
+  function race(box, bestK, best) {
+    var n = 0, score = 0, right = 0, timer = null;
+    function next() {
+      if (n === 8) return end();
+      var q = genQ(), left = 30, done = false; n++;
+      box.innerHTML = '<div class="ix-q"><div class="ix-score"><span>السؤال ' + n + ' / 8</span><span>⭐ ' + score + '</span></div><div class="ix-timer"><i id="rcT" style="width:100%"></i></div><b>' + q.q + '</b><div class="ix-opts">' +
+        q.o.map(function (o) { return '<button class="ix-opt mono" style="direction:ltr;text-align:center">' + o + '</button>'; }).join('') + '</div><div class="ix-why" hidden></div></div>';
+      var why = box.querySelector('.ix-why');
+      function settle(ok, b) {
+        done = true; clearInterval(timer);
+        box.querySelectorAll('.ix-opt').forEach(function (x) { if (x.textContent === q.a) x.classList.add('ok'); });
+        if (ok) { var pts = 10 + Math.floor(left / 3); score += pts; right++; why.className = 'ix-why ok'; why.innerHTML = '✔ +' + pts + ' — ' + q.w; }
+        else { if (b) b.classList.add('no'); why.className = 'ix-why no'; why.innerHTML = (b ? '✘ ' : '⏰ انتهى الوقت. ') + 'الإجابة: <b class="mono">' + q.a + '</b> — ' + q.w; }
+        why.hidden = false; why.insertAdjacentHTML('afterend', '<button class="btn pri" style="width:100%;margin-top:10px" id="rcN">' + (n === 8 ? 'النتيجة' : 'التالي') + '</button>');
+        $('#rcN').onclick = next;
+      }
+      box.querySelector('.ix-opts').addEventListener('click', function (e) { var b = e.target.closest('.ix-opt'); if (!b || done) return; settle(b.textContent === q.a, b); });
+      timer = setInterval(function () { left--; var t = $('#rcT'); if (t) t.style.width = (left / 30 * 100) + '%'; if (left <= 0 && !done) settle(false, null); }, 1000);
+    }
+    function end() {
+      var b = +(ls0(bestK) || 0), rec = score > b; if (rec) ls0(bestK, String(score)); best();
+      if (right >= 6) ixDone('subnet');
+      box.innerHTML = '<div class="ix-done"><div class="ix-big"><b>' + score + '</b>نقطة · ' + right + ' من 8 صحيحة</div>' + (rec ? '<p style="color:var(--ok);font-weight:700">🏆 رقم قياسي جديد لك!</p>' : '') +
+        '<p class="tl-sub">' + (right >= 6 ? 'ممتاز! أتقنت التقسيم.' : 'حاول مرة ثانية. 6 إجابات صحيحة أو أكثر تكمل الوحدة.') + '</p><button class="btn pri" id="rcAgain">سباق جديد</button></div>';
+      $('#rcAgain').onclick = function () { race(box, bestK, best); };
+    }
+    next();
+  }
+
+  /* ---------- محرّك الترتيب ---------- */
+  function orderTask(box, title, items, onDone) {
+    var placed = [], pool = shuffle(items.map(function (_, i) { return i; }));
+    function render() {
+      box.innerHTML = '<div class="ix-text"><p>' + title + '</p><p style="color:var(--muted);font-size:.85rem">اضغط على العنصر ليوضع في أول خانة فارغة، واضغط على خانة لإرجاع عنصرها.</p></div><div class="ix-two"><div class="ix-slots">' +
+        items.map(function (_, k) { var v = placed[k]; return '<button class="ix-slot' + (v !== undefined ? ' fill' : '') + '" data-s="' + k + '"><em>' + (k + 1) + '</em>' + (v !== undefined ? items[v] : '') + '</button>'; }).join('') +
+        '</div><div class="ix-pool">' + pool.filter(function (i) { return placed.indexOf(i) < 0; }).map(function (i) { return '<button class="ix-chip" data-p="' + i + '">' + items[i] + '</button>'; }).join('') + '</div></div><p class="tl-msg" id="odM"></p>' +
+        (placed.filter(function (x) { return x !== undefined; }).length === items.length ? '<button class="btn pri" id="odC" style="width:100%">تحقق من الترتيب</button>' : '');
+      var c = $('#odC'); if (c) c.onclick = check;
+    }
+    function check() {
+      var wrong = 0; items.forEach(function (_, k) { var s = box.querySelector('[data-s="' + k + '"]'); if (placed[k] === k) s.classList.add('ok'); else { wrong++; s.classList.add('no'); } });
+      if (!wrong) { msgx('odM', '✔ ترتيب صحيح تمامًا!', 'ok'); setTimeout(onDone, 900); }
+      else msgx('odM', wrong + ' في مكان خاطئ. اضغط الخانات الحمراء لإرجاعها وأعد المحاولة.', 'bad');
+    }
+    box.onclick = function (e) {
+      var p = e.target.closest('[data-p]'), s = e.target.closest('[data-s]');
+      if (p) { var k = 0; while (placed[k] !== undefined) k++; placed[k] = +p.getAttribute('data-p'); render(); }
+      else if (s && placed[+s.getAttribute('data-s')] !== undefined) { placed[+s.getAttribute('data-s')] = undefined; render(); }
+    };
+    render();
+  }
+  function msgx(id, t, k) { var m = document.getElementById(id); if (m) { m.textContent = t; m.className = 'tl-msg ' + (k || ''); } }
+  /* ---------- محرّك التوزيع على مجموعات ---------- */
+  function matchTask(box, title, buckets, items, onDone) {
+    var sel = null, inB = {};
+    function render() {
+      var left = items.map(function (_, i) { return i; }).filter(function (i) { return inB[i] === undefined; });
+      if (sel === null || inB[sel] !== undefined) sel = left.length ? left[0] : null;
+      box.innerHTML = '<div class="ix-text"><p>' + title + '</p><p style="color:var(--muted);font-size:.85rem">اضغط على المجموعة الصحيحة للعنصر الظاهر.</p></div><div class="ix-two"><div class="ix-pool" style="position:sticky;top:6px;z-index:2;align-self:start">' +
+        (left.length ? '<span style="color:var(--muted);font-size:.8rem">العنصر ' + (items.length - left.length + 1) + ' من ' + items.length + '</span><button class="ix-chip sel" data-p="' + sel + '" style="font-weight:700;font-size:1rem">' + items[sel].t + '</button>' : '<p style="color:var(--ok);font-weight:700">✔ وزّعت كل العناصر!</p>') +
+        '</div><div class="ix-buckets">' + buckets.map(function (b, k) { return '<button class="ix-bucket" data-b="' + k + '"><b>' + b + '</b><div class="ix-in">' + items.map(function (it, i) { return inB[i] === k ? '<span>' + it.t + '</span>' : ''; }).join('') + '</div></button>'; }).join('') + '</div></div><div class="ix-why" id="mtW" hidden></div>';
+      if (!left.length) setTimeout(onDone, 900);
+    }
+    box.onclick = function (e) {
+      var p = e.target.closest('[data-p]'), b = e.target.closest('[data-b]');
+      if (p) { sel = +p.getAttribute('data-p'); render(); return; }
+      if (b && sel !== null) {
+        var k = +b.getAttribute('data-b'), it = items[sel], w;
+        if (it.b === k) { inB[sel] = k; sel = null; render(); w = $('#mtW'); w.hidden = false; w.className = 'ix-why ok'; w.innerHTML = '✔ ' + it.t + ' ← ' + buckets[k] + (it.w ? ': ' + it.w : ''); }
+        else { render(); w = $('#mtW'); w.hidden = false; w.className = 'ix-why no'; w.innerHTML = '✘ «' + it.t + '» ليس في «' + buckets[k] + '». ' + (it.h || 'جرّب مجموعة أخرى.'); var c = box.querySelector('[data-p="' + sel + '"]'); if (c) c.classList.add('no'); }
+      }
+    };
+    render();
+  }
+
+  /* ---------- 3) OSI ---------- */
+  RUN.osi = function (box) {
+    var L = ['7 التطبيقات Application', '6 العرض Presentation', '5 الجلسة Session', '4 النقل Transport', '3 الشبكة Network', '2 ربط البيانات Data Link', '1 الفيزيائية Physical'];
+    var names = L.map(function (x) { return x.replace(/^\d /, ''); });
+    orderTask(box, '<b>الجزء 1:</b> رتّب طبقات OSI من الأعلى (7) إلى الأسفل (1). <span style="color:var(--muted)">تلميح للحفظ: All People Seem To Need Data Processing</span>', names, function () {
+      matchTask(box, '<b>الجزء 2:</b> ضع كل جهاز أو مفهوم في طبقته.', L, [
+        { t: 'HTTP / تصفح المواقع', b: 0, w: 'بروتوكولات التطبيقات التي يتعامل معها المستخدم.' },
+        { t: 'DNS', b: 0, w: 'خدمة تطبيقات تحوّل الأسماء إلى عناوين.' },
+        { t: 'التشفير وضغط الصور JPEG', b: 1, w: 'طبقة العرض تهتم بشكل البيانات وترميزها.' },
+        { t: 'فتح جلسة وإغلاقها', b: 2, w: 'طبقة الجلسة تدير الحوار بين الطرفين.' },
+        { t: 'TCP / UDP وأرقام المنافذ', b: 3, w: 'طبقة النقل: تقسيم البيانات والتسليم الموثوق.', h: 'أرقام المنافذ مثل 80 و443 تخص النقل.' },
+        { t: 'الموجه Router', b: 4, w: 'يقرر الطريق حسب عنوان IP.', h: 'الموجه يتعامل مع عناوين IP.' },
+        { t: 'عنوان IP', b: 4, w: 'العنوان المنطقي في طبقة الشبكة.' },
+        { t: 'السويتش Switch', b: 5, w: 'يمرّر الإطارات حسب عنوان MAC.', h: 'السويتش يتعامل مع عناوين MAC.' },
+        { t: 'عنوان MAC', b: 5, w: 'العنوان الفيزيائي في طبقة ربط البيانات.' },
+        { t: 'الكيبل والـ Hub', b: 6, w: 'إشارات كهربائية وبتات فقط.' }
+      ], function () { finish(box, 'osi'); });
+    });
+  };
+
+  /* ---------- 4) الكيبلات ---------- */
+  function quizList(box, intro, qs, id) {
+    var i = 0, ok = 0;
+    function render() {
+      if (i === qs.length) return finish(box, id, '<p class="tl-sub">' + ok + ' من ' + qs.length + ' من أول محاولة.</p>');
+      var q = qs[i];
+      box.innerHTML = (i === 0 ? '<div class="ix-text">' + intro + '</div>' : '') + '<div class="ix-dots">' + qs.map(function (_, k) { return '<i class="' + (k < i ? 'on' : k === i ? 'cur' : '') + '"></i>'; }).join('') + '</div><div id="qlQ"></div>';
+      var w = ask({ q: q.q, o: q.o, a: q.a, w: q.w, h: q.h }, function () { if (!w.dataset.wrong) ok++; var b = document.createElement('button'); b.className = 'btn pri'; b.style.cssText = 'width:100%;margin-top:10px'; b.textContent = i === qs.length - 1 ? 'إنهاء' : 'التالي'; b.onclick = function () { i++; render(); }; w.appendChild(b); });
+      $('#qlQ').appendChild(w);
+    }
+    render();
+  }
+  RUN.cables = function (box) {
+    var C = ['مستقيم Straight-through', 'متقاطع Crossover', 'كونسول Rollover', 'تسلسلي Serial'];
+    var Q = function (q, a, w, h) { return { q: q, o: C, a: a, w: w, h: h }; };
+    quizList(box, '<p><b>القاعدة الذهبية:</b> جهازان من <b>مجموعتين مختلفتين</b> ← كيبل <b>مستقيم</b>. جهازان من <b>نفس المجموعة</b> ← كيبل <b>متقاطع</b>.</p><p>المجموعة 1: الكمبيوتر، الموجه، السيرفر. المجموعة 2: السويتش، الـ Hub.</p><p style="color:var(--muted);font-size:.85rem">الأجهزة الحديثة فيها Auto-MDIX وتعدّل نفسها، لكن الاختبارات والمختبرات تتبع القاعدة.</p>', [
+      Q('كمبيوتر ← سويتش', 0, 'مجموعتان مختلفتان، إذن مستقيم.'),
+      Q('سويتش ← موجه', 0, 'السويتش من المجموعة 2 والموجه من المجموعة 1، إذن مستقيم.'),
+      Q('كمبيوتر ← كمبيوتر مباشرة', 1, 'نفس المجموعة، إذن متقاطع.', 'الجهازان من نفس النوع.'),
+      Q('سويتش ← سويتش', 1, 'نفس المجموعة، إذن متقاطع.'),
+      Q('كمبيوتر ← منفذ Ethernet في الموجه', 1, 'الكمبيوتر والموجه من نفس المجموعة، إذن متقاطع.', 'هل الكمبيوتر والموجه في نفس المجموعة؟'),
+      Q('لابتوب ← منفذ Console في الموجه لإعداده أول مرة', 2, 'كيبل الكونسول (Rollover) الأزرق، ومعه برنامج طرفية مثل PuTTY.'),
+      Q('موجه ← موجه عبر رابط WAN (S0/0/0)', 3, 'الكيبل التسلسلي، وطرف DCE يضبط clock rate.', 'لاحظ اسم المنفذ S0/0/0.')
+    ], 'cables');
+  };
+
+  /* ---------- 5) إقلاع الجهاز ---------- */
+  RUN.boot = function (box) {
+    var M = window.innerWidth < 600;
+    var P = M ? { psu: [65, 45, 'مزود الطاقة'], cpu: [180, 45, 'المعالج'], ram: [295, 45, 'الذاكرة'], bios: [65, 115, 'شريحة BIOS'], mb: [180, 115, 'اللوحة الأم'], gpu: [295, 115, 'كرت الشاشة'], ssd: [180, 180, 'القرص SSD'], mon: [180, 270, 'الشاشة'] }
+      : { psu: [80, 60, 'مزود الطاقة'], mb: [250, 120, 'اللوحة الأم'], bios: [180, 175, 'شريحة BIOS'], cpu: [300, 70, 'المعالج'], ram: [400, 70, 'الذاكرة'], gpu: [330, 175, 'كرت الشاشة'], ssd: [520, 150, 'القرص SSD'], mon: [640, 60, 'الشاشة'] };
+    var steps = [
+      { t: '<p>ضغطت <b>زر التشغيل</b>. الزر لا يشغّل الجهاز مباشرة، بل يرسل إشارة صغيرة للوحة الأم.</p>', on: ['psu'], q: { q: 'أي قطعة تبدأ العمل أولًا؟', o: ['مزود الطاقة PSU', 'القرص SSD', 'الشاشة'], a: 0, w: 'اللوحة الأم تطلب من مزود الطاقة التشغيل، فيوصل الجهود (12 و5 و3.3 فولت) ويرسل إشارة <b>Power Good</b>.' } },
+      { t: '<p>وصلت الكهرباء للوحة الأم والمعالج. المعالج يبدأ تنفيذ أول تعليمة.</p>', on: ['psu', 'mb', 'cpu', 'bios'], q: { q: 'من أين يقرأ المعالج أول التعليمات؟', o: ['من شريحة BIOS/UEFI على اللوحة الأم', 'من القرص الصلب', 'من الذاكرة RAM'], a: 0, w: 'الذاكرة فارغة عند التشغيل، والقرص لم يُعرَّف بعد. فيقرأ المعالج برنامج <b>BIOS/UEFI</b> المخزّن في شريحة على اللوحة.', h: 'الذاكرة RAM تُمسح عند فصل الكهرباء.' } },
+      { t: '<p>يبدأ <b>الفحص الذاتي POST</b>: يفحص المعالج والذاكرة وكرت الشاشة ولوحة المفاتيح.</p>', on: ['psu', 'mb', 'cpu', 'bios', 'ram', 'gpu'], q: { q: 'ماذا يحدث إذا كانت الذاكرة غير مثبّتة جيدًا؟', o: ['صفارات متكررة ويتوقف الإقلاع', 'يكمل الإقلاع عادي', 'تحترق اللوحة'], a: 0, w: 'لا توجد شاشة بعد، فيبلّغ BIOS عن الخطأ بـ<b>رموز صفارات</b>. صفارات متكررة غالبًا تعني مشكلة في الذاكرة.' } },
+      { t: '<p>نجح الفحص. كرت الشاشة يعمل فيظهر <b>شعار الشركة</b> على الشاشة، وهنا تقدر تدخل BIOS بزر Del أو F2.</p>', on: ['psu', 'mb', 'cpu', 'bios', 'ram', 'gpu', 'mon'] },
+      { t: '<p>BIOS يبحث عن جهاز إقلاع حسب <b>ترتيب الإقلاع Boot Order</b>، ويقرأ <b>محمّل الإقلاع</b> من القرص.</p>', on: ['psu', 'mb', 'cpu', 'bios', 'ram', 'gpu', 'mon', 'ssd'], q: { q: 'إذا لم يجد BIOS أي جهاز إقلاع، ماذا يظهر؟', o: ['رسالة No bootable device', 'صفارات متكررة', 'لا يعمل مزود الطاقة'], a: 0, w: 'الحل: تأكد من توصيل القرص وأنه أول جهاز في ترتيب الإقلاع، أو أن نظام التشغيل مثبّت عليه.' } },
+      { t: '<p>محمّل الإقلاع يحمّل <b>نواة نظام التشغيل</b> من القرص إلى الذاكرة، ثم تظهر شاشة الدخول. 🎉</p><p><b>الخلاصة:</b> الطاقة ← BIOS ← POST ← الشاشة ← ترتيب الإقلاع ← نظام التشغيل.</p>', on: ['psu', 'mb', 'cpu', 'bios', 'ram', 'gpu', 'mon', 'ssd'], win: 1 }
+    ];
+    steps.done = function (b) {
+      orderTask(b, '<b>دورك:</b> رتّب مراحل إقلاع الجهاز من الأول إلى الأخير.', ['ضغط زر التشغيل وعمل مزود الطاقة', 'المعالج يقرأ BIOS/UEFI', 'الفحص الذاتي POST', 'ظهور الشعار على الشاشة', 'البحث عن جهاز الإقلاع', 'تحميل نظام التشغيل'], function () { finish(b, 'boot'); });
+    };
+    var scene = {
+      state: function (i) { return { on: steps[Math.min(i, steps.length - 1)].on || [], win: steps[Math.min(i, steps.length - 1)].win }; },
+      svg: function (s) {
+        var on = function (k) { return s.on.indexOf(k) >= 0; };
+        var part = function (k, w, h) { var p = P[k], lit = on(k); return '<g><rect x="' + (p[0] - w / 2) + '" y="' + (p[1] - h / 2) + '" width="' + w + '" height="' + h + '" rx="6" fill="' + (lit ? 'color-mix(in srgb,#B89B5E 35%,var(--surface))' : 'var(--bg)') + '" stroke="' + (lit ? '#B89B5E' : 'var(--line)') + '" stroke-width="2"' + (lit ? ' style="filter:drop-shadow(0 0 6px #B89B5E88)"' : '') + '/><text x="' + p[0] + '" y="' + (p[1] + 4) + '" font-size="11" text-anchor="middle" fill="var(--fg)" font-weight="600">' + p[2] + '</text></g>'; };
+        var wire = function (a, b) { return '<line x1="' + P[a][0] + '" y1="' + P[a][1] + '" x2="' + P[b][0] + '" y2="' + P[b][1] + '" stroke="' + (on(a) && on(b) ? '#B89B5E' : 'var(--line)') + '" stroke-width="3" stroke-dasharray="6 4"/>'; };
+        var mx = P.mon[0], my = P.mon[1];
+        return '<svg viewBox="0 0 ' + (M ? '360 325' : '720 230') + '" style="direction:ltr" role="img" aria-label="قطع الحاسب أثناء الإقلاع">' + (M ? '<rect x="8" y="12" width="344" height="200" rx="12" fill="none" stroke="var(--line)" stroke-width="2"/>' : '<rect x="140" y="30" width="330" height="185" rx="12" fill="none" stroke="var(--line)" stroke-width="2"/>') +
+          wire('psu', 'mb') + wire('mb', 'ssd') + wire('gpu', 'mon') + part('psu', M ? 100 : 110, M ? 40 : 44) + part('mb', 100, 34) + part('bios', 90, 30) + part('cpu', 80, 40) + part('ram', 90, 40) + part('gpu', 100, 30) + part('ssd', 100, 36) +
+          '<g><rect x="' + (mx - 65) + '" y="' + (my - 42) + '" width="130" height="85" rx="8" fill="' + (on('mon') ? (s.win ? '#0b5cad' : '#111') : 'var(--bg)') + '" stroke="var(--line)" stroke-width="2"/><text x="' + mx + '" y="' + (my + 5) + '" font-size="13" text-anchor="middle" fill="' + (on('mon') ? '#fff' : 'var(--muted)') + '" font-weight="700">' + (s.win ? 'Windows ✓' : on('mon') ? 'LOGO' : 'الشاشة') + '</text></g></svg>';
+      }
+    };
+    stepper(box, steps, scene, 'boot');
+  };
+
+  /* ---------- 6) التشخيص والتوافق ---------- */
+  RUN.diag = function (box) {
+    var causes = ['كيبل الكهرباء أو مزود الطاقة', 'كيبل طاقة المعالج (4/8 pin)', 'الذاكرة RAM', 'كرت الشاشة أو كيبل الشاشة', 'ترتيب الإقلاع أو القرص', 'المبرد أو المعجون الحراري'];
+    matchTask(box, '<b>الجزء 1 — المشخّص:</b> اربط كل عرَض بسببه الأرجح.', causes, [
+      { t: 'لا يستجيب إطلاقًا، ولا ضوء ولا مراوح', b: 0, w: 'لا توجد طاقة أصلًا: افحص الكيبل وزر مزود الطاقة.' },
+      { t: 'المراوح تدور ثانية ثم تتوقف', b: 1, w: 'اللوحة تعمل لكن المعالج بلا طاقة، فتحمي نفسها وتطفئ.' },
+      { t: 'صفارات متكررة ولا صورة', b: 2, w: 'رمز الصفارات المتكررة يدل غالبًا على الذاكرة.' },
+      { t: 'المراوح تعمل والشاشة سوداء بلا صفارات', b: 3, w: 'تأكد من طاقة كرت الشاشة وأن الكيبل في منفذ الكرت لا اللوحة.' },
+      { t: 'رسالة No bootable device', b: 4, w: 'الجهاز سليم، لكنه لا يجد نظام تشغيل يقلع منه.' },
+      { t: 'يطفئ وحده بعد دقائق وحرارته عالية', b: 5, w: 'حماية من الحرارة: المبرد غير مثبّت أو المعجون ناقص.' }
+    ], function () {
+      var items = [
+        { t: 'معالج Core i5-12400 (LGA1700)', ok: 1, w: 'نفس المقبس LGA1700.' }, { t: 'معالج Ryzen 5 5600 (AM4)', ok: 0, w: 'مقبس AM4 لا يركب على LGA1700.' },
+        { t: 'ذاكرة DDR4 3200', ok: 1, w: 'اللوحة تدعم DDR4.' }, { t: 'ذاكرة DDR5 5600', ok: 0, w: 'DDR5 شكلها مختلف ولا تركب في فتحات DDR4.' },
+        { t: 'قرص NVMe M.2', ok: 1, w: 'اللوحة فيها منفذ M.2.' }, { t: 'مبرد يدعم LGA1700', ok: 1, w: 'المبرد لازم يطابق المقبس.' }, { t: 'مبرد خاص بـ AM4 فقط', ok: 0, w: 'تثبيته لا يناسب LGA1700.' }
+      ], sel = {};
+      function render() {
+        box.innerHTML = '<div class="ix-text"><p><b>الجزء 2 — التوافق:</b> عندك لوحة أم <b>B660</b> بمقبس <b class="mono">LGA1700</b> وذاكرة <b class="mono">DDR4</b> ومنفذ <b class="mono">M.2</b>. اختر كل القطع المتوافقة معها.</p></div><div class="ix-pool">' +
+          items.map(function (it, i) { return '<button class="ix-chip' + (sel[i] ? ' sel' : '') + '" data-c="' + i + '">' + (sel[i] ? '☑ ' : '☐ ') + it.t + '</button>'; }).join('') + '</div><p class="tl-msg" id="cpM"></p><button class="btn pri" id="cpC" style="width:100%">تحقق</button><div class="ix-why" id="cpW" hidden></div>';
+        $('#cpC').onclick = function () {
+          var bad = items.filter(function (it, i) { return !!sel[i] !== !!it.ok; });
+          items.forEach(function (it, i) { var c = box.querySelector('[data-c="' + i + '"]'); if (!!sel[i] !== !!it.ok) c.classList.add('no'); else if (it.ok) c.classList.add('ok'); });
+          var w = $('#cpW'); w.hidden = false;
+          if (!bad.length) { w.className = 'ix-why ok'; w.innerHTML = '✔ اختيار صحيح! ' + items.filter(function (x) { return !x.ok; }).map(function (x) { return x.w; }).join(' '); setTimeout(function () { finish(box, 'diag'); }, 1800); }
+          else { w.className = 'ix-why no'; w.innerHTML = '✘ راجع: ' + bad.map(function (x) { return '«' + x.t + '» — ' + x.w; }).join('<br>'); }
+        };
+      }
+      box.onclick = function (e) { var c = e.target.closest('[data-c]'); if (c) { var i = +c.getAttribute('data-c'); sel[i] = !sel[i]; render(); } };
+      render();
+    });
+  };
+
+  /* ---------- نقاط الدخول ---------- */
+  var modes = document.querySelector('#home .modes');
+  if (modes) {
+    modes.insertAdjacentHTML('afterbegin', '<button class="mode" id="ixMode" style="border-color:var(--gold,#B89B5E)"><span class="mi" style="font-size:1.6rem">🎮</span><b>التعلّم التفاعلي</b><span>افهم الشبكات وتجميع الحاسب بالحركة والتجربة: رحلة الحزمة، سباق Subnetting، إقلاع الجهاز، وغيرها.</span></button>');
+    $('#ixMode').addEventListener('click', function () { list(); });
+  }
+  var _rc2 = renderCourses;
+  renderCourses = function () {
+    _rc2.apply(this, arguments);
+    if (!CSEL) return; var ms = MODS.filter(function (m) { return m.c === CSEL; }); if (!ms.length) return;
+    var back = document.querySelector('#courseList > button[data-course=""]'); if (!back) return;
+    var d = ms.filter(function (m) { return isDone(m.id); }).length;
+    back.insertAdjacentHTML('afterend', '<div class="ix-banner"><span>🎮 <b>تعلّم تفاعلي لهذه المادة</b> — ' + ms.length + ' وحدات · أنجزت ' + d + '</span><button class="btn pri" id="ixFromCourse">ابدأ</button></div>');
+    $('#ixFromCourse').addEventListener('click', function () { list(CSEL); });
+  };
+  window.IX = { list: list, open: open };
 })();
 </script>
 </body>
