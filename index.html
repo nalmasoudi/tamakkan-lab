@@ -632,6 +632,65 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lab-card h2,:root:not([data-theme="light"]) .labhead h2{color:var(--fg)}}
 .chip{background:rgba(63,107,86,.1);border-color:transparent;color:var(--accent)}.chip.done{background:rgba(46,125,87,.14);color:var(--ok)}
 .how{border-radius:14px;border:1px dashed var(--gold);background:rgba(184,155,94,.08)}
+
+/* ===== الحسابات والشعب ===== */
+.tl-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:6px 0 16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.tl-invite{display:flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--gold,#B89B5E) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--gold,#B89B5E) 45%,transparent);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.tl-invite b{display:block}.tl-invite span{color:var(--muted);font-size:.85rem}
+.tl-invite i{font-style:normal;font-size:1.5rem;line-height:1}
+.tl-tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:12px}
+.tl-tabs button{border:0;background:transparent;border-radius:8px;padding:8px;min-height:38px;font-weight:600;color:var(--muted)}
+.tl-tabs button[aria-selected=true]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tl-card h3{font-family:var(--font-display);font-size:1.05rem;margin:0 0 2px}
+.tl-sub{color:var(--muted);font-size:.85rem;margin:0 0 12px}
+.tl-form .fld{margin-bottom:10px}
+.tl-pw{position:relative}.tl-pw input{padding-right:64px!important}
+.tl-pw button{position:absolute;right:4px;bottom:4px;border:0;background:transparent;min-height:34px;padding:0 8px;color:var(--muted);font-size:.8rem}
+.tl-msg{min-height:1.2em;font-size:.85rem;margin:2px 0 8px}.tl-msg.bad{color:var(--bad)}.tl-msg.ok{color:var(--ok)}
+.tl-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tl-link{border:0;background:none;color:var(--accent);padding:4px 0;font-size:.85rem;text-decoration:underline;text-underline-offset:3px}
+.tl-guest{display:block;margin:10px auto 0;color:var(--muted)}
+.tl-me{display:flex;gap:12px;align-items:center}
+.tl-av{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1.05rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--ink,#0B1626))}
+.tl-me b{display:block;font-size:1.05rem}.tl-me small{color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tl-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok)}.tl-dot.off{background:var(--warn)}
+.tl-secs{display:grid;gap:10px;margin-top:14px}
+.tl-sec{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}
+.tl-sec-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:8px}
+.tl-sec-h b{font-size:.98rem}.tl-sec-h span{color:var(--muted);font-size:.8rem}
+.tl-crs{display:grid;gap:6px}
+.tl-cr{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;text-align:start;border:0;background:var(--surface);border-radius:10px;padding:8px 10px;width:100%}
+.tl-cr span{font-size:.9rem}.tl-cr em{font-style:normal;color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.tl-bar{grid-column:1/-1;height:6px;border-radius:999px;background:var(--line);overflow:hidden}
+.tl-bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.tl-empty{color:var(--muted);font-size:.88rem;margin:12px 0 0}
+.tl-acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.tl-acts .btn{min-height:36px;padding:6px 12px;font-size:.85rem}
+.tl-group{font-family:var(--font-display);font-size:1rem;margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.tl-group small{color:var(--muted);font-family:var(--font-body);font-weight:400;font-size:.8rem}
+/* بوابة المدرب */
+.tl-hub .seg2{margin-bottom:12px}
+.tl-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:0 0 12px}
+.tl-kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tl-kpi b{display:block;font-size:1.5rem;font-variant-numeric:tabular-nums;line-height:1.2}.tl-kpi span{color:var(--muted);font-size:.8rem}
+.tl-scard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.tl-scard h4{margin:0;font-size:1rem}.tl-scard p{margin:4px 0 8px;color:var(--muted);font-size:.85rem}
+.tl-code{font-family:var(--font-mono);direction:ltr;unicode-bidi:isolate;letter-spacing:.12em;background:var(--bg);border:1px dashed var(--line);border-radius:6px;padding:1px 8px}
+.tl-chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}.tl-chips span{border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:.78rem}
+.tl-share{text-align:center}
+.tl-share img{width:200px;height:200px;border-radius:12px;background:#fff;padding:8px;border:1px solid var(--line)}
+.tl-share .mono{display:block;word-break:break-all;font-size:.8rem;background:var(--bg);border-radius:8px;padding:8px;margin:10px 0;text-align:left}
+.tl-table{width:100%;min-width:560px;border-collapse:collapse;font-size:.85rem}
+.tl-modal a.btn,.tl-acts a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.tl-table th,.tl-table td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:start;vertical-align:middle}
+.tl-table th{color:var(--muted);font-weight:600;font-size:.78rem}
+.tl-table td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-pct{display:flex;align-items:center;gap:6px}.tl-pct .tl-bar{width:60px;flex:none}
+.tl-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px 8px}
+.tl-modal{position:fixed;inset:0;background:rgba(5,12,20,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.tl-modal>div{background:var(--surface);color:var(--fg);border-radius:16px;padding:18px;max-width:420px;width:100%;max-height:90vh;overflow:auto}
+.tl-chk{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;margin:4px 0 10px}
+@media (max-width:520px){.tl-chk{grid-template-columns:1fr}}
+.tl-chk label{display:flex;gap:6px;align-items:center;font-size:.88rem}
 </style>
 
 <div class="wrap" id="app">
@@ -10775,6 +10834,386 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     post({ k: 'res', e: P.e, q: P.q || '', i: rec.i, sub: rec.sub }).then(function () { rec.sent = 1; saveRec(rec); st('تم إرسال درجتك للمدرب تلقائياً ✔', 'exok'); ev('exam', { lab: P.l, sc: rec.sc, of: rec.N }); })
       .catch(function () { st('تعذّر الإرسال (تحقق من الإنترنت). اضغط «إعادة الإرسال».', 'exbad'); });
   };
+})();
+
+/* ===================== الحسابات والشعب وبوابة المدرّب ===================== */
+(function () {
+  if (!TL_API) return;
+  var TK = 'tl.tok', MK = 'tl.me', TTK = 'tl.ttok', TMK = 'tl.tme';
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+  function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { return null; } }
+  function api(a, o) {
+    o = o || {}; o.a = a;
+    return fetch(TL_API, { method: 'POST', body: JSON.stringify(o) }).then(function (r) { if (!r.ok) throw new Error('net'); return r.json(); });
+  }
+  function E(s) { return esc(s == null ? '' : s).replace(/"/g, '&quot;'); }
+  function initials(n) { var p = String(n || '').trim().split(/\s+/), l = p.length > 1 ? p[p.length - 1].replace(/^ال(?=..)/, '') : ''; return ((p[0] || '').charAt(0) + l.charAt(0)) || '؟'; }
+  function first(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
+  function cTitle(id) { var c = COURSES.filter(function (x) { return x.id === id; })[0]; return c ? c.title : id; }
+  function labsOf(cid) { return allLabs().filter(function (l) { return labCourse(l) === cid && String(l.id).indexOf('exam') < 0; }); }
+  function ago(ts) {
+    if (!ts) return '—'; var m = Math.round((Date.now() - ts) / 60000);
+    if (m < 2) return 'الآن'; if (m < 60) return 'قبل ' + m + ' د'; var h = Math.round(m / 60); if (h < 24) return 'قبل ' + h + ' س';
+    var d = Math.round(h / 24); return d === 1 ? 'أمس' : 'قبل ' + d + ' يوم';
+  }
+  function msg(id, t, kind) { var m = document.getElementById(id); if (m) { m.textContent = t || ''; m.className = 'tl-msg' + (kind ? ' ' + kind : ''); } }
+  function busy(btn, on) { if (!btn) return; if (on) { btn.dataset.t = btn.textContent; btn.textContent = '…'; btn.disabled = true; } else { btn.textContent = btn.dataset.t || btn.textContent; btn.disabled = false; } }
+  var NET = 'تعذّر الاتصال بالخادم. تحقق من الإنترنت وحاول مرة أخرى.';
+
+  /* ---------- حالة المتدرب ---------- */
+  var TOK = ls(TK) || '', ME = null;
+  try { ME = TOK ? JSON.parse(ls(MK) || 'null') : null; } catch (e) { ME = null; }
+  var MODE = 'login', SYNC = 'ok', JINFO = null, JOIN = ss('tl.join') || '';
+  (function () {
+    var m = /[#&]join=([A-Za-z0-9]{4,10})/.exec(location.hash || '');
+    if (m) { JOIN = m[1].toUpperCase(); ss('tl.join', JOIN); try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } }
+  })();
+  if (JOIN && !ME) { MODE = 'reg'; api('sec_info', { sec: JOIN }).then(function (r) { if (r.ok) { JINFO = r.section; renderProf(); } else { JOIN = ''; ss('tl.join', null); renderProf(); } }).catch(function () { }); }
+
+  /* التقدم: يُحفظ محليًا كما كان، ويُزامن مع الخادم عند تسجيل الدخول */
+  var _saveDone = saveDone, syncT = null;
+  saveDone = function () { _saveDone(); if (TOK) { clearTimeout(syncT); syncT = setTimeout(pushSync, 1500); } };
+  function doneMap() { var o = {}; Object.keys(DONE).forEach(function (k) { if (DONE[k]) o[k] = typeof DONE[k] === 'number' && DONE[k] > 1 ? DONE[k] : Date.now(); }); return o; }
+  function mergeServer(done) { var ch = false; Object.keys(done || {}).forEach(function (k) { if (!DONE[k]) { DONE[k] = 1; ch = true; } }); if (ch) _saveDone(); }
+  function pushSync() {
+    if (!TOK) return;
+    api('st_sync', { tok: TOK, done: doneMap() }).then(function (r) {
+      if (r.auth) return expired();
+      SYNC = 'ok'; if (r.ok) mergeServer(r.done); paintSync();
+    }).catch(function () { SYNC = 'off'; paintSync(); });
+  }
+  window.addEventListener('online', function () { if (TOK && SYNC === 'off') pushSync(); });
+  function paintSync() { var d = document.getElementById('tlSync'); if (d) d.innerHTML = '<i class="tl-dot' + (SYNC === 'ok' ? '' : ' off') + '"></i>' + (SYNC === 'ok' ? 'متزامن مع حسابك' : 'غير متصل — سيُزامن لاحقًا'); }
+  function expired() { logoutSt(); msg('tlM', 'انتهت الجلسة، سجّل دخولك مرة أخرى.', 'bad'); }
+
+  function setSession(r) {
+    var guest = WHO ? null : JSON.parse(JSON.stringify(DONE));
+    TOK = r.tok; ME = r.me; ls(TK, TOK); ls(MK, JSON.stringify(ME));
+    profSwitch(ME.id);
+    if (guest) Object.keys(guest).forEach(function (k) { if (guest[k]) DONE[k] = guest[k]; });
+    mergeServer(ME.done); _saveDone();
+    JOIN = ''; ss('tl.join', null); JINFO = null;
+    pushSync(); renderProf();
+    if (window.TLEV) TLEV('login', {});
+  }
+  function logoutSt() { TOK = ''; ME = null; ls(TK, null); ls(MK, null); profSwitch(''); }
+  function refreshMe() {
+    if (!TOK) return;
+    api('st_me', { tok: TOK }).then(function (r) {
+      if (r.auth) return expired();
+      if (!r.ok) return;
+      ME = r.me; ls(MK, JSON.stringify(ME)); mergeServer(ME.done); SYNC = 'ok';
+      if (JOIN) joinSec(JOIN); else renderProf();
+      pushSync();
+    }).catch(function () { SYNC = 'off'; paintSync(); });
+  }
+  function joinSec(code, btn) {
+    busy(btn, true);
+    api('st_join', { tok: TOK, sec: code }).then(function (r) {
+      busy(btn, false); JOIN = ''; ss('tl.join', null);
+      if (r.auth) return expired();
+      if (!r.ok) return msg('tlM', r.err, 'bad');
+      ME = r.me; ls(MK, JSON.stringify(ME)); renderProf(); msg('tlM', 'تم الانضمام إلى الشعبة ✔', 'ok');
+    }).catch(function () { busy(btn, false); msg('tlM', NET, 'bad'); });
+  }
+
+  /* ---------- بطاقة المتدرب في الصفحة الرئيسية ---------- */
+  function pwField(id, ph, auto) {
+    return '<label class="fld tl-pw"><span>كلمة السر</span><input id="' + id + '" type="password" class="ltr" autocomplete="' + auto + '" placeholder="' + ph + '"><button type="button" data-tl="eye" aria-label="إظهار كلمة السر">إظهار</button></label>';
+  }
+  function invite() {
+    if (!JOIN) return '';
+    return '<div class="tl-invite"><i>🎓</i><div><b>' + (JINFO ? 'دعوة للانضمام إلى «' + E(JINFO.name) + '»' : 'دعوة للانضمام إلى شعبة') + '</b><span>' +
+      (JINFO ? 'المدرّب: ' + E(JINFO.trainer) + ' · ' + JINFO.courses.length + ' مواد' : 'رمز الشعبة: ' + E(JOIN)) + '</span></div></div>';
+  }
+  function cardOut() {
+    var reg = MODE === 'reg';
+    return '<div class="tl-card">' + invite() +
+      '<div class="tl-tabs" role="tablist"><button type="button" role="tab" data-tl="tab" data-m="login" aria-selected="' + !reg + '">تسجيل الدخول</button><button type="button" role="tab" data-tl="tab" data-m="reg" aria-selected="' + reg + '">حساب جديد</button></div>' +
+      (reg
+        ? '<h3>أنشئ حسابك مرة واحدة</h3><p class="tl-sub">ويرجع لك تقدّمك من أي جهاز، ويتابعك مدرّبك أولًا بأول.</p>' +
+          '<form class="tl-form" id="tlReg" autocomplete="on"><label class="fld"><span>الرقم التدريبي</span><input id="tlId" class="ltr" inputmode="numeric" autocomplete="username" placeholder="مثال: 44110022"></label>' +
+          '<label class="fld"><span>الاسم الثلاثي</span><input id="tlName" autocomplete="name" placeholder="كما في السجل"></label>' +
+          pwField('tlPw', '6 خانات على الأقل', 'new-password') +
+          '<label class="fld"><span>رمز الشعبة <small>(اختياري، من مدرّبك)</small></span><input id="tlSec" class="ltr" autocapitalize="characters" value="' + E(JOIN) + '" placeholder="مثال: LM7H97"></label>' +
+          '<p class="tl-msg" id="tlM"></p><button class="btn pri" style="width:100%">إنشاء الحساب</button></form>'
+        : '<h3>أهلًا بك في تمكّن لاب</h3><p class="tl-sub">ادخل برقمك التدريبي لتكمل من حيث توقفت.</p>' +
+          '<form class="tl-form" id="tlLog" autocomplete="on"><label class="fld"><span>الرقم التدريبي</span><input id="tlId" class="ltr" inputmode="numeric" autocomplete="username"></label>' +
+          pwField('tlPw', '', 'current-password') +
+          '<p class="tl-msg" id="tlM"></p><button class="btn pri" style="width:100%">دخول</button>' +
+          '<div class="tl-row" style="justify-content:space-between;margin-top:6px"><button type="button" class="tl-link" data-tl="forgot">نسيت كلمة السر؟</button><button type="button" class="tl-link" data-tl="tab" data-m="reg">ليس لديك حساب؟</button></div></form>') +
+      '<button type="button" class="tl-link tl-guest" data-tl="guest">تصفّح كضيف (تقدّمك يُحفظ على هذا الجهاز فقط)</button></div>';
+  }
+  function cardGuest() {
+    return '<div class="tl-card"><div class="tl-me"><div class="tl-av" style="background:var(--line);color:var(--fg)">ض</div><div><b>أنت تتصفح كضيف</b><small>تقدّمك محفوظ على هذا الجهاز فقط.</small></div></div>' +
+      '<div class="tl-acts"><button class="btn pri" data-tl="signin">سجّل دخولك واحفظ تقدّمك</button></div></div>';
+  }
+  function secHtml(s) {
+    var rows = s.courses.map(function (cid) {
+      var ls = labsOf(cid), d = ls.filter(function (l) { return DONE[l.id]; }).length, pc = ls.length ? Math.round(d / ls.length * 100) : 0;
+      return '<button type="button" class="tl-cr" data-tl="course" data-c="' + E(cid) + '"><span>' + E(cTitle(cid)) + '</span><em>' + d + '/' + ls.length + '</em><span class="tl-bar"><i style="width:' + pc + '%"></i></span></button>';
+    }).join('');
+    return '<div class="tl-sec"><div class="tl-sec-h"><b>' + E(s.name) + '</b><span>المدرّب: ' + E(s.trainer) + '</span></div><div class="tl-crs">' + (rows || '<p class="tl-empty">لم تُحدَّد مواد لهذه الشعبة بعد.</p>') + '</div></div>';
+  }
+  function cardIn() {
+    var n = Object.keys(DONE).filter(function (k) { return DONE[k]; }).length, secs = ME.sections || [];
+    return '<div class="tl-card"><div class="tl-me"><div class="tl-av">' + E(initials(ME.name)) + '</div><div><b>أهلًا ' + E(first(ME.name)) + '</b><small><span class="mono">' + E(ME.id) + '</span>·<span>' + n + ' تجربة منجزة</span>·<span id="tlSync"></span></small></div></div>' +
+      (secs.length ? '<div class="tl-secs">' + secs.map(secHtml).join('') + '</div>' : '<p class="tl-empty">لست منضمًا لأي شعبة بعد. اطلب رمز الشعبة من مدرّبك، أو افتح رابط الدعوة الذي أرسله.</p>') +
+      '<div id="tlJoinBox" hidden><form class="tl-row" id="tlJoin" style="margin-top:10px"><input id="tlJc" class="ltr" autocapitalize="characters" placeholder="رمز الشعبة" style="flex:1;min-width:0;font:16px var(--font-mono);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);min-height:42px"><button class="btn pri">انضمام</button></form></div>' +
+      '<p class="tl-msg" id="tlM"></p><div class="tl-acts"><button class="btn pri" data-tl="go">متابعة التدريب</button><button class="btn" data-tl="joinopen">انضمام لشعبة</button><button class="btn" data-tl="out">خروج</button></div></div>';
+  }
+  renderProf = function () {
+    var el = $('#prof'); if (!el) return;
+    el.className = '';
+    el.innerHTML = ME ? cardIn() : (ss('tl.guest') && !JOIN ? cardGuest() : cardOut());
+    paintSync();
+  };
+  $('#prof').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tl]'); if (!b) return;
+    var a = b.getAttribute('data-tl');
+    if (a === 'tab') { MODE = b.getAttribute('data-m'); var keep = ($('#tlId') || {}).value || ''; renderProf(); if ($('#tlId')) $('#tlId').value = keep; return; }
+    if (a === 'eye') { var i = b.parentNode.querySelector('input'); i.type = i.type === 'password' ? 'text' : 'password'; b.textContent = i.type === 'password' ? 'إظهار' : 'إخفاء'; return; }
+    if (a === 'forgot') return msg('tlM', 'اطلب من مدرّبك إعادة تعيين كلمة السر من بوابة المدرّب، وسيعطيك كلمة سر جديدة.', 'ok');
+    if (a === 'guest') { ss('tl.guest', '1'); renderProf(); return; }
+    if (a === 'signin') { ss('tl.guest', null); MODE = 'login'; renderProf(); return; }
+    if (a === 'out') { logoutSt(); ss('tl.guest', null); MODE = 'login'; renderProf(); return; }
+    if (a === 'joinopen') { var bx = $('#tlJoinBox'); bx.hidden = !bx.hidden; if (!bx.hidden) $('#tlJc').focus(); return; }
+    if (a === 'go') { CSEL = null; renderCourses(); show('courses'); return; }
+    if (a === 'course') { CSEL = b.getAttribute('data-c'); show('courses'); renderCourses(); return; }
+  });
+  $('#prof').addEventListener('submit', function (e) {
+    var f = e.target; if (!/^tl/.test(f.id)) return; e.preventDefault();
+    var btn = f.querySelector('button.pri');
+    if (f.id === 'tlJoin') { var c = ($('#tlJc').value || '').trim().toUpperCase(); if (c) joinSec(c, btn); return; }
+    var id = profNorm($('#tlId').value), pw = $('#tlPw').value;
+    if (!/^[0-9a-z]{4,16}$/.test(id)) return msg('tlM', 'اكتب رقمك التدريبي (4 إلى 16 خانة).', 'bad');
+    if (f.id === 'tlLog') {
+      if (!pw) return msg('tlM', 'اكتب كلمة السر.', 'bad');
+      busy(btn, true); msg('tlM', 'جارٍ التحقق…');
+      api('st_login', { id: id, pw: pw, sec: JOIN }).then(function (r) {
+        busy(btn, false);
+        if (r.ok) return setSession(r);
+        if (r.nf) { MODE = 'reg'; renderProf(); $('#tlId').value = id; return msg('tlM', 'هذا الرقم غير مسجّل بعد. أكمل بياناتك لإنشاء حسابك.', 'ok'); }
+        msg('tlM', r.err, 'bad');
+      }).catch(function () { busy(btn, false); msg('tlM', NET, 'bad'); });
+    } else {
+      var name = ($('#tlName').value || '').trim(), sec = ($('#tlSec').value || '').trim().toUpperCase();
+      if (name.split(/\s+/).length < 2) return msg('tlM', 'اكتب اسمك الثلاثي.', 'bad');
+      if (pw.length < 6) return msg('tlM', 'كلمة السر 6 خانات على الأقل.', 'bad');
+      busy(btn, true); msg('tlM', 'جارٍ إنشاء الحساب…');
+      api('st_register', { id: id, name: name, pw: pw, sec: sec }).then(function (r) {
+        busy(btn, false); if (r.ok) return setSession(r); msg('tlM', r.err, 'bad');
+      }).catch(function () { busy(btn, false); msg('tlM', NET, 'bad'); });
+    }
+  });
+
+  /* مواد الشعبة أولًا في صفحة المواد */
+  var _rc = renderCourses;
+  renderCourses = function () {
+    _rc.apply(this, arguments);
+    if (CSEL || !ME || !(ME.sections || []).length) return;
+    var mine = {}; ME.sections.forEach(function (s) { s.courses.forEach(function (c) { mine[c] = 1; }); });
+    var grid = document.querySelector('#courseList .labs'); if (!grid) return;
+    var cards = [].slice.call(grid.children), a = [], b = [];
+    cards.forEach(function (c) { var bt = c.querySelector('[data-course]'); (bt && mine[bt.getAttribute('data-course')] ? a : b).push(c); });
+    if (!a.length) return;
+    var g1 = document.createElement('div'); g1.className = 'labs'; a.forEach(function (c) { g1.appendChild(c); });
+    var g2 = document.createElement('div'); g2.className = 'labs'; b.forEach(function (c) { g2.appendChild(c); });
+    var h1 = document.createElement('h3'); h1.className = 'tl-group'; h1.innerHTML = 'مواد شعبتي <small>' + a.length + ' مواد</small>';
+    var h2 = document.createElement('h3'); h2.className = 'tl-group'; h2.innerHTML = 'مواد أخرى للتعلّم الذاتي';
+    grid.replaceWith(h1); h1.after(g1); g1.after(h2); h2.after(g2);
+  };
+
+  /* ---------- بوابة المدرّب ---------- */
+  var TTOK = ss(TTK) || '', TME = null;
+  try { TME = TTOK ? JSON.parse(ss(TMK) || 'null') : null; } catch (e) { TME = null; }
+  if (TME) { SESS = { role: TME.role === 'admin' ? 'admin' : 'trainer', id: TME.id, name: TME.name, courses: [], labs: [] }; }
+  function tSet(r) {
+    TTOK = r.tok; TME = r.me; ss(TTK, TTOK); ss(TMK, JSON.stringify(TME));
+    SESS = { role: TME.role === 'admin' ? 'admin' : 'trainer', id: TME.id, name: TME.name, courses: [], labs: [] };
+    applySess();
+  }
+  var _logout = logout;
+  logout = function () { TTOK = ''; TME = null; ss(TTK, null); ss(TMK, null); _logout(); };
+  function tAuth(r) { if (r && r.auth) { logout(); openLogin(); return true; } return false; }
+
+  renderAcctBar = function () {
+    var box = $('#acctBar');
+    if (!box) {
+      var how = document.querySelector('#home .how'); if (!how) return;
+      how.insertAdjacentHTML('beforebegin', '<div id="acctBar" class="acctbar"></div>'); box = $('#acctBar');
+    }
+    box.innerHTML = canTrain() && TME
+      ? '<span>مرحبًا <b>' + E(SESS.name) + '</b> (' + (SESS.role === 'admin' ? 'مسؤول' : 'مدرّب') + ')</span><button class="btn pri" data-tb="hub">بوابة المدرّب</button><button class="btn" data-tb="out">خروج</button>'
+      : '<button class="btn" data-tb="login">بوابة المدرّبين</button>';
+  };
+  openLogin = function (after) {
+    AFTER = after || '';
+    show('acct'); $('#acct').className = '';
+    $('#acct').innerHTML = '<div class="labhead"><h2>بوابة المدرّبين</h2></div><div class="tl-card"><p class="tl-sub">جارٍ الاتصال…</p></div>';
+    api('tr_state', {}).then(function (r) {
+      var setup = r.setup;
+      $('#acct').innerHTML = '<div class="labhead"><h2>بوابة المدرّبين</h2></div><div class="tl-card" style="max-width:460px">' +
+        (setup
+          ? '<h3>إعداد حساب المسؤول</h3><p class="tl-sub">أول دخول للمنصة. احفظ كلمة المرور جيدًا.</p><form class="tl-form" id="tlTS"><label class="fld"><span>اسمك</span><input id="tsName"></label>' + pwField('tsPw', '8 خانات على الأقل', 'new-password') + '<p class="tl-msg" id="tsM"></p><button class="btn pri" style="width:100%">إنشاء حساب المسؤول</button></form>'
+          : '<h3>دخول المدرّب</h3><p class="tl-sub">لمتابعة شعبك وإنشاء الاختبارات.</p><form class="tl-form" id="tlTL"><label class="fld"><span>معرّف المدرّب (أو admin)</span><input id="tlTId" class="ltr" autocomplete="username" autocapitalize="none"></label>' + pwField('tlTPw', '', 'current-password') + '<p class="tl-msg" id="tsM"></p><button class="btn pri" style="width:100%">دخول</button></form>') +
+        '</div>';
+    }).catch(function () { $('#acct').innerHTML = '<div class="labhead"><h2>بوابة المدرّبين</h2></div><div class="tl-card"><p class="tl-msg bad">' + NET + '</p></div>'; });
+  };
+  function afterLogin() { if (AFTER === 'exam') { AFTER = ''; renderTrainer('new'); } else hub('sec'); }
+  $('#acct').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tl="eye"]'); if (!b) return;
+    var i = b.parentNode.querySelector('input'); i.type = i.type === 'password' ? 'text' : 'password'; b.textContent = i.type === 'password' ? 'إظهار' : 'إخفاء';
+  });
+  $('#acct').addEventListener('submit', function (e) {
+    var f = e.target, btn = f.querySelector('button.pri');
+    if (f.id === 'tlTS') {
+      e.preventDefault(); var pw = $('#tsPw').value; if (pw.length < 8) return msg('tsM', 'كلمة المرور 8 خانات على الأقل.', 'bad');
+      busy(btn, true); api('tr_setup', { pw: pw, name: $('#tsName').value.trim() || 'المسؤول' }).then(function (r) { busy(btn, false); if (!r.ok) return msg('tsM', r.err, 'bad'); tSet(r); afterLogin(); }).catch(function () { busy(btn, false); msg('tsM', NET, 'bad'); });
+    } else if (f.id === 'tlTL') {
+      e.preventDefault(); var id = $('#tlTId').value.trim(), pw2 = $('#tlTPw').value; if (!id || !pw2) return msg('tsM', 'أدخل المعرّف وكلمة المرور.', 'bad');
+      busy(btn, true); msg('tsM', 'جارٍ التحقق…');
+      api('tr_login', { id: id, pw: pw2 }).then(function (r) { busy(btn, false); if (!r.ok) return msg('tsM', r.err, 'bad'); tSet(r); afterLogin(); }).catch(function () { busy(btn, false); msg('tsM', NET, 'bad'); });
+    }
+  });
+
+  var HUB = { secs: [], roster: null };
+  function hubHead(tab) {
+    return '<div class="labhead"><h2>بوابة المدرّب</h2></div><div class="seg2 tl-hubtabs">' +
+      '<button data-th="sec" aria-selected="' + (tab === 'sec') + '">شعبي</button><button data-th="exam" aria-selected="false">الاختبارات</button>' +
+      (SESS.role === 'admin' ? '<button data-th="staff" aria-selected="' + (tab === 'staff') + '">المدرّبون</button>' : '') + '</div>';
+  }
+  function hub(tab, arg) {
+    if (!canTrain() || !TTOK) return openLogin();
+    show('acct'); var box = $('#acct'); box.className = 'tl-hub';
+    if (tab === 'exam') return renderTrainer('new');
+    box.innerHTML = hubHead(tab) + '<p class="tl-sub">جارٍ التحميل…</p>';
+    if (tab === 'sec') {
+      api('tr_sections', { tok: TTOK }).then(function (r) {
+        if (tAuth(r)) return; HUB.secs = r.sections || [];
+        var tot = HUB.secs.reduce(function (s, x) { return s + x.n; }, 0);
+        box.innerHTML = hubHead('sec') +
+          '<div class="tl-kpis"><div class="tl-kpi"><b>' + HUB.secs.length + '</b><span>شعبة</span></div><div class="tl-kpi"><b>' + tot + '</b><span>متدرب منضم</span></div></div>' +
+          '<button class="btn pri" data-th="new" style="margin-bottom:12px">+ شعبة جديدة</button>' +
+          (HUB.secs.length ? HUB.secs.map(function (s) {
+            return '<div class="tl-scard"><div class="tl-row" style="justify-content:space-between"><h4>' + E(s.name) + (s.active ? '' : ' <small style="color:var(--bad)">(مغلقة)</small>') + '</h4><span class="tl-code">' + E(s.code) + '</span></div>' +
+              '<p>' + s.n + ' متدرب' + (SESS.role === 'admin' ? ' · المدرّب: ' + E(s.trainer) : '') + '</p><div class="tl-chips">' + s.courses.map(function (c) { return '<span>' + E(cTitle(c)) + '</span>'; }).join('') + '</div>' +
+              '<div class="tl-acts" style="margin-top:0"><button class="btn pri" data-th="roster" data-c="' + E(s.code) + '">متابعة المتدربين</button><button class="btn" data-th="share" data-c="' + E(s.code) + '">رابط الدعوة و QR</button><button class="btn" data-th="edit" data-c="' + E(s.code) + '">تعديل</button></div></div>';
+          }).join('') : '<p class="tl-empty">لا توجد شعب بعد. أنشئ أول شعبة، ثم أرسل رابط الدعوة لمتدربيك في الواتساب.</p>');
+      }).catch(function () { box.innerHTML = hubHead('sec') + '<p class="tl-msg bad">' + NET + '</p>'; });
+    } else if (tab === 'roster') {
+      api('tr_roster', { tok: TTOK, code: arg }).then(function (r) {
+        if (tAuth(r)) return; if (!r.ok) { box.innerHTML = hubHead('sec') + '<p class="tl-msg bad">' + E(r.err) + '</p>'; return; }
+        HUB.roster = r; box.innerHTML = hubHead('sec') + rosterHtml(r);
+      }).catch(function () { box.innerHTML = hubHead('sec') + '<p class="tl-msg bad">' + NET + '</p>'; });
+    } else if (tab === 'staff') {
+      api('ad_staff', { tok: TTOK }).then(function (r) {
+        if (tAuth(r)) return;
+        box.innerHTML = hubHead('staff') + '<div class="tl-card"><h3>إضافة مدرّب</h3><form class="tl-form" id="tlAddT"><label class="fld"><span>معرّف الدخول (إنجليزي، مثل t1001)</span><input id="atId" class="ltr" autocapitalize="none"></label><label class="fld"><span>اسم المدرّب</span><input id="atName"></label><p class="tl-msg" id="atM"></p><button class="btn pri">إضافة وإنشاء كلمة مرور</button></form></div>' +
+          '<div class="tl-scroll"><table class="tl-table"><thead><tr><th>المعرّف</th><th>الاسم</th><th>الدور</th><th></th></tr></thead><tbody>' +
+          (r.staff || []).map(function (s) { return '<tr><td class="n mono">' + E(s.id) + '</td><td>' + E(s.name) + '</td><td>' + (s.role === 'admin' ? 'مسؤول' : 'مدرّب') + '</td><td>' + (s.role === 'admin' ? '' : '<button class="btn" style="min-height:30px;padding:2px 8px;font-size:.78rem" data-th="treset" data-c="' + E(s.id) + '">كلمة مرور جديدة</button>') + '</td></tr>'; }).join('') +
+          '</tbody></table></div>';
+      }).catch(function () { box.innerHTML = hubHead('staff') + '<p class="tl-msg bad">' + NET + '</p>'; });
+    }
+  }
+  function rosterHtml(r) {
+    var sec = r.section, crs = sec.courses, lab = {}; crs.forEach(function (c) { lab[c] = labsOf(c).map(function (l) { return l.id; }); });
+    var total = crs.reduce(function (s, c) { return s + lab[c].length; }, 0), wk = Date.now() - 7 * 864e5;
+    var rows = r.students.map(function (s) {
+      var per = crs.map(function (c) { return lab[c].filter(function (id) { return s.done[id]; }).length; }), d = per.reduce(function (a, b) { return a + b; }, 0);
+      return { s: s, per: per, d: d, pc: total ? Math.round(d / total * 100) : 0 };
+    }).sort(function (a, b) { return b.pc - a.pc || b.s.last - a.s.last; });
+    var avg = rows.length ? Math.round(rows.reduce(function (a, x) { return a + x.pc; }, 0) / rows.length) : 0, act = rows.filter(function (x) { return x.s.last > wk; }).length;
+    return '<button class="btn" data-th="sec" style="margin-bottom:10px">‹ كل الشعب</button><h3 style="margin:0 0 4px">' + E(sec.name) + ' <span class="tl-code">' + E(sec.code) + '</span></h3>' +
+      '<div class="tl-kpis"><div class="tl-kpi"><b>' + rows.length + '</b><span>متدرب</span></div><div class="tl-kpi"><b>' + act + '</b><span>نشط هذا الأسبوع</span></div><div class="tl-kpi"><b>' + avg + '%</b><span>متوسط الإنجاز</span></div></div>' +
+      '<div class="tl-acts" style="margin:0 0 10px"><button class="btn" data-th="share" data-c="' + E(sec.code) + '">رابط الدعوة و QR</button><button class="btn" data-th="csv">تصدير Excel (CSV)</button><button class="btn" data-th="roster" data-c="' + E(sec.code) + '">تحديث</button></div>' +
+      (rows.length ? '<div class="tl-scroll"><table class="tl-table"><thead><tr><th>المتدرب</th>' + crs.map(function (c) { return '<th>' + E(cTitle(c)) + '</th>'; }).join('') + '<th>الإنجاز</th><th>آخر نشاط</th><th></th></tr></thead><tbody>' +
+        rows.map(function (x) {
+          return '<tr><td><b>' + E(x.s.name) + '</b><br><small class="mono" style="color:var(--muted)">' + E(x.s.id) + '</small></td>' + x.per.map(function (n, i) { return '<td class="n">' + n + '/' + lab[crs[i]].length + '</td>'; }).join('') +
+            '<td><div class="tl-pct"><span class="tl-bar"><i style="width:' + x.pc + '%"></i></span><span class="n">' + x.pc + '%</span></div></td><td class="n">' + ago(x.s.last) + '</td>' +
+            '<td><button class="btn" style="min-height:30px;padding:2px 8px;font-size:.78rem" data-th="sreset" data-c="' + E(x.s.id) + '">كلمة سر جديدة</button></td></tr>';
+        }).join('') + '</tbody></table></div>'
+        : '<p class="tl-empty">لم ينضم أحد بعد. أرسل رابط الدعوة لمتدربيك.</p>');
+  }
+  function modal(html) {
+    var m = document.createElement('div'); m.className = 'tl-modal'; m.innerHTML = '<div role="dialog" aria-modal="true">' + html + '</div>';
+    m.addEventListener('click', function (e) { if (e.target === m || e.target.closest('[data-x]')) m.remove(); });
+    document.body.appendChild(m); return m;
+  }
+  function joinUrl(code) { return location.origin + location.pathname + '#join=' + code; }
+  function share(code) {
+    var s = HUB.secs.filter(function (x) { return x.code === code; })[0] || (HUB.roster && HUB.roster.section) || { name: '', code: code }, u = joinUrl(code);
+    var txt = 'السلام عليكم 👋\nانضم لشعبة «' + s.name + '» في منصة تمكّن لاب للتدريب العملي من الجوال:\n' + u + '\n\nأو أنشئ حسابك واكتب رمز الشعبة: ' + code;
+    var m = modal('<div class="tl-share"><h3 style="margin-top:0">دعوة «' + E(s.name) + '»</h3><img alt="رمز QR لرابط الانضمام" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=8&data=' + encodeURIComponent(u) + '">' +
+      '<p class="tl-sub" style="margin:8px 0 0">اعرضه في الاجتماع ليمسحه المتدربون، أو أرسل الرابط.</p><span class="mono">' + E(u) + '</span>' +
+      '<p>رمز الشعبة: <span class="tl-code">' + E(code) + '</span></p><div class="tl-acts" style="justify-content:center"><a class="btn pri" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(txt) + '">إرسال عبر الواتساب</a><button class="btn" data-cp>نسخ الرابط</button><button class="btn" data-x>إغلاق</button></div></div>');
+    m.querySelector('[data-cp]').addEventListener('click', function (e) { copyText(txt, e.target, 'نُسخ ✓'); });
+  }
+  function editSec(code) {
+    var s = code ? HUB.secs.filter(function (x) { return x.code === code; })[0] : { name: '', courses: [], active: true };
+    var cs = COURSES.filter(function (c) { return c.id !== 'project'; });
+    var m = modal('<h3 style="margin-top:0">' + (code ? 'تعديل الشعبة' : 'شعبة جديدة') + '</h3><form class="tl-form" id="tlSecF"><label class="fld"><span>اسم الشعبة</span><input id="sfName" value="' + E(s.name) + '" placeholder="مثال: شبكات 1 — الفصل الثاني"></label>' +
+      '<div class="fld"><span>المواد التي تظهر للمتدربين</span><div class="tl-chk">' + cs.map(function (c) { return '<label><input type="checkbox" value="' + E(c.id) + '"' + (s.courses.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + E(c.title) + '</label>'; }).join('') + '</div></div>' +
+      (code ? '<label class="tl-row" style="margin-bottom:10px"><input type="checkbox" id="sfAct"' + (s.active ? ' checked' : '') + '> الشعبة مفتوحة للانضمام</label>' : '') +
+      '<p class="tl-msg" id="sfM"></p><div class="tl-acts"><button class="btn pri">' + (code ? 'حفظ' : 'إنشاء الشعبة') + '</button><button type="button" class="btn" data-x>إلغاء</button></div></form>');
+    m.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault(); var btn = e.target.querySelector('.pri'), name = m.querySelector('#sfName').value.trim();
+      var courses = [].slice.call(m.querySelectorAll('.tl-chk input:checked')).map(function (i) { return i.value; });
+      if (name.length < 2) return msg('sfM', 'اكتب اسم الشعبة.', 'bad'); if (!courses.length) return msg('sfM', 'اختر مادة واحدة على الأقل.', 'bad');
+      var o = { tok: TTOK, name: name, courses: courses }; if (code) { o.code = code; o.active = m.querySelector('#sfAct').checked; }
+      busy(btn, true);
+      api('tr_sec_save', o).then(function (r) { busy(btn, false); if (tAuth(r)) return; if (!r.ok) return msg('sfM', r.err, 'bad'); m.remove(); hub('sec'); if (!code) setTimeout(function () { HUB.secs.push({ code: r.code, name: name, courses: courses }); share(r.code); }, 600); })
+        .catch(function () { busy(btn, false); msg('sfM', NET, 'bad'); });
+    });
+  }
+  function csv() {
+    var r = HUB.roster; if (!r) return; var crs = r.section.courses;
+    var lines = [['الرقم التدريبي', 'الاسم'].concat(crs.map(cTitle)).concat(['آخر نشاط'])];
+    r.students.forEach(function (s) { lines.push([s.id, s.name].concat(crs.map(function (c) { var ls = labsOf(c); return ls.filter(function (l) { return s.done[l.id]; }).length + '/' + ls.length; })).concat([s.last ? fmtDT(s.last) : ''])); });
+    var t = '﻿' + lines.map(function (l) { return l.map(function (x) { return '"' + String(x).replace(/"/g, '""') + '"'; }).join(','); }).join('\r\n');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([t], { type: 'text/csv;charset=utf-8' })); a.download = 'شعبة-' + r.section.code + '.csv'; document.body.appendChild(a); a.click(); a.remove();
+  }
+  $('#acct').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-th]'); if (!b || !$('#acct').classList.contains('tl-hub')) return;
+    var a = b.getAttribute('data-th'), c = b.getAttribute('data-c');
+    if (a === 'sec' || a === 'exam' || a === 'staff') hub(a);
+    else if (a === 'roster') hub('roster', c);
+    else if (a === 'new') editSec('');
+    else if (a === 'edit') editSec(c);
+    else if (a === 'share') share(c);
+    else if (a === 'csv') csv();
+    else if (a === 'sreset' || a === 'treset') {
+      if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اضغط للتأكيد'; return; }
+      busy(b, true);
+      api(a === 'sreset' ? 'tr_resetpw' : 'ad_staff', a === 'sreset' ? { tok: TTOK, id: c } : { tok: TTOK, op: 'reset', id: c }).then(function (r) {
+        busy(b, false); if (tAuth(r)) return; if (!r.ok) { b.textContent = r.err; return; }
+        modal('<h3 style="margin-top:0">كلمة السر الجديدة</h3><p>للحساب <span class="mono">' + E(c) + '</span>:</p><p style="font-size:1.6rem;text-align:center" class="mono">' + E(r.pw) + '</p><p class="tl-sub">أرسلها لصاحبها، ويقدر يدخل بها مباشرة.</p><div class="tl-acts"><button class="btn" data-x>تم</button></div>');
+        b.dataset.sure = ''; b.textContent = 'كلمة سر جديدة';
+      }).catch(function () { busy(b, false); b.textContent = 'تعذّر'; });
+    }
+  });
+  $('#acct').addEventListener('submit', function (e) {
+    if (e.target.id !== 'tlAddT') return; e.preventDefault(); var btn = e.target.querySelector('.pri');
+    busy(btn, true);
+    api('ad_staff', { tok: TTOK, op: 'add', id: $('#atId').value.trim(), name: $('#atName').value.trim() }).then(function (r) {
+      busy(btn, false); if (tAuth(r)) return; if (!r.ok) return msg('atM', r.err, 'bad');
+      modal('<h3 style="margin-top:0">تم إنشاء حساب المدرّب</h3><p>المعرّف: <span class="mono">' + E(r.id) + '</span></p><p>كلمة المرور: <span class="mono" style="font-size:1.3rem">' + E(r.pw) + '</span></p><p class="tl-sub">أرسلها للمدرّب. يدخل من «بوابة المدرّبين» في الصفحة الرئيسية.</p><div class="tl-acts"><button class="btn" data-x>تم</button></div>');
+      hub('staff');
+    }).catch(function () { busy(btn, false); msg('atM', NET, 'bad'); });
+  });
+  /* زر الرجوع لبوابة المدرّب من لوحة الاختبارات */
+  var _rt = renderTrainer;
+  renderTrainer = function () {
+    _rt.apply(this, arguments);
+    if (TTOK && !document.getElementById('tlBackHub')) { var h = document.querySelector('#examT .labhead'); if (h) h.insertAdjacentHTML('afterend', '<button class="btn" id="tlBackHub" style="margin-bottom:10px">‹ بوابة المدرّب</button>'); var bk = document.getElementById('tlBackHub'); if (bk) bk.addEventListener('click', function () { hub('sec'); }); }
+  };
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-tb]'); if (!b) return; var a = b.getAttribute('data-tb');
+    if (a === 'login') openLogin(); else if (a === 'hub') hub('sec'); else if (a === 'out') { logout(); }
+  });
+  if (ME && WHO !== ME.id) profSwitch(ME.id);
+  renderProf(); renderAcctBar(); refreshMe();
 })();
 </script>
 </body>
