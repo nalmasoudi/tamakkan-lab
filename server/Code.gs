@@ -41,6 +41,9 @@ function num_(v) { v = Number(v); return isFinite(v) ? v : ''; }
 function normId_(s) { return String(s || '').replace(/[٠-٩]/g, function (c) { return String(c.charCodeAt(0) - 1632); }).replace(/[۰-۹]/g, function (c) { return String(c.charCodeAt(0) - 1776); }).replace(/\s+/g, '').toLowerCase(); }
 function hex_(bytes) { return bytes.map(function (b) { return ('0' + (b & 255).toString(16)).slice(-2); }).join(''); }
 function rand_(n) { var a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s = ''; for (var i = 0; i < n; i++) s += a.charAt(Math.floor(Math.random() * a.length)); return s; }
+/* توحيد كلمة المرور: الأرقام العربية/الفارسية إلى إنجليزية وحذف المسافات الطرفية */
+function normPw_(pw) { return String(pw || '').replace(/[٠-٩]/g, function (c) { return String(c.charCodeAt(0) - 1632); }).replace(/[۰-۹]/g, function (c) { return String(c.charCodeAt(0) - 1776); }).trim(); }
+function pwOk_(pw, salt, hash) { var raw = String(pw || ''); return hashPw_(normPw_(raw), salt) === hash || hashPw_(raw, salt) === hash; }
 function hashPw_(pw, salt) {
   var h = salt + '|' + pw;
   for (var i = 0; i < 400; i++) h = hex_(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, h + salt, Utilities.Charset.UTF_8));
@@ -92,7 +95,7 @@ function stRegister_(b) {
   var sec = b.sec ? section_(b.sec) : null;
   if (b.sec && !sec) return { ok: false, err: 'رمز الشعبة غير صحيح.' };
   var salt = rand_(16), now = new Date();
-  sheet_('users').appendRow([id, name, salt, hashPw_(pw, salt), now, now, sec ? sec.code : '']);
+  sheet_('users').appendRow([id, name, salt, hashPw_(normPw_(pw), salt), now, now, sec ? sec.code : '']);
   return stLoginOk_(findRow_('users', 0, id));
 }
 function stLoginOk_(f) {
@@ -102,7 +105,7 @@ function stLoginOk_(f) {
 function stLogin_(b) {
   var id = normId_(b.id); if (locked_('st:' + id)) return { ok: false, err: 'محاولات كثيرة. حاول بعد 10 دقائق.' };
   var f = findRow_('users', 0, id);
-  if (!f || hashPw_(String(b.pw || ''), f.r[2]) !== f.r[3]) { fail_('st:' + id); return { ok: false, err: f ? 'كلمة السر غير صحيحة.' : 'الرقم غير مسجّل. أنشئ حسابًا جديدًا.', nf: !f }; }
+  if (!f || !pwOk_(b.pw, f.r[2], f.r[3])) { fail_('st:' + id); return { ok: false, err: f ? 'كلمة السر غير صحيحة.' : 'الرقم غير مسجّل. أنشئ حسابًا جديدًا.', nf: !f }; }
   okLogin_('st:' + id);
   if (b.sec) { var s = section_(b.sec); if (s) addSec_(f, s.code); f = findRow_('users', 0, id); }
   return stLoginOk_(f);
@@ -132,17 +135,21 @@ function stSync_(b) {
 
 /* ---------- المدرّب والمسؤول ---------- */
 function staffOf_(b) { var t = readTok_(b.tok); if (!t || (t.r !== 'tr' && t.r !== 'ad')) return null; var f = findRow_('staff', 0, t.i); return f ? { id: f.r[0], name: f.r[1], role: f.r[2], f: f } : null; }
-function trState_() { return { ok: true, setup: rows_('staff').length === 0 }; }
+function hasAdmin_() { return rows_('staff').some(function (r) { return r[2] === 'admin'; }); }
+function trState_() { return { ok: true, setup: !hasAdmin_() }; }
 function trSetup_(b) {
-  if (rows_('staff').length) return { ok: false, err: 'تم إعداد المسؤول مسبقًا.' };
+  if (hasAdmin_()) return { ok: false, err: 'تم إعداد المسؤول مسبقًا.' };
   var pw = String(b.pw || ''); if (pw.length < 8) return { ok: false, err: 'كلمة مرور المسؤول 8 خانات على الأقل.' };
-  var salt = rand_(16); sheet_('staff').appendRow(['admin', str_(b.name || 'المسؤول', 60), 'admin', salt, hashPw_(pw, salt), new Date()]);
+  var salt = rand_(16), old = findRow_('staff', 0, 'admin'); if (old) sheet_('staff').deleteRow(old.i);
+  sheet_('staff').appendRow(['admin', str_(b.name || 'المسؤول', 60), 'admin', salt, hashPw_(normPw_(pw), salt), new Date()]);
   return { ok: true, tok: mkTok_('ad', 'admin', 7), me: { id: 'admin', name: str_(b.name || 'المسؤول', 60), role: 'admin' } };
 }
 function trLogin_(b) {
   var id = normId_(b.id); if (locked_('tr:' + id)) return { ok: false, err: 'محاولات كثيرة. حاول بعد 10 دقائق.' };
   var f = findRow_('staff', 0, id);
-  if (!f || hashPw_(String(b.pw || ''), f.r[3]) !== f.r[4]) { fail_('tr:' + id); return { ok: false, err: 'بيانات الدخول غير صحيحة.' }; }
+  if (!f) { var nm = String(b.id || '').trim(); rows_('staff').forEach(function (r, k) { if (!f && String(r[1]).trim() === nm) f = { i: k + 2, r: r }; }); }
+  if (!f) { fail_('tr:' + id); return { ok: false, err: 'المعرّف غير موجود. معرّف المسؤول هو admin، ومعرّف المدرّب يعطيك إياه المسؤول.' }; }
+  if (!pwOk_(b.pw, f.r[3], f.r[4])) { fail_('tr:' + id); return { ok: false, err: 'كلمة المرور غير صحيحة.' }; }
   okLogin_('tr:' + id);
   return { ok: true, tok: mkTok_(f.r[2] === 'admin' ? 'ad' : 'tr', f.r[0], 7), me: { id: f.r[0], name: f.r[1], role: f.r[2] } };
 }
@@ -183,7 +190,7 @@ function trResetPw_(b) {
     var mine = rows_('sections').filter(function (r) { return r[2] === s.id; }).map(function (r) { return r[0]; });
     if (!String(f.r[6] || '').split(',').some(function (c) { return mine.indexOf(c) >= 0; })) return { ok: false, err: 'المتدرب ليس في شعبك.' };
   }
-  var pw = rand_(6).toLowerCase(), salt = rand_(16), r = f.r.slice(); r[2] = salt; r[3] = hashPw_(pw, salt); setRow_('users', f.i, r);
+  var pw = rand_(6).toLowerCase(), salt = rand_(16), r = f.r.slice(); r[2] = salt; r[3] = hashPw_(normPw_(pw), salt); setRow_('users', f.i, r);
   okLogin_('st:' + f.r[0]);
   return { ok: true, pw: pw };
 }
@@ -194,12 +201,12 @@ function adStaff_(b) {
     if (!/^[0-9a-z._-]{3,20}$/.test(id)) return { ok: false, err: 'معرّف المدرب من 3 إلى 20 خانة إنجليزية أو أرقام.' };
     if (findRow_('staff', 0, id)) return { ok: false, err: 'المعرّف مستخدم.' };
     var pw = rand_(8).toLowerCase(), salt = rand_(16);
-    sheet_('staff').appendRow([id, name || id, 'trainer', salt, hashPw_(pw, salt), new Date()]);
+    sheet_('staff').appendRow([id, name || id, 'trainer', salt, hashPw_(normPw_(pw), salt), new Date()]);
     return { ok: true, id: id, pw: pw };
   }
   if (b.op === 'reset') {
     var f = findRow_('staff', 0, normId_(b.id)); if (!f) return { ok: false, err: 'غير موجود.' };
-    var p2 = rand_(8).toLowerCase(), s2 = rand_(16), r = f.r.slice(); r[3] = s2; r[4] = hashPw_(p2, s2); setRow_('staff', f.i, r);
+    var p2 = rand_(8).toLowerCase(), s2 = rand_(16), r = f.r.slice(); r[3] = s2; r[4] = hashPw_(normPw_(p2), s2); setRow_('staff', f.i, r);
     return { ok: true, id: f.r[0], pw: p2 };
   }
   return { ok: true, staff: rows_('staff').map(function (r) { return { id: r[0], name: r[1], role: r[2] }; }) };
