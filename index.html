@@ -11000,7 +11000,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
           '<form class="tl-form" id="tlReg" autocomplete="on"><label class="fld"><span>الرقم التدريبي</span><input id="tlId" class="ltr" inputmode="numeric" autocomplete="username" placeholder="مثال: 44110022"></label>' +
           '<label class="fld"><span>الاسم الثلاثي</span><input id="tlName" autocomplete="name" placeholder="كما في السجل"></label>' +
           pwField('tlPw', '6 خانات على الأقل', 'new-password') +
-          '<label class="fld"><span>رمز الشعبة <small>(اختياري، من مدرّبك)</small></span><input id="tlSec" class="ltr" autocapitalize="characters" value="' + E(JOIN) + '" placeholder="مثال: LM7H97"></label>' +
+          '<label class="fld"><span>رمز الشعبة <small>(من رابط الدعوة أو من مدرّبك)</small></span><input id="tlSec" class="ltr" autocapitalize="characters" value="' + E(JOIN) + '" placeholder="مثال: LM7H97"></label>' +
           '<p class="tl-msg" id="tlM"></p><button class="btn pri" style="width:100%">إنشاء الحساب</button></form>'
         : '<h3>أهلًا بك في تمكّن لاب</h3><p class="tl-sub">ادخل برقمك التدريبي لتكمل من حيث توقفت.</p>' +
           '<form class="tl-form" id="tlLog" autocomplete="on"><label class="fld"><span>الرقم التدريبي</span><input id="tlId" class="ltr" inputmode="numeric" autocomplete="username"></label>' +
@@ -11025,7 +11025,8 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     return '<div class="tl-card"><div class="tl-me"><div class="tl-av">' + E(initials(ME.name)) + '</div><div><b>أهلًا ' + E(first(ME.name)) + '</b><small><span class="mono">' + E(ME.id) + '</span>·<span>' + n + ' تجربة منجزة</span>·<span id="tlSync"></span></small></div></div>' +
       (secs.length ? '<div class="tl-secs">' + secs.map(secHtml).join('') + '</div>' : '<p class="tl-empty">لست منضمًا لأي شعبة بعد. اطلب رمز الشعبة من مدرّبك، أو افتح رابط الدعوة الذي أرسله.</p>') +
       '<div id="tlJoinBox" hidden><form class="tl-row" id="tlJoin" style="margin-top:10px"><input id="tlJc" class="ltr" autocapitalize="characters" placeholder="رمز الشعبة" style="flex:1;min-width:0;font:16px var(--font-mono);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);min-height:42px"><button class="btn pri">انضمام</button></form></div>' +
-      '<p class="tl-msg" id="tlM"></p><div class="tl-acts"><button class="btn pri" data-tl="go">متابعة التدريب</button><button class="btn" data-tl="joinopen">انضمام لشعبة</button><button class="btn" data-tl="out">خروج</button></div></div>';
+      '<div id="tlPwBox" hidden><form class="tl-form" id="tlChPw" style="margin-top:10px">' + pwField('cpOld', 'كلمة السر الحالية', 'current-password').replace('<span>كلمة السر</span>', '<span>كلمة السر الحالية</span>') + pwField('cpNew', '6 خانات على الأقل', 'new-password').replace('<span>كلمة السر</span>', '<span>كلمة السر الجديدة</span>') + '<button class="btn pri">حفظ كلمة السر</button></form></div>' +
+      '<p class="tl-msg" id="tlM"></p><div class="tl-acts"><button class="btn pri" data-tl="go">متابعة التدريب</button><button class="btn" data-tl="joinopen">انضمام لشعبة</button><button class="btn" data-tl="pwopen">تغيير كلمة السر</button><button class="btn" data-tl="out">خروج</button></div></div>';
   }
   renderProf = function () {
     var el = $('#prof'); if (!el) return;
@@ -11042,6 +11043,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     if (a === 'guest') { ss('tl.guest', '1'); renderProf(); return; }
     if (a === 'signin') { ss('tl.guest', null); MODE = 'login'; renderProf(); return; }
     if (a === 'out') { logoutSt(); ss('tl.guest', null); MODE = 'login'; renderProf(); return; }
+    if (a === 'pwopen') { var pb = $('#tlPwBox'); pb.hidden = !pb.hidden; if (!pb.hidden) $('#cpOld').focus(); return; }
     if (a === 'joinopen') { var bx = $('#tlJoinBox'); bx.hidden = !bx.hidden; if (!bx.hidden) $('#tlJc').focus(); return; }
     if (a === 'go') { CSEL = null; renderCourses(); show('courses'); return; }
     if (a === 'course') { CSEL = b.getAttribute('data-c'); show('courses'); renderCourses(); return; }
@@ -11050,6 +11052,11 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     var f = e.target; if (!/^tl/.test(f.id)) return; e.preventDefault();
     var btn = f.querySelector('button.pri');
     if (f.id === 'tlJoin') { var c = ($('#tlJc').value || '').trim().toUpperCase(); if (c) joinSec(c, btn); return; }
+    if (f.id === 'tlChPw') {
+      var o = $('#cpOld').value, n = $('#cpNew').value; if (n.length < 6) return msg('tlM', 'كلمة السر الجديدة 6 خانات على الأقل.', 'bad');
+      busy(btn, true); api('st_chpw', { tok: TOK, old: o, pw: n }).then(function (r) { busy(btn, false); if (r.auth) return expired(); if (!r.ok) return msg('tlM', r.err, 'bad'); $('#tlPwBox').hidden = true; msg('tlM', 'تم تغيير كلمة السر ✔', 'ok'); }).catch(function () { busy(btn, false); msg('tlM', NET, 'bad'); });
+      return;
+    }
     var id = profNorm($('#tlId').value), pw = $('#tlPw').value;
     if (!/^[0-9a-z]{4,16}$/.test(id)) return msg('tlM', 'اكتب رقمك التدريبي (4 إلى 16 خانة).', 'bad');
     if (f.id === 'tlLog') {
@@ -11065,6 +11072,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
       var name = ($('#tlName').value || '').trim(), sec = ($('#tlSec').value || '').trim().toUpperCase();
       if (name.split(/\s+/).length < 2) return msg('tlM', 'اكتب اسمك الثلاثي.', 'bad');
       if (pw.length < 6) return msg('tlM', 'كلمة السر 6 خانات على الأقل.', 'bad');
+      if (!/^[A-Z0-9]{4,10}$/.test(sec)) return msg('tlM', 'اكتب رمز الشعبة. تجده في رابط الدعوة أو تطلبه من مدرّبك. وإذا ما عندك شعبة تقدر تتصفح كضيف.', 'bad');
       busy(btn, true); msg('tlM', 'جارٍ إنشاء الحساب…');
       api('st_register', { id: id, name: name, pw: pw, sec: sec }).then(function (r) {
         busy(btn, false); if (r.ok) return setSession(r); msg('tlM', r.err, 'bad');
@@ -11145,7 +11153,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   var HUB = { secs: [], roster: null };
   function hubHead(tab) {
     return '<div class="labhead"><h2>بوابة المدرّب</h2></div><div class="seg2 tl-hubtabs">' +
-      '<button data-th="sec" aria-selected="' + (tab === 'sec') + '">شعبي</button><button data-th="exam" aria-selected="false">الاختبارات</button>' +
+      '<button data-th="sec" aria-selected="' + (tab === 'sec') + '">شعبي</button><button data-th="find" aria-selected="' + (tab === 'find') + '">المتدربون</button><button data-th="exam" aria-selected="false">الاختبارات</button>' +
       (SESS.role === 'admin' ? '<button data-th="staff" aria-selected="' + (tab === 'staff') + '">المدرّبون</button>' : '') + '</div>';
   }
   function hub(tab, arg) {
@@ -11171,6 +11179,9 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
         if (tAuth(r)) return; if (!r.ok) { box.innerHTML = hubHead('sec') + '<p class="tl-msg bad">' + E(r.err) + '</p>'; return; }
         HUB.roster = r; box.innerHTML = hubHead('sec') + rosterHtml(r);
       }).catch(function () { box.innerHTML = hubHead('sec') + '<p class="tl-msg bad">' + NET + '</p>'; });
+    } else if (tab === 'find') {
+      box.innerHTML = hubHead('find') + '<div class="tl-card"><h3>بحث عن متدرب</h3><p class="tl-sub">بالرقم التدريبي أو جزء من الاسم. منها تعطيه كلمة سر جديدة أو تضيفه لشعبة.</p><form class="tl-row" id="tlFind"><input id="fdQ" value="' + E(arg || '') + '" placeholder="مثال: 4411 أو أحمد" style="flex:1;min-width:0;font:16px var(--font-body);padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);min-height:42px"><button class="btn pri">بحث</button></form><p class="tl-msg" id="fdM"></p></div><div id="fdOut"></div>';
+      if (arg) doFind(arg);
     } else if (tab === 'staff') {
       api('ad_staff', { tok: TTOK }).then(function (r) {
         if (tAuth(r)) return;
@@ -11180,6 +11191,21 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
           '</tbody></table></div>';
       }).catch(function () { box.innerHTML = hubHead('staff') + '<p class="tl-msg bad">' + NET + '</p>'; });
     }
+  }
+  function doFind(q) {
+    msg('fdM', 'جارٍ البحث…'); var out = $('#fdOut');
+    api('tr_find', { tok: TTOK, q: q }).then(function (r) {
+      if (tAuth(r)) return; if (!r.ok) return msg('fdM', r.err, 'bad');
+      msg('fdM', r.users.length ? r.users.length + ' نتيجة' : 'لا توجد نتائج. تأكد من الرقم، أو أن المتدرب أنشأ حسابه.', r.users.length ? 'ok' : 'bad');
+      var opts = r.mine.map(function (m) { return '<option value="' + E(m.code) + '">' + E(m.name) + '</option>'; }).join('');
+      out.innerHTML = r.users.map(function (u) {
+        return '<div class="tl-scard"><div class="tl-row" style="justify-content:space-between"><h4>' + E(u.name) + '</h4><span class="mono">' + E(u.id) + '</span></div>' +
+          '<p>' + (u.secs.length ? 'الشعب: ' + u.secs.map(function (x) { return E(x.name); }).join('، ') : '<b style="color:var(--warn)">غير منضم لأي شعبة</b>') + ' · آخر دخول: ' + ago(u.last) + '</p>' +
+          (u.can ? '<div class="tl-acts" style="margin-top:0"><button class="btn" data-th="sreset" data-c="' + E(u.id) + '">كلمة سر جديدة</button>' +
+            (opts ? '<select data-sel="' + E(u.id) + '" style="min-height:36px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);padding:0 8px;font:inherit">' + opts + '</select><button class="btn pri" data-th="addsec" data-c="' + E(u.id) + '">إضافة للشعبة</button>' : '') + '</div>'
+            : '<p class="tl-sub" style="margin:0">المتدرب في شعبة مدرّب آخر.</p>') + '</div>';
+      }).join('');
+    }).catch(function () { msg('fdM', NET, 'bad'); });
   }
   function rosterHtml(r) {
     var sec = r.section, crs = sec.courses, lab = {}; crs.forEach(function (c) { lab[c] = labsOf(c).map(function (l) { return l.id; }); });
@@ -11247,6 +11273,11 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     else if (a === 'edit') editSec(c);
     else if (a === 'share') share(c);
     else if (a === 'csv') csv();
+    else if (a === 'find') hub('find');
+    else if (a === 'addsec') {
+      var sel = document.querySelector('[data-sel="' + c + '"]'); if (!sel) return; busy(b, true);
+      api('tr_add_sec', { tok: TTOK, id: c, code: sel.value }).then(function (r) { busy(b, false); if (tAuth(r)) return; if (!r.ok) { b.textContent = r.err; return; } b.textContent = 'أُضيف ✔'; b.disabled = true; }).catch(function () { busy(b, false); b.textContent = 'تعذّر'; });
+    }
     else if (a === 'sreset' || a === 'treset') {
       if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اضغط للتأكيد'; return; }
       busy(b, true);
@@ -11258,6 +11289,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     }
   });
   $('#acct').addEventListener('submit', function (e) {
+    if (e.target.id === 'tlFind') { e.preventDefault(); var q = $('#fdQ').value.trim(); if (q) doFind(q); return; }
     if (e.target.id !== 'tlAddT') return; e.preventDefault(); var btn = e.target.querySelector('.pri');
     busy(btn, true);
     api('ad_staff', { tok: TTOK, op: 'add', id: $('#atId').value.trim(), name: $('#atName').value.trim() }).then(function (r) {
