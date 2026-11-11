@@ -92,8 +92,9 @@ function stRegister_(b) {
   if (name.length < 3) return { ok: false, err: 'اكتب اسمك الثلاثي.' };
   if (pw.length < 6) return { ok: false, err: 'كلمة السر 6 خانات على الأقل.' };
   if (findRow_('users', 0, id)) return { ok: false, err: 'هذا الرقم مسجّل مسبقًا. سجّل دخولك، أو اطلب من مدرّبك إعادة تعيين كلمة السر.' };
-  var sec = b.sec ? section_(b.sec) : null;
-  if (b.sec && !sec) return { ok: false, err: 'رمز الشعبة غير صحيح.' };
+  if (!b.sec) return { ok: false, err: 'اكتب رمز الشعبة (تجده في رابط الدعوة أو عند مدرّبك).' };
+  var sec = section_(b.sec);
+  if (!sec) return { ok: false, err: 'رمز الشعبة غير صحيح أو الشعبة مغلقة.' };
   var salt = rand_(16), now = new Date();
   sheet_('users').appendRow([id, name, salt, hashPw_(normPw_(pw), salt), now, now, sec ? sec.code : '']);
   return stLoginOk_(findRow_('users', 0, id));
@@ -186,10 +187,7 @@ function trRoster_(b) {
 function trResetPw_(b) {
   var s = staffOf_(b); if (!s) return { ok: false, auth: true };
   var f = findRow_('users', 0, normId_(b.id)); if (!f) return { ok: false, err: 'الرقم غير موجود.' };
-  if (s.role !== 'admin') {
-    var mine = rows_('sections').filter(function (r) { return r[2] === s.id; }).map(function (r) { return r[0]; });
-    if (!String(f.r[6] || '').split(',').some(function (c) { return mine.indexOf(c) >= 0; })) return { ok: false, err: 'المتدرب ليس في شعبك.' };
-  }
+  if (!canManage_(s, f.r)) return { ok: false, err: 'المتدرب ليس في شعبك.' };
   var pw = rand_(6).toLowerCase(), salt = rand_(16), r = f.r.slice(); r[2] = salt; r[3] = hashPw_(normPw_(pw), salt); setRow_('users', f.i, r);
   okLogin_('st:' + f.r[0]);
   return { ok: true, pw: pw };
@@ -213,6 +211,35 @@ function adStaff_(b) {
 }
 function secInfo_(b) { var s = section_(b.sec); return s ? { ok: true, section: publicSec_(s) } : { ok: false, err: 'رمز الشعبة غير صحيح.' }; }
 
+/* ---------- البحث عن متدرب وإدارته ---------- */
+function mySecs_(s) { return rows_('sections').filter(function (r) { return s.role === 'admin' || r[2] === s.id; }).map(function (r) { return r[0]; }); }
+function canManage_(s, u) {
+  if (s.role === 'admin') return true;
+  var list = String(u[6] || '').split(',').filter(String), mine = mySecs_(s);
+  return !list.length || list.some(function (c) { return mine.indexOf(c) >= 0; });
+}
+function trFind_(b) {
+  var s = staffOf_(b); if (!s) return { ok: false, auth: true };
+  var q = normId_(b.q), qn = String(b.q || '').trim(); if (qn.length < 2) return { ok: false, err: 'اكتب رقمين أو حرفين على الأقل.' };
+  var out = rows_('users').filter(function (u) { return String(u[0]).indexOf(q) >= 0 || String(u[1]).indexOf(qn) >= 0; }).slice(0, 25).map(function (u) {
+    return { id: u[0], name: u[1], secs: sectionsOf_(u[6]).map(function (x) { return { code: x.code, name: x.name }; }), last: u[5] ? new Date(u[5]).getTime() : 0, can: canManage_(s, u) };
+  });
+  return { ok: true, users: out, mine: rows_('sections').filter(function (r) { return s.role === 'admin' || r[2] === s.id; }).map(function (r) { return { code: r[0], name: r[1] }; }) };
+}
+function trAddSec_(b) {
+  var s = staffOf_(b); if (!s) return { ok: false, auth: true };
+  var f = findRow_('users', 0, normId_(b.id)); if (!f) return { ok: false, err: 'المتدرب غير موجود.' };
+  var code = String(b.code || '').toUpperCase(); if (mySecs_(s).indexOf(code) < 0) return { ok: false, err: 'لا تملك هذه الشعبة.' };
+  addSec_(f, code); return { ok: true };
+}
+function stChPw_(b) {
+  var f = stUser_(b); if (!f) return { ok: false, auth: true };
+  if (!pwOk_(b.old, f.r[2], f.r[3])) return { ok: false, err: 'كلمة السر الحالية غير صحيحة.' };
+  var pw = normPw_(b.pw); if (pw.length < 6) return { ok: false, err: 'كلمة السر الجديدة 6 خانات على الأقل.' };
+  var salt = rand_(16), r = f.r.slice(); r[2] = salt; r[3] = hashPw_(pw, salt); setRow_('users', f.i, r);
+  return { ok: true };
+}
+
 /* ---------- الاختبارات: روابط قصيرة ---------- */
 function exSave_(b) {
   var s = staffOf_(b); if (!s) return { ok: false, auth: true };
@@ -228,7 +255,7 @@ function exGet_(b) {
 
 /* ---------- نقاط الدخول ---------- */
 var ACTIONS = { st_register: stRegister_, st_login: stLogin_, st_me: stMe_, st_join: stJoin_, st_sync: stSync_, sec_info: secInfo_,
-  tr_state: trState_, tr_setup: trSetup_, tr_login: trLogin_, tr_sections: trSections_, tr_sec_save: trSecSave_, tr_roster: trRoster_, tr_resetpw: trResetPw_, ad_staff: adStaff_, ex_save: exSave_, ex_get: exGet_ };
+  tr_state: trState_, tr_setup: trSetup_, tr_login: trLogin_, tr_sections: trSections_, tr_sec_save: trSecSave_, tr_roster: trRoster_, tr_resetpw: trResetPw_, ad_staff: adStaff_, ex_save: exSave_, ex_get: exGet_, tr_find: trFind_, tr_add_sec: trAddSec_, st_chpw: stChPw_ };
 
 function doPost(e) {
   var body;
