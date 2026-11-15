@@ -4094,7 +4094,7 @@ function wsPwErr(pw, pol, who) {
 /* ---------- AD model ---------- */
 function wsAdNew(dom) {
   var dn = wsDnOf(dom), nb = dom.split('.')[0].toUpperCase().slice(0, 15);
-  var ad = { dom: dom, dn: dn, nb: nb, fl: 'Windows Server 2016', ous: {}, users: {}, groups: {}, comps: {}, gpos: {}, links: [], policy: { minLen: 7, cx: true, age: 42, lockout: 0 } };
+  var ad = { dom: dom, dn: dn, nb: nb, fl: 'Windows Server 2012 R2', ous: {}, users: {}, groups: {}, comps: {}, gpos: {}, links: [], policy: { minLen: 7, cx: true, age: 42, lockout: 0 } };
   ['Domain Admins', 'Domain Users', 'Domain Computers', 'Domain Controllers', 'Enterprise Admins', 'Schema Admins', 'Group Policy Creator Owners', 'DnsAdmins'].forEach(function (g) { ad.groups[g] = { name: g, scope: 'Global', type: 'Security', cn: 'Users', m: [], builtin: true }; });
   ad.groups['Domain Admins'].m = ['Administrator']; ad.groups['Domain Users'].m = ['Administrator', 'Guest'];
   ad.users.Administrator = { sam: 'Administrator', name: 'Administrator', first: '', last: '', upn: 'Administrator@' + dom, cn: 'Users', pw: '', enabled: true, builtin: true, desc: 'Built-in account for administering the computer/domain', must: false, never: true };
@@ -4663,8 +4663,14 @@ wsCmd('Set-Date', 'Date;Adjust', function (d, a) {
   var s = wsSan(a.Date).trim(), m = /^(\d{4}-\d{2}-\d{2})?\s*(\d{1,2}:\d{2})?/.exec(s);
   var e = WSA.setClock(d, m[1] || d.win.clock.date, m[2] || d.win.clock.time); if (e) return wsErr(d, 'Set-Date : ' + e); wsOut(d, 'Saturday, ' + wsClockStr(d.win));
 });
-wsCmd('Get-TimeZone', 'Id;Name', function (d) { var t = WS_TZS.filter(function (x) { return x[0] === d.win.tz; })[0]; wsList(d, [['Id', t[0]], ['DisplayName', t[1]], ['StandardName', t[0].replace(' Standard Time', ' Standard Time')], ['SupportsDaylightSavingTime', 'False']]); });
-wsCmd('Set-TimeZone', 'Id;Name', function (d, a) { var e = WSA.setTz(d, wsSan(a.Id || a.Name)); if (e) wsErr(d, 'Set-TimeZone : ' + e); });
+wsCmd('tzutil', '', function () {}); WSC.tzutil.raw = true; WSC.tzutil.any = true;
+WSC.tzutil.fn = function (d, a) {
+  var r = (a._raw || []).join(' ').trim(), m;
+  if (/^\/g$/i.test(r)) { wsOut(d, d.win.tz); return; }
+  if (/^\/l$/i.test(r)) { wsOut(d, WS_TZS.map(function (x) { return x[1] + '\n' + x[0]; }).join('\n\n')); return; }
+  if ((m = /^\/s\s+(.+)$/i.exec(r))) { var id = m[1].replace(/^["']+|["']+$/g, '').trim(); var e = WSA.setTz(d, id); if (e) wsErr(d, 'Error: Invalid time zone identifier: ' + id); return; }
+  wsOut(d, 'Windows Time Zone Utility\n\nUsage:\nTZUTIL </? | /g | /s TimeZoneID | /l>\n\n  /g  Displays the current time zone ID.\n  /s  Sets the current time zone using the specified time zone ID.\n  /l  Lists all valid time zone IDs and display names.');
+};
 wsCmd('Rename-Computer', 'NewName;ComputerName;Restart*;Force*;DomainCredential', function (d, a) {
   var e = WSA.rename(d, wsSan(a.NewName)); if (e) return wsErr(d, 'Rename-Computer : ' + e);
   wsOut(d, 'WARNING: The changes will take effect after you restart the computer ' + d.win.name + '.', 'dim'); if (a.Restart) wsDoRestart(d);
@@ -4773,7 +4779,7 @@ wsCmd('Install-ADDSForest', 'DomainName;DomainNetbiosName;SafeModeAdministratorP
   };
   wsSecure(d, a.SafeModeAdministratorPassword, 'SafeModeAdministratorPassword: ', true, function (p1) { if (a.SafeModeAdministratorPassword) return run(p1); wsAsk(d, 'Confirm SafeModeAdministratorPassword: ', true, function (p2) { if (p1 !== p2) return wsErr(d, 'Install-ADDSForest : The passwords do not match.'); run(p1); }); });
 });
-wsCmd('Get-ADDomain', '', function (d) { if (wsNeedAd(d)) return; var ad = d.win.ad; wsList(d, [['DistinguishedName', ad.dn], ['DNSRoot', ad.dom], ['DomainMode', ad.fl.replace('Windows Server 2016', 'Windows2016Domain')], ['Forest', ad.dom], ['NetBIOSName', ad.nb], ['PDCEmulator', wsFqdn(d.win)]]); });
+wsCmd('Get-ADDomain', '', function (d) { if (wsNeedAd(d)) return; var ad = d.win.ad; wsList(d, [['DistinguishedName', ad.dn], ['DNSRoot', ad.dom], ['DomainMode', ad.fl.replace(/^Windows Server (\d{4})( R2)?$/, function (x, y, r) { return 'Windows' + y + (r ? 'R2' : '') + 'Domain'; })], ['Forest', ad.dom], ['NetBIOSName', ad.nb], ['PDCEmulator', wsFqdn(d.win)]]); });
 wsCmd('Get-ADOrganizationalUnit', 'Filter;Identity', function (d) { if (wsNeedAd(d)) return; var ad = d.win.ad; var all = ['OU=Domain Controllers,' + ad.dn].concat(Object.keys(ad.ous)); wsTable(d, ['Name', 'DistinguishedName'], all.map(function (k) { return [ad.ous[k] ? ad.ous[k].name : 'Domain Controllers', k]; })); });
 wsCmd('New-ADOrganizationalUnit', 'Name;Path;Description;ProtectedFromAccidentalDeletion', function (d, a) { if (wsNeedAd(d)) return; var ad = d.win.ad, p = a.Path ? wsSan(a.Path) : ad.dn; if (p !== ad.dn && !ad.ous[p]) return wsErr(d, 'New-ADOrganizationalUnit : Directory object not found'); var e = WSA.newOu(d, wsSan(a.Name), p); if (e) wsErr(d, 'New-ADOrganizationalUnit : ' + e); });
 wsCmd('Get-ADUser', 'Identity;Filter;SearchBase;Properties', function (d, a) {
@@ -4839,7 +4845,7 @@ wsCmd('gpresult', '', function (d) {
   var o = ['', 'RSOP data for ' + W.sess.domain + '\\' + W.sess.user + ' on ' + W.name + ' : Logging Mode', '----------------------------------------------------------', '', 'COMPUTER SETTINGS', '------------------', '    Applied Group Policy Objects', '    -----------------------------'].concat(W.applied.gpos.map(function (g) { return '        ' + g; })).concat(['', 'USER SETTINGS', '-------------', '    Applied Group Policy Objects', '    -----------------------------']).concat(W.applied.gpos.map(function (g) { return '        ' + g; }));
   wsOut(d, o.join('\n'));
 }); WSC.gpresult.raw = true;
-wsCmd('systeminfo', '', function (d) { var W = d.win; wsOut(d, 'Host Name:                 ' + W.name.toUpperCase() + '\nOS Name:                   Microsoft Windows Server 2019 Standard\nOS Version:                10.0.17763 N/A Build 17763\nSystem Type:               x64-based PC\nDomain:                    ' + (W.domain || 'WORKGROUP') + '\nTime Zone:                 ' + (WS_TZS.filter(function (x) { return x[0] === W.tz; })[0] || ['', ''])[1]); }); WSC.systeminfo.raw = true;
+wsCmd('systeminfo', '', function (d) { var W = d.win; wsOut(d, 'Host Name:                 ' + W.name.toUpperCase() + '\nOS Name:                   Microsoft Windows Server 2012 R2 Standard\nOS Version:                6.3.9600 N/A Build 9600\nSystem Type:               x64-based PC\nDomain:                    ' + (W.domain || 'WORKGROUP') + '\nTime Zone:                 ' + (WS_TZS.filter(function (x) { return x[0] === W.tz; })[0] || ['', ''])[1]); }); WSC.systeminfo.raw = true;
 wsCmd('Get-Service', 'Name', function (d) { var W = d.win, rows = [['Running', 'Dnscache', 'DNS Client'], ['Running', 'LanmanServer', 'Server']]; if (W.roles.dns) rows.push(['Running', 'DNS', 'DNS Server']); if (W.roles.dhcp) rows.push(['Running', 'DHCPServer', 'DHCP Server']); if (W.ad) rows.push(['Running', 'NTDS', 'Active Directory Domain Services']); wsTable(d, ['Status', 'Name', 'DisplayName'], rows); });
 wsCmd('New-Item', 'Path;ItemType;Name', function (d, a) { var p = wsSan(a.Path || a.Name); if (!/^[A-Za-z]:\\/.test(p)) return wsErr(d, 'New-Item : Cannot find path \'' + p + '\' because it does not exist.'); d.win.fs = d.win.fs || {}; d.win.fs[p.toLowerCase()] = 1; wsOut(d, '\n    Directory: ' + p.replace(/\\[^\\]*$/, '') + '\n\nMode   Name\n----   ----\nd----- ' + p.replace(/^.*\\/, '') + '\n'); });
 WSA.acl = function (d, name, who, lv) {
@@ -4862,7 +4868,7 @@ wsCmd('ConvertTo-SecureString', 'String;AsPlainText*;Force*', function (d, a) { 
 wsCmd('Read-Host', 'Prompt;AsSecureString*', function (d, a) { wsAsk(d, wsSan(a.Prompt) + ': ', !!a.AsSecureString, function (v) { d.wsLast = a.AsSecureString ? { secure: v } : v; }); });
 wsCmd('gui', '', function (d) { d.win.view = 'gui'; wsOut(d, '(returning to the desktop)', 'dim'); }); WSC.gui.any = false;
 wsCmd('exit', '', function (d) { d.win.view = 'gui'; wsOut(d, '(returning to the desktop)', 'dim'); }); WSC.exit.any = false;
-wsCmd('Get-Help', 'Name', function (d) { wsOut(d, 'Useful commands: hostname, ipconfig /all, Rename-Computer, New-NetIPAddress, Set-DnsClientServerAddress, Set-TimeZone, Install-WindowsFeature, Install-ADDSForest, New-ADOrganizationalUnit, New-ADUser, New-ADGroup, Add-ADGroupMember, Add-DhcpServerv4Scope, Add-DnsServerResourceRecordA, New-GPO, New-GPLink, gpupdate /force, Add-Computer, nslookup, ping'); }); WSC['get-help'].any = true;
+wsCmd('Get-Help', 'Name', function (d) { wsOut(d, 'Useful commands: hostname, ipconfig /all, Rename-Computer, New-NetIPAddress, Set-DnsClientServerAddress, tzutil /s, Install-WindowsFeature, Install-ADDSForest, New-ADOrganizationalUnit, New-ADUser, New-ADGroup, Add-ADGroupMember, Add-DhcpServerv4Scope, Add-DnsServerResourceRecordA, New-GPO, New-GPLink, gpupdate /force, Add-Computer, nslookup, ping'); }); WSC['get-help'].any = true;
 
 wsCmd('Set-ItemProperty', 'Path;Name;Value', function (d, a) {
   var p = wsSan(a.Path), n = wsSan(a.Name), W = d.win;
@@ -4916,10 +4922,10 @@ function wuiRender(d) {
   if (W.kind === 'w7') return w7Render(d);
   if (W.stage === 'desktop' && W.kind === 'server' && !g.init) { g.init = true; g.scr = 'sm'; g.wins = ['sm']; g.nav = g.nav || 'dash'; }
   g.wins = g.wins || [];
-  var top = '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + (W.stage === 'desktop' && W.sess ? ' · ' + esc((W.sess.domain || '') + '\\' + W.sess.user) : '') + '</span>' +
+  var top = '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + (W.stage === 'desktop' && W.sess ? ' · ' + esc((W.sess.domain || '') + '\\' + W.sess.user) : '') + '</span>' +
     '<a class="wtb2" data-wa="drawer">☰ المهام</a>' + (W.full === false ? '<a class="wtb2" data-wa="fullon">⛶</a>' : '<a class="wtb2" data-wa="fullx">✕ خروج</a>') + '</div>';
   var full = W.full !== false, tp = '';
-  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2019' : 'Windows 10 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' : '';
+  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' : '';
   var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">لوحة اللمس · حرّك إصبعك = مؤشر · نقرة = ضغط · إصبعان = تمرير</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : '<div class="wnf">' + top + '<div class="wnfv" id="wnfv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '</div><div class="wled"></div></div></div></div>' + extra + '</div>'; };
   if (W.bootUntil && Date.now() < W.bootUntil) return wrapMon('<div class="wx0">' + tp + '<div class="wboot"><div class="wspin"></div><p>Restarting…</p></div></div>', '');
   if (W.kind === 'ubuntu') h = ubScreen(d);
@@ -4933,7 +4939,7 @@ function wuiTaskbar(d) {
   var W = d.win, g = W.g;
   var btns = g.wins.map(function (id) { return '<a class="wtbb' + (g.scr === id || (id === 'gpmc' && g.scr === 'gpe') ? ' on' : '') + '" data-wa="taskbtn" data-arg="' + id + '">' + esc(WTITLES[id] || id) + '</a>'; }).join('');
   var apps = W.kind === 'server' ? [['sm', 'Server Manager'], ['ps', 'Windows PowerShell']].concat(W.ad ? [['aduc', 'Active Directory Users and Computers'], ['gpmc', 'Group Policy Management']] : []).concat(W.roles.dns ? [['dns', 'DNS']] : []).concat(W.roles.dhcp ? [['dhcp', 'DHCP']] : []) : [['ps', 'Command Prompt'], ['capp:settings', 'Settings'], ['capp:net', 'Network'], ['capp:cp', 'Control Panel'], ['capp:task', 'Task Manager']];
-  var menu = g.start ? '<div class="wstartm"><div class="wsh2">' + (W.kind === 'server' ? 'Windows Server' : 'Windows 10') + '</div>' + apps.map(function (a) { var c = a[0].indexOf('capp:') === 0; return '<a class="wsi" data-wa="' + (c ? 'capp' : 'open') + '" data-arg="' + (c ? a[0].slice(5) : a[0]) + '">▫ ' + esc(a[1]) + '</a>'; }).join('') + '<div class="wsh2">Power</div><a class="wsi" data-wa="signout">⏏ Sign out</a><a class="wsi" data-wa="rs1">↻ Restart</a></div>' : '';
+  var menu = g.start ? '<div class="wstartm"><div class="wsh2">' + (W.kind === 'server' ? 'Windows Server' : 'Windows 8.1') + '</div>' + apps.map(function (a) { var c = a[0].indexOf('capp:') === 0; return '<a class="wsi" data-wa="' + (c ? 'capp' : 'open') + '" data-arg="' + (c ? a[0].slice(5) : a[0]) + '">▫ ' + esc(a[1]) + '</a>'; }).join('') + '<div class="wsh2">Power</div><a class="wsi" data-wa="signout">⏏ Sign out</a><a class="wsi" data-wa="rs1">↻ Restart</a></div>' : '';
   return menu + wnFly(d) + '<div class="wtbar"><a class="wstart' + (g.start ? ' on' : '') + '" data-wa="start">⊞</a><div class="wtbbs">' + btns + '</div>' + wnTray(d) + '</div>';
 }
 function wuiDrawer(d) {
@@ -4973,8 +4979,8 @@ function wuiSetup(d) {
   var W = d.win, I = W.inst, s = WS_SETUP[I.i], v = I.v, err = I.err ? '<div class="werr">' + esc(I.err) + '</div>' : '';
   var hd = '<div class="wsetup"><div class="wsh">Windows Setup</div>';
   if (s === 'lang') return hd + WX.sel('Language to install', 'lang', [['English (United States)'], ['Arabic (Saudi Arabia)']], v.lang || 'English (United States)') + WX.sel('Time and currency format', 'fmt', [['English (United States)'], ['Arabic (Saudi Arabia)']], v.fmt || 'English (United States)') + WX.sel('Keyboard or input method', 'kb', [['US'], ['Arabic (101)']], v.kb || 'US') + err + '<div class="wbtns">' + WX.btn('Next', 'snext', '', 'pri') + '</div></div>';
-  if (s === 'now') return hd + '<h3>Windows Server 2019</h3><p>Install the operating system on this virtual machine.</p>' + err + '<div class="wbtns">' + WX.btn('Install now', 'snext', '', 'pri') + '</div></div>';
-  if (s === 'os') return hd + '<p>Select the operating system you want to install</p>' + WX.rad('os', 'Standard Core', 'Windows Server 2019 Standard', v.os) + WX.rad('os', 'Standard DE', 'Windows Server 2019 Standard (Desktop Experience)', v.os) + WX.rad('os', 'Datacenter Core', 'Windows Server 2019 Datacenter', v.os) + WX.rad('os', 'Datacenter DE', 'Windows Server 2019 Datacenter (Desktop Experience)', v.os) + '<p class="wnote">Without “Desktop Experience” the server has no graphical interface (Server Core): PowerShell only.</p>' + err + '<div class="wbtns">' + WX.btn('Next', 'snext', '', 'pri') + '</div></div>';
+  if (s === 'now') return hd + '<h3>Windows Server 2012 R2</h3><p>Install the operating system on this virtual machine.</p>' + err + '<div class="wbtns">' + WX.btn('Install now', 'snext', '', 'pri') + '</div></div>';
+  if (s === 'os') return hd + '<p>Select the operating system you want to install</p>' + WX.rad('os', 'Standard Core', 'Windows Server 2012 R2 Standard (Server Core Installation)', v.os) + WX.rad('os', 'Standard DE', 'Windows Server 2012 R2 Standard (Server with a GUI)', v.os) + WX.rad('os', 'Datacenter Core', 'Windows Server 2012 R2 Datacenter (Server Core Installation)', v.os) + WX.rad('os', 'Datacenter DE', 'Windows Server 2012 R2 Datacenter (Server with a GUI)', v.os) + '<p class="wnote">Without “Server with a GUI” the server has no graphical interface (Server Core Installation): PowerShell only.</p>' + err + '<div class="wbtns">' + WX.btn('Next', 'snext', '', 'pri') + '</div></div>';
   if (s === 'lic') return hd + '<p><b>Applicable notices and license terms</b></p><div class="wlic">MICROSOFT SOFTWARE LICENSE TERMS … (evaluation copy)</div>' + WX.chk('I accept the license terms', 'acc', v.acc) + err + '<div class="wbtns">' + WX.btn('Next', 'snext', '', 'pri') + '</div></div>';
   if (s === 'type') return hd + '<p>Which type of installation do you want?</p>' + WX.rad('type', 'upgrade', '<b>Upgrade:</b> Install Windows and keep files, settings, and applications', v.type) + WX.rad('type', 'custom', '<b>Custom:</b> Install Windows only (advanced)', v.type) + err + '<div class="wbtns">' + WX.btn('Next', 'snext', '', 'pri') + '</div></div>';
   if (s === 'disk') {
@@ -4994,7 +5000,7 @@ function wuiSetupAct(d, act, arg, vals) {
   if (act === 'sapply') { var z = +(vals.size || 0); if (!(z >= 1000 && z <= 61440)) { I.err = 'The size must be between 1000 and 61440 MB.'; I.newsz = vals.size; return; } I.parts = true; I.newsz = undefined; I.sel = 'p2'; return; }
   if (act !== 'snext') return;
   if (s === 'lang') { v.lang = vals.lang; v.fmt = vals.fmt; v.kb = vals.kb; }
-  else if (s === 'os') { if (!vals.os) { I.err = 'Select an operating system.'; return; } if (!/DE$/.test(vals.os)) { I.err = 'You selected Server Core (no graphical interface). This lab needs the graphical version: choose “Windows Server 2019 Standard (Desktop Experience)”.'; return; } v.os = vals.os; }
+  else if (s === 'os') { if (!vals.os) { I.err = 'Select an operating system.'; return; } if (!/DE$/.test(vals.os)) { I.err = 'You selected Server Core (no graphical interface). This lab needs the graphical version: choose “Windows Server 2012 R2 Standard (Server with a GUI)”.'; return; } v.os = vals.os; }
   else if (s === 'lic') { if (!vals.acc) { I.err = 'You must accept the license terms to continue.'; return; } v.acc = true; }
   else if (s === 'type') { if (!vals.type) { I.err = 'Select the installation type.'; return; } if (vals.type === 'upgrade') { I.err = 'Windows could not be upgraded: this computer has no previous version of Windows. Choose Custom: Install Windows only.'; v.type = 'upgrade'; return; } v.type = 'custom'; }
   else if (s === 'disk') { if (!I.parts) { I.err = 'Windows cannot be installed here. Create a partition first: select the unallocated space, click New, then Apply.'; return; } if (I.sel !== 'p2') { I.err = 'Windows cannot be installed to this partition. Select Drive 0 Partition 2 (Primary).'; return; } }
@@ -5032,7 +5038,7 @@ function wuiSm(d) {
   var head = '<div class="wsmh"><b>Server Manager</b> ▸ ' + esc((nav.filter(function (n) { return n[0] === g.nav; })[0] || ['', ''])[1]) +
     '<span class="wsp"></span>' + '<a class="wl flag' + (fl.length ? ' hot' : '') + '" data-wa="menu" data-arg="flag">⚑' + (fl.length ? '<i>' + fl.length + '</i>' : '') + '</a>' + '<a class="wl" data-wa="menu" data-arg="manage">Manage ▾</a><a class="wl" data-wa="menu" data-arg="tools">Tools ▾</a></div>';
   var menu = '';
-  if (g.menu === 'tools') { menu = '<div class="wmenu">' + (W.roles.dhcp ? WX.link('DHCP', 'open', 'dhcp') : '') + (W.roles.dns ? WX.link('DNS', 'open', 'dns') : '') + (W.ad ? WX.link('Active Directory Users and Computers', 'open', 'aduc') + WX.link('Group Policy Management', 'open', 'gpmc') : '') + WX.link('Windows PowerShell', 'open', 'ps') + WX.link('Windows Defender Firewall with Advanced Security', 'dlg', 'fw') + '</div>'; }
+  if (g.menu === 'tools') { menu = '<div class="wmenu">' + (W.roles.dhcp ? WX.link('DHCP', 'open', 'dhcp') : '') + (W.roles.dns ? WX.link('DNS', 'open', 'dns') : '') + (W.ad ? WX.link('Active Directory Users and Computers', 'open', 'aduc') + WX.link('Group Policy Management', 'open', 'gpmc') : '') + WX.link('Windows PowerShell', 'open', 'ps') + WX.link('Windows Firewall with Advanced Security', 'dlg', 'fw') + '</div>'; }
   else if (g.menu === 'manage') menu = '<div class="wmenu">' + WX.link('Add Roles and Features', 'dlg', 'roles') + WX.link('Remove Roles and Features', 'dlg', 'noop') + WX.link('Server Manager Properties', 'dlg', 'noop') + '</div>';
   else if (g.menu === 'flag') menu = '<div class="wmenu wide">' + (fl.length ? fl.map(function (f) { return '<div class="wfl"><b>' + esc(f.t) + '</b><p>' + esc(f.m) + '</p>' + WX.link(esc(f.l), f.a, f.arg || '') + '</div>'; }).join('') : '<div class="wfl"><p>No notifications.</p></div>') + '</div>';
   var body = '', n = g.nav;
@@ -5045,7 +5051,7 @@ function wuiSm(d) {
     body = '<h4>PROPERTIES For ' + esc(W.name) + '</h4><table class="wprops">' +
       row('Computer name', WX.link(esc(W.name), 'dlg', 'sysprops') + (W.pendingName ? ' <span class="wdim">(will be ' + esc(W.pendingName) + ' after restart)</span>' : '')) +
       row(W.domain ? 'Domain' : 'Workgroup', WX.link(esc(W.domain || W.workgroup), 'dlg', 'sysprops')) +
-      row('Windows Defender Firewall', WX.link(W.fw.on ? 'Domain: On, Private: On, Public: On' : 'Off', 'dlg', 'fw')) +
+      row('Windows Firewall', WX.link(W.fw.on ? 'Domain: On, Private: On, Public: On' : 'Off', 'dlg', 'fw')) +
       row('Remote management', 'Enabled') + row('Remote Desktop', WX.link(W.rdp ? 'Enabled' : 'Disabled', 'dlg', 'rdp')) +
       row('Ethernet0', WX.link(f.ip ? esc(f.ip) + (W.nic.dhcp ? ' (DHCP)' : '') : 'IPv4 address assigned by DHCP, IPv6 enabled', 'dlg', 'ip4')) +
       row('Time zone', WX.link(esc(wuiTz(W)), 'dlg', 'dt')) + row('Date / Time', WX.link(esc(wsClockStr(W)), 'dlg', 'dt')) +
@@ -5155,14 +5161,14 @@ function wuiDlg(d) {
     case 'dt': return WX.dlg('Date and Time', '<p>' + esc(wuiTz(W)) + '</p>' + WX.fld('Date (yyyy-mm-dd)', 'date', v.date || W.clock.date) + WX.fld('Time (hh:mm, 24h)', 'time', v.time || W.clock.time), WX.btn('Change time zone…', 'dlg', 'tz', '') + okc, E);
     case 'tz': return WX.dlg('Time Zone Settings', WX.sel('Time zone', 'tz', WS_TZS.map(function (t) { return [t[0], t[1]]; }), v.tz || W.tz), okc, E);
     case 'rdp': return WX.dlg('System Properties ▸ Remote', WX.rad('rdp', 'off', 'Don\'t allow remote connections to this computer', v.rdp || (W.rdp ? 'on' : 'off')) + WX.rad('rdp', 'on', 'Allow remote connections to this computer', v.rdp || (W.rdp ? 'on' : 'off')), okc, E);
-    case 'fw': return WX.dlg('Windows Defender Firewall', WX.chk('Windows Defender Firewall is ON (all profiles)', 'fwon', v.fwon === undefined ? W.fw.on : v.fwon) + WX.chk('Allow File and Printer Sharing (Echo Request - ICMPv4-In): lets this computer reply to ping', 'icmp', v.icmp === undefined ? W.fw.icmp : v.icmp), okc, E);
+    case 'fw': return WX.dlg('Windows Firewall', WX.chk('Windows Firewall is ON (all profiles)', 'fwon', v.fwon === undefined ? W.fw.on : v.fwon) + WX.chk('Allow File and Printer Sharing (Echo Request - ICMPv4-In): lets this computer reply to ping', 'icmp', v.icmp === undefined ? W.fw.icmp : v.icmp), okc, E);
     case 'roles': {
       var st = D.step || 0, sel = v.sel || {};
       var titles = ['Before You Begin', 'Installation Type', 'Server Selection', 'Server Roles', 'Features', 'Confirmation', 'Results'];
       var body = '<div class="wstep">' + titles.map(function (t, i) { return '<span class="' + (i === st ? 'on' : '') + '">' + t + '</span>'; }).join(' › ') + '</div>';
       if (st === 0) body += '<p>This wizard helps you install roles, role services, or features. Verify that the destination server has a strong Administrator password, static IP addresses and the latest security updates.</p>';
       else if (st === 1) body += WX.rad('itype', 'role', 'Role-based or feature-based installation', v.itype || 'role') + WX.rad('itype', 'rds', 'Remote Desktop Services installation', v.itype || 'role');
-      else if (st === 2) body += '<p>Select a server from the server pool</p>' + WX.tbl(['Name', 'IP Address', 'Operating System'], [{ k: 'a', c: [esc(W.name), esc(f.ip || ''), 'Microsoft Windows Server 2019 Standard'] }], 'a');
+      else if (st === 2) body += '<p>Select a server from the server pool</p>' + WX.tbl(['Name', 'IP Address', 'Operating System'], [{ k: 'a', c: [esc(W.name), esc(f.ip || ''), 'Microsoft Windows Server 2012 R2 Standard'] }], 'a');
       else if (st === 3) body += '<p>Select one or more roles to install on the selected server.</p>' + WS_ROLES.map(function (r) { return '<div class="wrole">' + (W.roles[r.id] ? '<label class="wc"><input type="checkbox" checked disabled> <span>' + r.name + ' <i>(Installed)</i></span></label>' : WX.chk(r.name, 'r_' + r.id, sel[r.id])) + '<small>' + r.desc + '</small></div>'; }).join('');
       else if (st === 4) body += '<p>Select one or more features to install. Management tools required by the selected roles are added automatically.</p><p class="wdim">' + (Object.keys(sel).filter(function (k) { return sel[k]; }).length ? 'Features to add: Group Policy Management, Remote Server Administration Tools for the selected roles.' : 'No additional features selected.') + '</p>';
       else if (st === 5) { var ch = Object.keys(sel).filter(function (k) { return sel[k]; }); body += '<p>To install the following roles, role services, or features on selected server, click Install.</p><ul>' + (ch.length ? ch.map(function (k) { return '<li>' + esc(wsRole(k).name) + '</li>'; }).join('') : '<li class="wdim">(nothing selected)</li>') + '</ul>' + WX.chk('Restart the destination server automatically if required', 'auto', v.auto); }
@@ -5175,11 +5181,11 @@ function wuiDlg(d) {
       var names = ['Deployment Configuration', 'Domain Controller Options', 'DNS Options', 'Additional Options', 'Paths', 'Review Options', 'Prerequisites Check', 'Installation'];
       var b2 = '<div class="wstep">' + names.map(function (t, i) { return '<span class="' + (i === s2 ? 'on' : '') + '">' + t + '</span>'; }).join(' › ') + '</div>';
       if (s2 === 0) b2 += '<p>Select the deployment operation</p>' + WX.rad('op', 'add', 'Add a domain controller to an existing domain', v.op || 'forest') + WX.rad('op', 'child', 'Add a new domain to an existing forest', v.op || 'forest') + WX.rad('op', 'forest', 'Add a new forest', v.op || 'forest') + WX.fld('Root domain name', 'dom', dm, { ph: 'college.local' });
-      else if (s2 === 1) b2 += WX.sel('Forest functional level', 'ffl', [['Windows Server 2016'], ['Windows Server 2012 R2']], v.ffl) + '<b>Specify domain controller capabilities</b>' + WX.chk('Domain Name System (DNS) server', 'dnsc', v.dnsc === undefined ? true : v.dnsc) + WX.chk('Global Catalog (GC)', 'gc', true) + '<b>Type the Directory Services Restore Mode (DSRM) password</b>' + WX.fld('Password', 'dsrm', v.dsrm || '', { type: 'password' }) + WX.fld('Confirm password', 'dsrm2', v.dsrm2 || '', { type: 'password' });
+      else if (s2 === 1) b2 += WX.sel('Forest functional level', 'ffl', [['Windows Server 2012 R2'], ['Windows Server 2012'], ['Windows Server 2008 R2']], v.ffl) + '<b>Specify domain controller capabilities</b>' + WX.chk('Domain Name System (DNS) server', 'dnsc', v.dnsc === undefined ? true : v.dnsc) + WX.chk('Global Catalog (GC)', 'gc', true) + '<b>Type the Directory Services Restore Mode (DSRM) password</b>' + WX.fld('Password', 'dsrm', v.dsrm || '', { type: 'password' }) + WX.fld('Confirm password', 'dsrm2', v.dsrm2 || '', { type: 'password' });
       else if (s2 === 2) b2 += '<p class="wwarn">⚠ A delegation for this DNS server cannot be created because the authoritative parent zone cannot be found or it does not run Windows DNS server. (Normal for a new .local forest: continue.)</p>';
       else if (s2 === 3) b2 += WX.fld('The NetBIOS domain name', 'nb', v.nb === undefined ? (dm.split('.')[0] || '').toUpperCase() : v.nb);
       else if (s2 === 4) b2 += WX.fld('Database folder', 'p1', 'C:\\Windows\\NTDS', { ro: 1 }) + WX.fld('Log files folder', 'p2', 'C:\\Windows\\NTDS', { ro: 1 }) + WX.fld('SYSVOL folder', 'p3', 'C:\\Windows\\SYSVOL', { ro: 1 });
-      else if (s2 === 5) b2 += '<p>Review your selections</p><pre class="wpre">Configure this server as the first Active Directory domain controller in a new forest.\n\nThe new domain name is "' + esc(dm) + '". This is also the name of the new forest.\n\nNetBIOS name: ' + esc(v.nb || dm.split('.')[0].toUpperCase()) + '\nForest/Domain functional level: ' + esc(v.ffl || 'Windows Server 2016') + '\nAdditional options: Global catalog: Yes · DNS Server: Yes\nDatabase folder: C:\\Windows\\NTDS</pre>';
+      else if (s2 === 5) b2 += '<p>Review your selections</p><pre class="wpre">Configure this server as the first Active Directory domain controller in a new forest.\n\nThe new domain name is "' + esc(dm) + '". This is also the name of the new forest.\n\nNetBIOS name: ' + esc(v.nb || dm.split('.')[0].toUpperCase()) + '\nForest/Domain functional level: ' + esc(v.ffl || 'Windows Server 2012 R2') + '\nAdditional options: Global catalog: Yes · DNS Server: Yes\nDatabase folder: C:\\Windows\\NTDS</pre>';
       else if (s2 === 6) { var warns = []; if (W.nic.dhcp) warns.push('This computer has at least one physical network adapter that does not have static IP address(es) assigned to its IPv4 properties. Assign static IPs first.'); if (/^WIN-/.test(W.name)) warns.push('The computer name is still the random default (' + W.name + '). Rename it before promotion.'); b2 += '<p>All prerequisite checks passed successfully. Click “Install” to begin installation.</p>' + warns.map(function (x) { return '<p class="wwarn">⚠ ' + esc(x) + '</p>'; }).join('') + '<p class="wdim">Warnings do not block promotion, but a DC with a dynamic IP or a default name is poor practice.</p>'; }
       var b2btn = s2 === 6 ? WX.btn('‹ Previous', 'wprev', '', '') + WX.btn('Install', 'wnext', '', 'pri') + cancel : (s2 > 0 ? WX.btn('‹ Previous', 'wprev', '', '') : '') + WX.btn('Next ›', 'wnext', '', 'pri') + cancel;
       return WX.dlg('Active Directory Domain Services Configuration Wizard', b2, b2btn, E, true);
@@ -6484,7 +6490,7 @@ var COURSES = [
   { id: 'rs2-222', title: 'التوجيه والتحويل (2)', code: '222 شبكا', desc: 'ترجمة العناوين NAT/PAT وقوائم التحكم بالوصول ACL.' },
   { id: 'wan-241', title: 'ربط الشبكات', code: '241 شبكا', desc: 'تقنيات الشبكات الواسعة: PPP وPPPoE وGRE وNAT وNetFlow.' },
   { id: 'sec-231', title: 'مقدمة في أمن الشبكات', code: '231 شبكا', desc: 'تأمين الوصول الإداري للموجه وAAA، وجدار الحماية بالمناطق ZPF، ونظام منع الاختراق IPS.' },
-  { id: 'os-251', title: 'نظم تشغيل (1) - ويندوز سيرفر', code: '251 داعم', desc: 'تنصيب ويندوز سيرفر 2019، الإعدادات الأساسية، الأدوار، Active Directory وDHCP وDNS وسياسات المجموعة.' },
+  { id: 'os-251', title: 'نظم تشغيل (1) - ويندوز سيرفر', code: '251 داعم', desc: 'تنصيب ويندوز سيرفر 2012 R2، الإعدادات الأساسية، الأدوار، Active Directory وDHCP وDNS وسياسات المجموعة.' },
   { id: 'os-252', title: 'نظم تشغيل (2) - لينكس', code: '252 داعم', desc: 'إدارة أوبنتو: الملفات والصلاحيات والمستخدمون ومشاركة Samba وSSH والطابعات.' },
   { id: 'pc-asm', title: 'تجميع الحاسب وتشغيله', code: '121 حاسب', desc: 'تجميع الحاسب الشخصي خطوة بخطوة (المعالج والمبرد والذاكرة والتخزين والكيبلات)، التشغيل وفحص POST، ضبط BIOS، واستكشاف أعطال الإقلاع.' },
   { id: 'sec-232', title: 'أمن الشبكات المتقدم', code: '232 شبكا', desc: 'شبكات IPsec VPN وجدار الحماية ASA والوصول عن بعد.' }
@@ -7076,15 +7082,15 @@ var LABS = [
     ]
   },
   {
-    id: 'win-install', course: 'os-251', title: 'تنصيب ويندوز سيرفر 2019', level: 'مبتدئ', min: 20, qn: 'السؤال 1 (تنصيب النظام)',
+    id: 'win-install', course: 'os-251', title: 'تنصيب ويندوز سيرفر 2012 R2', level: 'مبتدئ', min: 20, qn: 'السؤال 1 (تنصيب النظام)',
     desc: 'معالج تنصيب ويندوز سيرفر: اللغة، النسخة، الرخصة، نوع التنصيب، تقسيم القرص، كلمة سر المدير، ثم تسجيل الدخول.',
     obj: ['ينصّب ويندوز سيرفر بالنسخة الرسومية.', 'يقسّم القرص ويضبط كلمة سر معقدة للمدير.'],
-    info: ['الإعدادات الافتراضية للغة والكيبورد كما هي', 'النسخة: Windows Server 2019 Standard (Desktop Experience) لأنها تحتوي واجهة رسومية', 'نوع التنصيب: Custom ثم أنشئ القسم من المساحة غير المخصصة (New ثم Apply)', 'كلمة سر Administrator: P@ssw0rd (معقدة: حروف كبيرة وصغيرة وأرقام ورموز)', 'المحاكاة معالج موجّه وليست إقلاعاً حقيقياً من ISO.'],
+    info: ['الإعدادات الافتراضية للغة والكيبورد كما هي', 'النسخة: Windows Server 2012 R2 Standard (Server with a GUI) لأنها تحتوي واجهة رسومية', 'نوع التنصيب: Custom ثم أنشئ القسم من المساحة غير المخصصة (New ثم Apply)', 'كلمة سر Administrator: P@ssw0rd (معقدة: حروف كبيرة وصغيرة وأرقام ورموز)', 'المحاكاة معالج موجّه وليست إقلاعاً حقيقياً من ISO.'],
     devs: [['Server', 'pc', { os: 'win', install: true }]],
     links: [], pos: { 'Server': [200, 90] },
     tasks: [
       T('Server', 'اللغة والكيبورد: اضغط Next ثم Install now', ['(واجهة رسومية) Next ثم Install now'], [{ k: 'win', d: 'Server', t: 'step', n: 2 }]),
-      T('Server', 'اختر النسخة Standard (Desktop Experience) ثم اقبل شروط الرخصة', ['(واجهة رسومية) اختر Desktop Experience ثم Next، علّم I accept ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 4 }]),
+      T('Server', 'اختر النسخة Standard (Server with a GUI) ثم اقبل شروط الرخصة', ['(واجهة رسومية) اختر Server with a GUI ثم Next، علّم I accept ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 4 }]),
       T('Server', 'اختر Custom: Install Windows only، ثم أنشئ القسم: New ثم Apply واختر Partition 2 (Primary) ثم Next', ['(واجهة رسومية) Custom ثم New ثم Apply ثم اختر Drive 0 Partition 2 ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 6 }]),
       T('Server', 'اضغط Restart now ثم اضبط كلمة سر Administrator: P@ssw0rd', ['(واجهة رسومية) Restart now ثم أدخل P@ssw0rd مرتين ثم Finish'], [{ k: 'win', d: 'Server', t: 'installed' }]),
       T('Server', 'سجّل الدخول بالمستخدم Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin' }])
@@ -7094,14 +7100,14 @@ var LABS = [
     id: 'win-basic', course: 'os-251', title: 'الإعدادات الأساسية للخادم: IP والمنطقة الزمنية والوقت والاسم', level: 'مبتدئ', min: 40, qn: 'السؤال 2',
     desc: 'بعد التنصيب: اضبط عنوان IP ثابت، المنطقة الزمنية والوقت، سطح المكتب البعيد، السماح بـ ping، ثم غيّر اسم الخادم وأعد التشغيل.',
     obj: ['يضبط عنوان IP ثابتاً للخادم.', 'يضبط الوقت والمنطقة الزمنية.', 'يغيّر اسم الحاسب ويعيد تشغيله.'],
-    info: ['Server: الدخول Administrator / P@ssw0rd', 'IP: 192.168.10.10 ، القناع 255.255.255.0 ، البوابة 192.168.10.1 ، DNS: 192.168.10.10', 'المنطقة الزمنية: Arab Standard Time (الرياض) ، التاريخ 2026-10-24 والوقت 22:30', 'الاسم الجديد: DC1', 'PC1: عميل ويندوز 10 (192.168.10.20) المستخدم student / P@ssw0rd للتأكد من الاتصال', 'من واجهة Server Manager ▸ Local Server اضغط على القيمة لتعديلها، أو استخدم PowerShell من زر PowerShell أعلى الشاشة (وgui للعودة).'],
+    info: ['Server: الدخول Administrator / P@ssw0rd', 'IP: 192.168.10.10 ، القناع 255.255.255.0 ، البوابة 192.168.10.1 ، DNS: 192.168.10.10', 'المنطقة الزمنية: Arab Standard Time (الرياض) ، التاريخ 2026-10-24 والوقت 22:30', 'الاسم الجديد: DC1', 'PC1: عميل ويندوز 8.1 (192.168.10.20) المستخدم student / P@ssw0rd للتأكد من الاتصال', 'من واجهة Server Manager ▸ Local Server اضغط على القيمة لتعديلها، أو استخدم PowerShell من زر PowerShell أعلى الشاشة (وgui للعودة).'],
     devs: [['Server', 'pc', { os: 'win' }], ['PC1', 'pc', { os: 'wclient', pcname: 'PC1', pre: ['ip:192.168.10.20/255.255.255.0/192.168.10.1/192.168.10.10', 'login'] }], S('SW1', ['F0/1', 'F0/2'])],
     links: [L('SW1', 'F0/1', 'Server', 'Fa0'), L('SW1', 'F0/2', 'PC1', 'Fa0')],
     pos: { 'Server': [110, 80], 'SW1': [260, 150], 'PC1': [410, 80] },
     tasks: [
       T('Server', 'سجّل الدخول بـ Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin' }]),
       T('Server', 'اضبط عنوان IP ثابتاً: 192.168.10.10/24 والبوابة 192.168.10.1 و DNS 192.168.10.10', ['New-NetIPAddress -InterfaceAlias Ethernet0 -IPAddress 192.168.10.10 -PrefixLength 24 -DefaultGateway 192.168.10.1', 'Set-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses 192.168.10.10', 'ipconfig /all'], [{ k: 'win', d: 'Server', t: 'ip', ip: '192.168.10.10', mask: '255.255.255.0', gw: '192.168.10.1', dns: '192.168.10.10' }]),
-      T('Server', 'اضبط المنطقة الزمنية Arab Standard Time', ['Get-TimeZone', 'Set-TimeZone -Id "Arab Standard Time"'], [{ k: 'win', d: 'Server', t: 'tz', v: 'Arab Standard Time' }]),
+      T('Server', 'اضبط المنطقة الزمنية Arab Standard Time', ['tzutil /g', 'tzutil /s "Arab Standard Time"'], [{ k: 'win', d: 'Server', t: 'tz', v: 'Arab Standard Time' }]),
       T('Server', 'اضبط تاريخ اليوم والوقت الحالي كما في جهازك (مثلاً 2026-11-08 الساعة 13:00)', ['Set-Date -Date "2026-10-24 22:30"', 'Get-Date'], [{ k: 'win', d: 'Server', t: 'time' }]),
       T('Server', 'فعّل سطح المكتب البعيد (Remote Desktop)', ['Set-ItemProperty -Path "HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server" -Name fDenyTSConnections -Value 0', 'Enable-NetFirewallRule -DisplayGroup "Remote Desktop"'], [{ k: 'win', d: 'Server', t: 'rdp' }]),
       T('PC1', 'من PC1: جرّب ping للخادم 192.168.10.10 (سيفشل لأن جدار الحماية يحجب ICMP)', ['ping 192.168.10.10'], [{ k: 'win', d: 'PC1', t: 'ran', c: '^ping 192' }]),
@@ -7147,7 +7153,7 @@ var LABS = [
     id: 'win-dhcp', course: 'os-251', title: 'خدمة DHCP على ويندوز سيرفر', level: 'متوسط', min: 50, qn: 'السؤال 5',
     desc: 'ثبّت دور DHCP، أكمل الإعداد واعتمد الخادم في Active Directory، أنشئ نطاق عناوين مع استثناءات وخيارات، ثم اجعل العميل يحصل على عنوان.',
     obj: ['يثبّت ويضبط خدمة DHCP.', 'ينشئ النطاق والاستثناءات والخيارات.', 'يتحقق من حصول العميل على عنوان.'],
-    info: ['DC1: 192.168.10.10 ، COLLEGE\\Administrator / P@ssw0rd', 'النطاق StudentsScope: من 192.168.10.100 إلى 192.168.10.200 والقناع 255.255.255.0', 'استثناء: من 192.168.10.100 إلى 192.168.10.110', 'الخيارات: Router 192.168.10.1 ، DNS 192.168.10.10 ، النطاق college.local', 'PC1: عميل ويندوز 10 مضبوط DHCP ، student / P@ssw0rd', 'الخادم في نطاق AD لا يمنح عناوين قبل اعتماده (Authorize).'],
+    info: ['DC1: 192.168.10.10 ، COLLEGE\\Administrator / P@ssw0rd', 'النطاق StudentsScope: من 192.168.10.100 إلى 192.168.10.200 والقناع 255.255.255.0', 'استثناء: من 192.168.10.100 إلى 192.168.10.110', 'الخيارات: Router 192.168.10.1 ، DNS 192.168.10.10 ، النطاق college.local', 'PC1: عميل ويندوز 8.1 مضبوط DHCP ، student / P@ssw0rd', 'الخادم في نطاق AD لا يمنح عناوين قبل اعتماده (Authorize).'],
     devs: [['DC1', 'pc', { os: 'win', pre: ['named', 'ip:192.168.10.10/255.255.255.0/192.168.10.1/192.168.10.10', 'tz', 'dc:college.local', 'icmp', 'login'] }], ['PC1', 'pc', { os: 'wclient', pcname: 'PC1', pre: ['login'] }], S('SW1', ['F0/1', 'F0/2'])],
     links: [L('SW1', 'F0/1', 'DC1', 'Fa0'), L('SW1', 'F0/2', 'PC1', 'Fa0')],
     pos: { 'DC1': [110, 80], 'SW1': [260, 150], 'PC1': [410, 80] },
@@ -7228,7 +7234,7 @@ var LABS = [
     mk: [6, 6, 6, 6, 6, 3, 3, 4, 2, 4, 4, 5, 5, 4, 4, 6, 6, 4, 6, 1, 2, 4, 3],
     tasks: [
       T('Server', 'التنصيب: اللغة والكيبورد — اضغط Next ثم Install now', ['(واجهة رسومية) Next ثم Install now'], [{ k: 'win', d: 'Server', t: 'step', n: 2 }]),
-      T('Server', 'التنصيب: اختر النسخة Standard (Desktop Experience) واقبل شروط الرخصة', ['(واجهة رسومية) اختر Desktop Experience ثم Next، علّم I accept ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 4 }]),
+      T('Server', 'التنصيب: اختر النسخة Standard (Server with a GUI) واقبل شروط الرخصة', ['(واجهة رسومية) اختر Server with a GUI ثم Next، علّم I accept ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 4 }]),
       T('Server', 'التنصيب: Custom ثم أنشئ القسم (New ثم Apply) واختر Partition 2 ثم Next', ['(واجهة رسومية) Custom ثم New ثم Apply ثم Partition 2 ثم Next'], [{ k: 'win', d: 'Server', t: 'step', n: 6 }]),
       T('Server', 'اضغط Restart now ثم اضبط كلمة سر Administrator: P@ssw0rd', ['(واجهة رسومية) Restart now ثم أدخل P@ssw0rd مرتين ثم Finish'], [{ k: 'win', d: 'Server', t: 'installed' }]),
       T('Server', 'سجّل الدخول بالمستخدم Administrator وكلمة السر P@ssw0rd', ['(واجهة رسومية) Sign in'], [{ k: 'win', d: 'Server', t: 'loggedin' }]),
@@ -7946,11 +7952,11 @@ var LEARN = [
       ['p', 'ويندوز سيرفر نظام تشغيل مخصص للخوادم. وظيفته أن يقدّم <b>خدمات</b> لباقي الأجهزة (العملاء)، وكل خدمة تُسمّى <b>دوراً (Role)</b>.'],
       ['ul', ['<b>AD DS</b> (Active Directory): قاعدة بيانات مركزية للمستخدمين والأجهزة وتسجيل الدخول.', '<b>DNS</b>: يحوّل الأسماء إلى عناوين IP (مثل dc1.college.local).', '<b>DHCP</b>: يوزّع عناوين IP تلقائياً على الأجهزة.', '<b>File Services</b>: مشاركة الملفات والمجلدات.', '<b>Web Server (IIS)</b>: استضافة المواقع.']],
       ['h', 'نسختان عند التنصيب'],
-      ['ul', ['<b>Desktop Experience</b>: بواجهة رسومية (نستخدمها في التدريب).', '<b>Server Core</b>: بلا واجهة، يُدار بـ PowerShell فقط، أخف وأكثر أماناً.']],
+      ['ul', ['<b>Server with a GUI</b>: بواجهة رسومية (نستخدمها في التدريب).', '<b>Server Core Installation</b>: بلا واجهة، يُدار بـ PowerShell فقط، أخف وأكثر أماناً.']],
       ['tip', 'اللوحة الرئيسية لإدارة الخادم اسمها <b>Server Manager</b> وتفتح تلقائياً بعد الدخول.']
     ] },
     { id: 'ws-install', title: 'تنصيب ويندوز سيرفر خطوة بخطوة', min: 8, lab: 'win-install', b: [
-      ['ol', ['<b>Language / Keyboard:</b> اترك الافتراضي ثم Next ثم <b>Install now</b>.', '<b>اختيار النظام:</b> Standard (Desktop Experience) للحصول على واجهة رسومية.', '<b>الرخصة:</b> علّم I accept ثم Next.', '<b>نوع التنصيب:</b> Custom: Install Windows only (Upgrade لا يصلح على جهاز جديد).', '<b>القرص:</b> اختر المساحة غير المخصصة ثم <b>New</b> ثم <b>Apply</b>، واختر القسم الأساسي Primary ثم Next.', '<b>النسخ وإعادة التشغيل:</b> ينسخ الملفات ثم يعيد التشغيل.', '<b>كلمة سر Administrator:</b> يجب أن تكون معقدة.']],
+      ['ol', ['<b>Language / Keyboard:</b> اترك الافتراضي ثم Next ثم <b>Install now</b>.', '<b>اختيار النظام:</b> Standard (Server with a GUI) للحصول على واجهة رسومية.', '<b>الرخصة:</b> علّم I accept ثم Next.', '<b>نوع التنصيب:</b> Custom: Install Windows only (Upgrade لا يصلح على جهاز جديد).', '<b>القرص:</b> اختر المساحة غير المخصصة ثم <b>New</b> ثم <b>Apply</b>، واختر القسم الأساسي Primary ثم Next.', '<b>النسخ وإعادة التشغيل:</b> ينسخ الملفات ثم يعيد التشغيل.', '<b>كلمة سر Administrator:</b> يجب أن تكون معقدة.']],
       ['p', 'كلمة السر المعقدة: ثمانية أحرف على الأقل، وتحوي ثلاثة أنواع من (حرف كبير، حرف صغير، رقم، رمز). مثال: <code>P@ssw0rd</code>.'],
       ['tip', 'بعد التنصيب تظهر شاشة الدخول: اكتب Administrator وكلمة السر ثم Sign in.'],
       ['warn', 'المحاكاة معالج موجّه وليست إقلاعاً حقيقياً من ISO.']
@@ -7961,7 +7967,7 @@ var LEARN = [
       ['p', 'الخادم يجب أن يكون عنوانه ثابتاً لأن العملاء يعتمدون عليه. بالرسومي: Ethernet0 ▸ Properties ▸ IPv4. وبـ PowerShell:'],
       ['code', 'New-NetIPAddress -InterfaceAlias Ethernet0 -IPAddress 192.168.10.10 -PrefixLength 24 -DefaultGateway 192.168.10.1\nSet-DnsClientServerAddress -InterfaceAlias Ethernet0 -ServerAddresses 192.168.10.10\nipconfig /all'],
       ['h', 'الوقت والمنطقة الزمنية'],
-      ['code', 'Set-TimeZone -Id "Arab Standard Time"\nSet-Date -Date "2026-10-24 22:30"\nGet-Date'],
+      ['code', 'tzutil /s "Arab Standard Time"\ntzutil /g\nSet-Date -Date "2026-10-24 22:30"\nGet-Date'],
       ['tip', 'الوقت مهم جداً في Active Directory: إن زاد الفرق بين الأجهزة عن 5 دقائق فشل تسجيل الدخول (Kerberos).'],
       ['h', 'اسم الحاسب'],
       ['code', 'Rename-Computer -NewName DC1\nRestart-Computer'],
@@ -8303,7 +8309,7 @@ function startLab(lab) {
 function greet(n) {
   var d = CUR.lab.devs[n];
   if (d.win && (d.win.kind === 'ubuntu' || d.win.kind === 'pcb' || d.win.kind === 'w7')) return;
-  if (d.win) { EMIT(d, 'Windows PowerShell', ''); EMIT(d, 'Copyright (C) Microsoft Corporation. All rights reserved.', ''); EMIT(d, '', ''); return; }
+  if (d.win) { EMIT(d, 'Windows PowerShell', ''); EMIT(d, 'Copyright (C) 2014 Microsoft Corporation. All rights reserved.', ''); EMIT(d, '', ''); return; }
   if (d.os) { lxGreet(d); return; }
   if (d.type === 'pc') { EMIT(d, d.name + ' - Command Prompt', 'dim'); EMIT(d, 'مثال: ip 192.168.1.10 255.255.255.0 192.168.1.1' + (CUR.lab.def.id === 'asa-vpn' ? '   |   VPN: vpn connect <IP> <group> <key> <user> <password>' : ''), 'dim'); EMIT(d, '', ''); return; }
   if (d.type === 'asa') { EMIT(d, 'Type help or \'?\' for a list of available commands.', 'dim'); EMIT(d, '', ''); return; }
@@ -10891,13 +10897,16 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     try { if (L && !L.def.exam && L.done.size > before) ev('task', { lab: L.def.id || '', c: labCourse(L.def), n: L.done.size - before, of: L.def.tasks.length, all: L.done.size === L.def.tasks.length ? 1 : 0 }); } catch (e) { }
     return r;
   };
-  /* النتائج تُرسل للخادم بدل الخدمة العامة */
+  /* النتائج تُحفظ في الخادم (ورقة results) وتُرسل أيضاً لقناة الاختبار حتى تظهر في «استيراد النتائج» عند المدرّب */
   sendResult = function (P, rec) {
     if (rec.pv || EX.pv) return;
     var st = function (t, c) { var x = document.getElementById('exSend'); if (x) { x.textContent = t; x.className = 'note ' + c; } };
     st('جارٍ إرسال درجتك للمدرب…', '');
-    post({ k: 'res', e: P.e, q: P.q || '', i: rec.i, sub: rec.sub }).then(function () { rec.sent = 1; saveRec(rec); st('تم إرسال درجتك للمدرب تلقائياً ✔', 'exok'); ev('exam', { lab: P.l, sc: rec.sc, of: rec.N }); })
-      .catch(function () { st('تعذّر الإرسال (تحقق من الإنترنت). اضغط «إعادة الإرسال».', 'exbad'); });
+    var jobs = [post({ k: 'res', e: P.e, q: P.q || '', i: rec.i, sub: rec.sub })];
+    if (P.q) jobs.push(fetch('https://ntfy.sh/' + P.q, { method: 'POST', body: rec.sub }).then(function (r) { if (!r.ok) throw 0; }));
+    var left = jobs.length, ok = false;
+    var fin = function () { if (--left) return; if (ok) { rec.sent = 1; saveRec(rec); st('تم إرسال درجتك للمدرب تلقائياً ✔', 'exok'); ev('exam', { lab: P.l, sc: rec.sc, of: rec.N }); } else st('تعذّر الإرسال (تحقق من الإنترنت). اضغط «إعادة الإرسال».', 'exbad'); };
+    jobs.forEach(function (j) { j.then(function () { ok = true; fin(); }, fin); });
   };
 })();
 
