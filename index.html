@@ -572,11 +572,13 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 .rp-task{border:1px solid #c9d2da;border-radius:6px;margin:8px 0;break-inside:avoid;overflow:hidden}.rp-th{display:flex;align-items:center;gap:8px;background:#eef2f6;padding:7px 8px}.rp-n{flex:none;width:26px;height:26px;border-radius:50%;background:#0B1626;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.rp-tt{flex:1;font-size:13px;line-height:1.5}.rp-tm{flex:none;font-size:12px;font-weight:700;color:#0B1626}.rp-cb{flex:none;font-size:20px;line-height:1}.rp-st{padding:6px 8px;font-size:12px}.rp-st pre{margin-top:4px}
 
 .qbar{flex:none;display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--gold);border-radius:12px;padding:4px 6px;margin-bottom:6px}
-.qbar button{flex:none;width:34px;height:34px;min-height:0;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.3rem;line-height:1}
+.qbar button{direction:ltr;unicode-bidi:isolate;flex:none;width:34px;height:34px;min-height:0;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:1.3rem;line-height:1}
 .qmid{flex:1;min-width:0;cursor:pointer}.qmid b{font-size:.72rem;color:var(--muted);font-weight:600}
 .qtxt{font-size:.84rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
 .qbar.open .qtxt{display:block;-webkit-line-clamp:unset;max-height:min(34dvh,200px);overflow:auto}
 .qbar.qdone{border-inline-start-color:var(--ok)}
+.qbar #qDev{direction:rtl;width:auto;height:22px;padding:0 9px;margin-inline-start:6px;font-family:inherit;font-weight:700;font-size:.74rem;line-height:1;border-radius:999px;vertical-align:middle;color:var(--fg)}
+.qbar #qDev.go{background:var(--gold);border-color:var(--gold);color:#1b1300}
 #pcsheet{position:fixed;inset:0;z-index:9100;background:rgba(11,22,38,.55);display:flex;align-items:flex-end;justify-content:center}
 .pcs-card{background:var(--surface);color:var(--fg);width:min(100%,460px);border-radius:20px 20px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 30px rgba(0,0,0,.25);max-height:88dvh;overflow:auto}
 @media(min-width:620px){#pcsheet{align-items:center}.pcs-card{border-radius:20px}}
@@ -837,7 +839,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="grid">
       <div class="pane" data-pane="term">
         <div class="devtabs" id="devTabs" role="tablist"></div>
-        <div class="qbar" id="qbar" hidden><button type="button" id="qPrev" aria-label="المهمة السابقة">›</button><div class="qmid"><b id="qNum"></b><div id="qTxt" class="qtxt"></div></div><button type="button" id="qNext" aria-label="المهمة التالية">‹</button></div>
+        <div class="qbar" id="qbar" hidden><button type="button" id="qPrev" aria-label="المهمة السابقة">›</button><div class="qmid"><b id="qNum"></b><button type="button" id="qDev" hidden></button><div id="qTxt" class="qtxt"></div></div><button type="button" id="qNext" aria-label="المهمة التالية">‹</button></div>
         <div class="miniwrap" id="miniWrap"><div class="zctl"><button type="button" data-zt="mini" data-zoom="in" aria-label="تكبير">+</button><button type="button" data-zt="mini" data-zoom="out" aria-label="تصغير">−</button><button type="button" data-zt="mini" data-zoom="fit">ملاءمة</button><button type="button" id="diagBig" style="margin-inline-start:auto">كبّر الرسم</button><button type="button" id="termBig">كبّر الطرفية</button></div><div class="mini" id="miniTopo" aria-label="مخطط الشبكة"></div></div>
         <div class="wui" id="wui" hidden></div>
         <div class="term" id="term" role="log" aria-live="polite" tabindex="0"><div id="termOut"></div><div class="live" id="live" aria-hidden="true"></div></div>
@@ -7428,7 +7430,7 @@ function ifaceSection(d, n) {
   return out.join('\n').toLowerCase().replace(/[ \t]+/g, ' ');
 }
 /* عزل المقاطع اللاتينية (عناوين IP والمنافذ والأوامر) داخل النص العربي حتى لا ينقلب ترتيبها */
-function bd(x) { return String(x).replace(/[A-Za-z0-9][A-Za-z0-9.\/:_()\-]*(?: [A-Za-z0-9][A-Za-z0-9.\/:_()\-]*)*/g, function (m) { return '\u2066' + m + '\u2069'; }); }
+function bd(x) { return String(x).replace(/[A-Za-z0-9][A-Za-z0-9.\/:_()\-]*(?: [A-Za-z0-9][A-Za-z0-9.\/:_()\-]*)*/g, function (m) { var t = /[.:,]+$/.exec(m), e = t ? t[0] : ''; if (e && m.length > e.length) m = m.slice(0, -e.length); else e = ''; return '\u2066' + m + '\u2069' + e; }); }
 function evalCheck(l, c, ti) {
   if (c.k === 'form') return !!(l.formOk && l.formOk[ti]);
   var d = l.devs[c.d]; if (!d) return false;
@@ -8850,13 +8852,16 @@ function qRender() {
   }
   var t = tasks[QI], done = lab.done.has(QI);
   document.getElementById('qNum').textContent = (QI + 1) + '/' + tasks.length;
-  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + bd(t.t); bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
+  var m = /^([A-Za-z][\w-]*):\s*/.exec(t.t), dv = m && lab.devs[m[1]] && lab.order.length > 1 ? m[1] : '', qd = document.getElementById('qDev');
+  qd.hidden = !dv; if (dv) { var here = CUR.dev && CUR.dev.name === dv; qd.textContent = here ? dv : 'انتقل إلى ' + dv + ' ←'; qd.classList.toggle('go', !here); qd.setAttribute('data-go', dv); }
+  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + bd(dv ? t.t.slice(m[0].length) : t.t); bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
   applyFix();
 }
 document.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('#qbar') && document.body.classList.contains('lab-kb')) e.preventDefault(); });
 document.addEventListener('click', function (e) {
   var b = e.target.closest && e.target.closest('#qbar'); if (!b) return;
   var n = CUR.lab ? CUR.lab.def.tasks.length : 0, id = e.target.closest('button') ? e.target.closest('button').id : '';
+  if (id === 'qDev') { var g = e.target.closest('button').getAttribute('data-go'), tb = document.querySelector('#devTabs [data-d="' + g + '"]'); if (tb) tb.click(); qRender(); return; }
   if (id === 'qPrev') { QI = (QI - 1 + n) % n; QMAN = true; }
   else if (id === 'qNext') { QI = (QI + 1) % n; QMAN = true; }
   else QOPEN = !QOPEN;
@@ -9259,7 +9264,7 @@ function setZoom(which, z, cx, cy) {
     box.scrollLeft = qx * z - cx; box.scrollTop = qy * z - cy; return;
   }
   if (!svg || !lab || !lab._tp) return;
-  z = Math.max(0.3, Math.min(3, z));
+  z = Math.max(0.12, Math.min(3, z));
   var old = ZOOM[which]; if (cx === undefined) { cx = box.clientWidth / 2; cy = box.clientHeight / 2; }
   var mg = mgOf(box), px = (box.scrollLeft + cx - mg.x) / old, py = (box.scrollTop + cy - mg.y) / old;
   ZOOM[which] = z;
@@ -9270,7 +9275,8 @@ function fitZoom(which) {
   if (CUR.lab && CUR.lab.def.free && which === 'topo') { setZoom('topo', 1); var bx = $('#topo'); bx.scrollLeft = 0; bx.scrollTop = 0; return; }
   var box = $(which === 'mini' ? '#miniTopo' : '#topo'), lab = CUR.lab; if (!box || !lab || !lab._tp) return;
   var zw = (box.clientWidth - 4) / lab._tp.vw, zh = which === 'mini' ? (box.clientHeight - 4) / lab._tp.vh : 9;
-  setZoom(which, Math.min(zw, zh)); var mg2 = mgOf(box); box.scrollLeft = mg2.x; box.scrollTop = mg2.y; ZOOM._f[which] = true;
+  setZoom(which, Math.min(zw, zh)); var mg2 = mgOf(box), zz = ZOOM[which];
+  box.scrollLeft = Math.max(0, mg2.x - Math.max(0, (box.clientWidth - lab._tp.vw * zz) / 2)); box.scrollTop = which === 'mini' ? Math.max(0, mg2.y - Math.max(0, (box.clientHeight - lab._tp.vh * zz) / 2)) : mg2.y; ZOOM._f[which] = true;
 }
 ['mini', 'topo'].forEach(function (which) {
   var box = $(which === 'mini' ? '#miniTopo' : '#topo'), g = null;
