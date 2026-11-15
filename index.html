@@ -4925,7 +4925,7 @@ function wuiRender(d) {
   var top = '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + (W.stage === 'desktop' && W.sess ? ' · ' + esc((W.sess.domain || '') + '\\' + W.sess.user) : '') + '</span>' +
     '<a class="wtb2" data-wa="drawer">☰ المهام</a>' + (W.full === false ? '<a class="wtb2" data-wa="fullon">⛶</a>' : '<a class="wtb2" data-wa="fullx">✕ خروج</a>') + '</div>';
   var full = W.full !== false, tp = '';
-  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' : '';
+  var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + '</span>' + (window.xqParts ? xqParts() : '') + '<a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' + (window.xqTask ? xqTask() : '') : '';
   var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">لوحة اللمس · حرّك إصبعك = مؤشر · نقرة = ضغط · إصبعان = تمرير</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : '<div class="wnf">' + top + '<div class="wnfv" id="wnfv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '</div><div class="wled"></div></div></div></div>' + extra + '</div>'; };
   if (W.bootUntil && Date.now() < W.bootUntil) return wrapMon('<div class="wx0">' + tp + '<div class="wboot"><div class="wspin"></div><p>Restarting…</p></div></div>', '');
   if (W.kind === 'ubuntu') h = ubScreen(d);
@@ -8841,7 +8841,7 @@ var QI = -1, QOPEN = false, QMAN = false, QLAB = null;
 function qRender() {
   var bar = document.getElementById('qbar'); if (!bar) return;
   var lab = CUR.lab, tasks = lab && lab.def.tasks || [];
-  var show = !!lab && tasks.length && !(CUR.dev && CUR.dev.win);
+  var show = !!lab && tasks.length;
   bar.hidden = !show; if (!show) { applyFix(); return; }
   if (QLAB !== lab) { QLAB = lab; QI = -1; QMAN = false; QOPEN = false; }
   if (QI < 0 || QI >= tasks.length || (!QMAN && lab.done.has(QI))) {
@@ -9916,7 +9916,10 @@ $('#cmd').addEventListener('input', function (e) {
 
 /* ---- result code ---- */
 function buildResult(P, rec, t1) {
-  var lab = headlessLab(P, rec), N = lab.def.tasks.length, k = Array.from(lab.done).sort(function (a, b) { return a - b; });
+  var lab = headlessLab(P, rec), N = lab.def.tasks.length, k = Array.from(lab.done);
+  /* المهام المنجزة بالواجهة الرسومية لا تُسجَّل كأوامر، فنضيف ما تحقق فعلياً أثناء الحل */
+  (rec.kd || []).forEach(function (i) { if (i >= 0 && i < N && k.indexOf(i) < 0) k.push(i); });
+  k.sort(function (a, b) { return a - b; });
   var R = { v: 1, e: P.e, xs: examSig(P), pv: rec.pv ? 1 : 0, i: rec.i, n: rec.n || '', l: P.l, d: P.d, a: P.a, b: P.b, t0: rec.s, t1: t1, dv: rec.dv, k: k, N: N, ps: rec.ps || 0, cm: rec.cm.slice(0, 700) };
   var b = b64e(JSON.stringify(R));
   return { code: 'NL1.' + b + '.' + sign(b), score: k.length, N: N };
@@ -9959,7 +9962,7 @@ function startRun(P, rec, pv) {
   EX.active = true; EX.P = P; EX.s = rec; EX.pv = !!pv; EX.pasteFlag = 0;
   document.body.classList.add('exam');
   var def = variantDef(P, rec.i);
-  openLab(null, def, function (lab) { replayInto(lab, rec.cm); });
+  openLab(null, def, function (lab) { replayInto(lab, rec.cm); (rec.kd || []).forEach(function (i) { if (i < lab.def.tasks.length) lab.done.add(i); }); });
   $('#exbar').hidden = false;
   $('#exWho').textContent = rec.i + (rec.n ? ' · ' + rec.n : '') + (pv ? ' · تجربة' : '');
   clearInterval(EX.timer); EX.timer = setInterval(tick, 1000); tick();
@@ -10136,7 +10139,9 @@ function analyze(text, rosterTxt, max) {
     var g0 = reg.filter(function (x) { return x.e === R.e; })[0];
     if (g0 && g0.P && Array.isArray(R.cm)) {
       try {
-        var kk = Array.from(headlessLab(g0.P, { i: R.i, cm: R.cm }).done).sort(function (a, b) { return a - b; });
+        var kk = Array.from(headlessLab(g0.P, { i: R.i, cm: R.cm }).done);
+        (R.k || []).forEach(function (i) { if (kk.indexOf(i) < 0) kk.push(i); }); /* مهام الواجهة الرسومية */
+        kk.sort(function (a, b) { return a - b; });
         if (kk.join(',') !== (R.k || []).join(',')) {
           if (R.cm.length >= 700 && kk.length < (R.k || []).length) add('سجل الأوامر طويل؛ تعذر التحقق الكامل من الدرجة', 'w');
           else { add('الدرجة في الرمز (' + (R.k || []).length + ') لا تطابق الأوامر المنفذة؛ اعتُمدت ' + kk.length, 'r'); R.k = kk; }
@@ -11828,6 +11833,20 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   var MEM = {}, _lr = loadRec;
   loadRec = function (e) { return MEM[e] || _lr(e); };
   function keep(rec) { if (rec.pv) MEM[rec.e] = rec; else saveRec(rec); }
+  /* نحفظ المهام المتحققة أولاً بأول (تشمل ما يُنجز بالواجهة الرسومية) ونبقي المعمل حياً عند التنقل */
+  var LIVE = {}, _ct = checkTasks;
+  checkTasks = function () {
+    var r = _ct.apply(this, arguments);
+    try { if (EX.active && EX.s && EX.P && EX.P.bx && CUR.lab) { var kd = Array.from(CUR.lab.done); if (kd.join() !== (EX.s.kd || []).join()) { EX.s.kd = kd; keep(EX.s); } } } catch (e) { }
+    return r;
+  };
+  function leavePart() {
+    if (!EX.active) return;
+    try { if (CUR.lab && EX.s) { EX.s.kd = Array.from(CUR.lab.done); keep(EX.s); LIVE[EX.s.e] = CUR.lab; } } catch (e) { }
+    clearInterval(EX.timer); EX.active = false; EX.s = null; document.body.classList.remove('exam', 'lab-kb');
+    $('#exbar').hidden = true; CUR.lab = null; CUR.dev = null;
+  }
+  function endAll(B) { var st = state(B); st.end = Date.now(); setState(B, st); menu(B); }
 
   var _rg = renderGate;
   renderGate = function (P, pv) {
@@ -11875,52 +11894,99 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   function menu(B) {
     var st = state(B); if (!st) return gate(B, false);
     CURB = B.e; EX.gate = null;
-    var now = Date.now(), over = now >= st.dl || st.end, rows = '', got = 0, allDone = true;
+    var now = Date.now(), fin = now >= st.dl || !!st.end, rows = '', got = 0, unsent = false, sending = false;
     B.parts.forEach(function (p, k) {
-      var Pk = partP(B, k), rec = loadRec(Pk.e);
-      if (over && rec && !rec.sub) closePart(Pk, rec);
-      var L = labOf(p.l), r = partRes(Pk, rec), act;
-      if (r && r.R) { var g = earned(Pk, r.R.k); got += g; act = '<b class="exok">سُلّم: ' + g + ' من ' + p.w + '</b>' + (rec.pv ? '' : rec.sent ? ' <span class="note exok">✔ وصل للمدرب</span>' : Date.now() - (rec.subAt || 0) < 8000 ? ' <span class="note">جارٍ الإرسال…</span>' : ' <button class="btn" data-bx="resend" data-k="' + k + '">إعادة الإرسال</button>'); }
-      else if (over) { act = '<span class="exbad">لم يُحل (0 من ' + p.w + ')</span>'; }
-      else { allDone = false; act = '<button class="btn pri" data-bx="part" data-k="' + k + '">' + (rec ? 'متابعة' : 'ابدأ') + '</button>'; }
+      var Pk = partP(B, k), rec = loadRec(Pk.e), L = labOf(p.l), n = Pk.m.length, act;
+      if (fin && rec && !rec.sub) closePart(Pk, rec);
+      if (fin) {
+        var r = partRes(Pk, rec), g = r && r.R ? earned(Pk, r.R.k) : 0; got += g;
+        act = r && r.R ? '<b>' + g + ' من ' + p.w + '</b> <span class="note">(' + r.R.k.length + ' من ' + n + ' مهام)</span>' : '<span class="exbad">لم يُفتح (0 من ' + p.w + ')</span>';
+        if (rec && rec.sub && !rec.pv && !rec.sent) { if (now - (rec.subAt || 0) < 8000) sending = true; else unsent = true; }
+      } else {
+        var kd = rec && rec.kd ? rec.kd.length : 0;
+        act = '<span class="note">' + (rec ? 'أنجزت ' + kd + ' من ' + n + ' مهام' : 'لم يُفتح بعد') + '</span> <button class="btn pri" data-bx="part" data-k="' + k + '">' + (rec ? 'متابعة' : 'فتح') + '</button>';
+      }
       rows += '<tr><td>' + (k + 1) + '. ' + esc(L ? L.title : p.l) + '</td><td class="num">' + p.w + '</td><td>' + act + '</td></tr>';
     });
-    var fin = over || allDone, left = Math.max(0, Math.ceil((st.dl - now) / 60000));
+    var left = Math.max(0, Math.ceil((st.dl - now) / 60000)), sendTxt = st.pv ? '' : sending ? '<p class="note">جارٍ إرسال درجتك للمدرب…</p>' : unsent ? '<p class="note exbad">ما وصلت درجتك للمدرب بعد. <button class="btn" data-bx="resend">إعادة الإرسال</button></p>' : '<p class="note exok">✔ وصلت درجتك للمدرب</p>';
     show('examS');
     $('#examS').innerHTML = '<div class="labhead"><h2>' + esc(B.t) + (st.pv ? ' <small>(تجربة المدرّب)</small>' : '') + '</h2></div><div class="panel">' +
       '<p style="margin-top:0">الرقم <b dir="ltr">' + esc(st.i) + '</b>' + (st.n ? ' — ' + esc(st.n) : '') + (fin ? '' : ' — الوقت المتبقي: <b>' + left + '</b> دقيقة') + '</p>' +
-      (fin ? '<div class="exbig exok">انتهى الاختبار — درجتك ' + r2(got) + ' من ' + total(B) + '</div>' : '<p class="note">حل كل معمل واضغط «تسليم» داخله. تقدر تحل المعامل بأي ترتيب، وترجع للقائمة من زر «القائمة».</p>') +
-      '<div class="tblwrap"><table class="extbl"><thead><tr><th>المعمل</th><th>الدرجة</th><th>الحالة</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-      '<div class="row2" style="margin-top:10px">' + (fin ? '<button class="btn pri" data-bx="rep">📄 تقرير الاختبار (حفظ PDF)</button>' : '<button class="btn" data-bx="end">إنهاء الاختبار وتسليم الكل</button>') + '<button class="btn" data-act="home">الرئيسية</button></div>' +
+      (fin ? '<div class="exbig exok">انتهى الاختبار — درجتك ' + r2(got) + ' من ' + total(B) + '</div>' + sendTxt : '<p class="note">افتح أي معمل وحل مهامه، وتنقّل بين المعامل من الأزرار م1، م2… أعلى الشاشة. شغلك ينحفظ أول بأول. لما تخلص كل شي اضغط «إنهاء الاختبار وإرسال» مرة وحدة.</p>') +
+      '<div class="tblwrap"><table class="extbl"><thead><tr><th>المعمل</th><th>الدرجة</th><th>' + (fin ? 'النتيجة' : 'التقدم') + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div class="row2" style="margin-top:10px">' + (fin ? '<button class="btn pri" data-bx="rep">📄 تقرير الاختبار (حفظ PDF)</button>' : '<button class="btn pri" data-bx="end">إنهاء الاختبار وإرسال</button>') + '<button class="btn" data-act="home">الرئيسية</button></div>' +
       (fin ? '<p class="note">افتح التقرير واضغط «طباعة / حفظ PDF» واحفظه عندك.</p>' : '') + '</div>';
     var box = $('#examS');
     box.querySelectorAll('[data-bx]').forEach(function (b) {
       b.onclick = function () {
         var a = b.getAttribute('data-bx'), k = +b.getAttribute('data-k');
         if (a === 'part') startPart(B, k);
-        else if (a === 'resend') { var Pk = partP(B, k); sendResult(Pk, loadRec(Pk.e)); setTimeout(function () { menu(B); }, 2500); }
-        else if (a === 'end') { if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'متأكد؟ اضغط مرة ثانية'; return; } st.end = Date.now(); setState(B, st); menu(B); }
+        else if (a === 'resend') { B.parts.forEach(function (p, j) { var Pk = partP(B, j), rc = loadRec(Pk.e); if (rc && rc.sub && !rc.sent) { rc.subAt = Date.now(); sendResult(Pk, rc); } }); menu(B); setTimeout(function () { if (CURB === B.e) menu(B); }, 8500); }
+        else if (a === 'end') { if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'متأكد؟ اضغط مرة ثانية للإرسال'; return; } endAll(B); setTimeout(function () { if (CURB === B.e) menu(B); }, 8500); }
         else if (a === 'rep') openReport(null, report(B, st, null));
       };
     });
   }
   function startPart(B, k) {
+    if (EX.active) leavePart();
     var st = state(B), Pk = partP(B, k), rec = loadRec(Pk.e);
+    if (!st || st.end || Date.now() >= st.dl) return menu(B);
     if (!rec) { rec = { e: Pk.e, i: st.i, n: st.n, s: Date.now(), dl: st.dl, cm: [], ps: 0, dv: EXDEV, pv: st.pv ? 1 : 0, sub: null }; keep(rec); }
     if (rec.sub) return menu(B);
     EX.gate = { P: Pk, pv: !!st.pv };
-    startRun(Pk, rec, !!st.pv);
-    var bar = $('#exbar');
-    if (!$('#exMenu')) $('#exSubmit').insertAdjacentHTML('beforebegin', '<button type="button" class="btn" id="exMenu">القائمة</button>');
-    $('#exMenu').hidden = false;
-    $('#exMenu').onclick = function () {
-      clearInterval(EX.timer); EX.active = false; EX.s = null; document.body.classList.remove('exam', 'lab-kb');
-      bar.hidden = true; CUR.lab = null; CUR.dev = null; menu(B);
+    var live = LIVE[Pk.e];
+    if (live) {
+      /* نرجع لنفس المعمل كما تركه (بما فيه شغل الواجهة الرسومية) بدل إعادة بنائه */
+      EX.active = true; EX.P = Pk; EX.s = rec; EX.pv = !!st.pv; EX.pasteFlag = 0; document.body.classList.add('exam');
+      var _bl = buildLab; buildLab = function () { buildLab = _bl; return live; };
+      try { openLab(null, live.def); } finally { buildLab = _bl; }
+      $('#exbar').hidden = false; $('#exWho').textContent = rec.i + (rec.n ? ' · ' + rec.n : '') + (st.pv ? ' · تجربة' : '');
+      clearInterval(EX.timer); EX.timer = setInterval(tick, 1000); tick(); applyFix();
+    } else startRun(Pk, rec, !!st.pv);
+    partBar(B, k);
+  }
+  function partBar(B, k) {
+    var sb = $('#exSubmit'); sb.hidden = true;
+    var c = $('#exParts');
+    if (!c) { sb.insertAdjacentHTML('beforebegin', '<span id="exParts" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-inline-start:auto"></span>'); c = $('#exParts'); }
+    c.hidden = false;
+    c.innerHTML = B.parts.map(function (p, i) { var L = labOf(p.l); return '<button type="button" class="btn' + (i === k ? ' pri' : '') + '" data-xp="' + i + '" title="' + esc(L ? L.title : p.l) + '" aria-pressed="' + (i === k) + '">م' + (i + 1) + '</button>'; }).join('') +
+      '<button type="button" class="btn" data-xp="menu">القائمة</button><button type="button" class="btn pri" data-xp="end">إنهاء وإرسال</button>';
+    c.onclick = function (e) {
+      var b = e.target.closest('[data-xp]'); if (!b) return; var a = b.getAttribute('data-xp');
+      if (a === 'menu') { leavePart(); menu(B); }
+      else if (a === 'end') {
+        if (!b.getAttribute('data-sure')) { b.setAttribute('data-sure', '1'); b.textContent = 'متأكد؟ اضغط مرة ثانية'; setTimeout(function () { b.removeAttribute('data-sure'); b.textContent = 'إنهاء وإرسال'; }, 4000); return; }
+        leavePart(); endAll(B); setTimeout(function () { if (CURB === B.e) menu(B); }, 8500);
+      }
+      else if (+a !== k) startPart(B, +a);
     };
   }
-  /* أي اختبار عادي يخفي زر القائمة */
+  /* في شاشة ويندوز الكاملة: أزرار المعامل + المهمة الحالية في الشريط العلوي */
+  window.xqParts = function () {
+    if (!(EX.active && EX.P && EX.P.bx)) return '';
+    var B = lg(BXP + EX.P.bx, null), cur = partOfE(EX.P.e); if (!B || !cur) return '';
+    return B.parts.map(function (p, i) { return '<a class="wtb2" data-xq="p" data-i="' + i + '" style="' + (i === cur.k ? 'background:#fff;color:#0b1626;font-weight:700' : '') + '">م' + (i + 1) + '</a>'; }).join('') + '<a class="wtb2" data-xq="menu">القائمة</a>';
+  };
+  window.xqTask = function () {
+    var lab = CUR.lab, ts = lab && lab.def.tasks || []; if (!ts.length) return '';
+    if (QLAB !== lab) { QLAB = lab; QI = -1; QMAN = false; }
+    if (QI < 0 || QI >= ts.length || (!QMAN && lab.done.has(QI))) { var nx = -1; for (var j = 0; j < ts.length; j++) if (!lab.done.has(j)) { nx = j; break; } QI = nx < 0 ? ts.length - 1 : nx; QMAN = false; }
+    var dn = lab.done.has(QI);
+    return '<div style="display:flex;align-items:center;gap:6px;background:' + (dn ? '#1d6b45' : '#2a3a4c') + ';color:#fff;padding:4px 8px;font-size:13px;line-height:1.5" dir="rtl"><a class="wtb2" data-xq="prev" style="flex:none">›</a><b style="flex:none">' + (QI + 1) + '/' + ts.length + '</b><span style="flex:1;min-width:0">' + (dn ? '✔ ' : '') + esc(ts[QI].t) + '</span><span style="flex:none;opacity:.8">' + lab.done.size + ' منجزة</span><a class="wtb2" data-xq="next" style="flex:none">‹</a></div>';
+  };
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-xq]'); if (!a) return;
+    e.preventDefault(); e.stopPropagation();
+    var q = a.getAttribute('data-xq'), n = CUR.lab ? CUR.lab.def.tasks.length : 0;
+    if (q === 'prev' && n) { QI = (QI - 1 + n) % n; QMAN = true; }
+    else if (q === 'next' && n) { QI = (QI + 1) % n; QMAN = true; }
+    else if (q === 'p' || q === 'menu') { var B = EX.P && lg(BXP + EX.P.bx, null); if (!B) return; if (q === 'menu') { leavePart(); menu(B); } else startPart(B, +a.getAttribute('data-i')); return; }
+    try { refresh(); } catch (x) { }
+  }, true);
+  /* الاختبار العادي (معمل واحد) يبقى بزر «تسليم» كما هو */
   var _sr = startRun;
-  startRun = function (P, rec, pv) { var r = _sr.apply(this, arguments); var m = document.getElementById('exMenu'); if (m) m.hidden = !(P && P.bx); return r; };
+  startRun = function (P, rec, pv) { var r = _sr.apply(this, arguments); if (!(P && P.bx)) { var c = document.getElementById('exParts'); if (c) c.hidden = true; $('#exSubmit').hidden = false; } return r; };
 
   /* ---------- التقرير (للمتدرب والمدرّب) ---------- */
   function report(B, st, codes) {
@@ -11956,8 +12022,9 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     var cur = (cs.filter(function (c) { return c.id === 'os-251'; })[0] || cs[0] || {}).id;
     $('#examT').innerHTML = head('new') + '<div class="panel">' +
       '<label class="fld"><span>المادة</span><select id="bxC">' + cs.map(function (c) { return '<option value="' + esc(c.id) + '"' + (c.id === cur ? ' selected' : '') + '>' + esc(c.title) + '</option>'; }).join('') + '</select></label>' +
-      '<div class="fld"><span>علّم المعامل واكتب درجة كل واحد</span><div id="bxL"></div></div>' +
-      '<p class="note" id="bxSum"></p><button class="btn" data-bc="eq">وزّع 100 بالتساوي</button>' +
+      '<label class="fld"><span>الدرجة الكلية للاختبار (اكتب اللي تبي: 20، 30، 100…)</span><input id="bxTot" type="number" min="0.5" step="0.5" value="100" class="ltr"></label>' +
+      '<div class="fld"><span>علّم المعامل، وتقدر تعدّل درجة أي معمل بنفسك</span><div id="bxL"></div></div>' +
+      '<p class="note" id="bxSum"></p><button class="btn" data-bc="eq">وزّع الدرجة الكلية بالتساوي</button>' +
       '<label class="fld" style="margin-top:10px"><span>عنوان الاختبار</span><input id="bxT"></label>' +
       '<label class="fld"><span>مدة الاختبار كاملاً (دقيقة)</span><input id="bxD" type="number" min="5" max="300" value="60" class="ltr"></label>' +
       '<p class="note" id="bxMsg2"></p><button class="btn pri" style="width:100%" data-bc="mk">ابدأ الاختبار</button>' +
@@ -11972,13 +12039,23 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     var sum = function () {
       var s = 0, m = 0, n = 0;
       Array.prototype.forEach.call(document.querySelectorAll('#bxL .chkrow'), function (r) { var on = r.querySelector('.bxk').checked, w = r.querySelector('.bxw'); w.disabled = !on; if (on) { s += +w.value || 0; m += +r.querySelector('.bxk').getAttribute('data-min'); n++; } });
-      $('#bxSum').textContent = n ? 'المعامل المختارة: ' + n + ' — مجموع الدرجات: ' + r2(s) : 'ما اخترت معامل بعد.';
+      var T = +$('#bxTot').value || 0;
+      $('#bxSum').innerHTML = n ? 'المعامل المختارة: ' + n + ' — مجموع درجاتها: <b>' + r2(s) + '</b>' + (T && r2(s) !== r2(T) ? ' <span class="exwarn">(لا يساوي الدرجة الكلية ' + T + '؛ الاختبار يُحسب من ' + r2(s) + ')</span>' : '') : 'ما اخترت معامل بعد.';
       return { s: s, m: m, n: n };
     };
-    var eq = function () { var rs = rowsSel(), sp = split(100, rs.length || 1); rs.forEach(function (r, i) { r.querySelector('.bxw').value = sp[i]; }); sum(); };
+    /* المعامل اللي ما عدّلت درجتها بنفسك تأخذ الباقي من الدرجة الكلية بالتساوي */
+    var fill = function (all) {
+      var rs = rowsSel(), T = +$('#bxTot').value || 0, man = 0, auto = [];
+      rs.forEach(function (r) { var w = r.querySelector('.bxw'); if (all) w.removeAttribute('data-man'); if (w.getAttribute('data-man') && w.value !== '') man += +w.value || 0; else auto.push(w); });
+      var sp = split(Math.max(0, T - man), auto.length || 1); auto.forEach(function (w, i) { w.value = sp[i]; });
+      Array.prototype.forEach.call(document.querySelectorAll('#bxL .bxk'), function (c) { if (!c.checked) { var w = c.closest('.chkrow').querySelector('.bxw'); w.value = ''; w.removeAttribute('data-man'); } });
+      sum();
+    };
+    var eq = function () { fill(true); };
     $('#bxC').onchange = draw;
-    $('#bxL').onchange = function (e) { if (e.target.classList.contains('bxk')) { eq(); var t = sum(); $('#bxD').value = Math.min(300, Math.max(20, Math.round(t.m / 5) * 5)); } };
-    $('#bxL').oninput = sum;
+    $('#bxL').onchange = function (e) { if (e.target.classList.contains('bxk')) { fill(false); var t = sum(); $('#bxD').value = Math.min(300, Math.max(20, Math.round(t.m / 5) * 5)); } };
+    $('#bxL').oninput = function (e) { if (e.target.classList.contains('bxw')) e.target.setAttribute('data-man', '1'); sum(); };
+    $('#bxTot').oninput = function () { fill(false); };
     $('#examT').querySelectorAll('[data-bc]').forEach(function (b) {
       b.onclick = function (e) {
         e.preventDefault(); var a = b.getAttribute('data-bc');
@@ -12062,7 +12139,8 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
       var r = readResult(c); if (!r.R) return; var pe = partOfE(r.R.e); if (!pe || pe.e !== B.e || !B.parts[pe.k]) return;
       var s = by[r.R.i] = by[r.R.i] || { i: r.R.i, n: '', p: {}, pv: 0, bad: 0 };
       var prev = s.p[pe.k]; if (prev && prev.R.t1 >= r.R.t1) return;
-      try { r.kk = Array.from(headlessLab(partP(B, pe.k), { i: r.R.i, cm: r.R.cm || [] }).done); } catch (x) { r.kk = r.R.k; }
+      try { r.kk = Array.from(headlessLab(partP(B, pe.k), { i: r.R.i, cm: r.R.cm || [] }).done); } catch (x) { r.kk = []; }
+      (r.R.k || []).forEach(function (i) { if (r.kk.indexOf(i) < 0) r.kk.push(i); }); /* مهام الواجهة الرسومية */
       s.p[pe.k] = r; if (r.R.n) s.n = r.R.n;
     });
     return Object.keys(by).map(function (i) {
