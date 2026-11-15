@@ -758,6 +758,14 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
 .tl-chk{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;margin:4px 0 10px}
 @media (max-width:520px){.tl-chk{grid-template-columns:1fr}}
 .tl-chk label{display:flex;gap:6px;align-items:center;font-size:.88rem}
+
+.navb{display:flex;gap:6px;flex:none}.navb[hidden],.navb [hidden]{display:none!important}
+.navb .btn{min-height:40px;padding:6px 14px;font-weight:700;white-space:nowrap}
+#navHome{font-size:1.25rem;padding:4px 12px;line-height:1}
+.exam .navb{display:none!important}
+.v-lab .brand small{display:none}.v-lab header.top{padding-block:6px}.v-lab .brand img{max-height:40px;width:auto}
+.fixterm .navb .btn{min-height:34px;padding:4px 12px}
+#navToast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9999;background:#0b1626;color:#fff;padding:10px 16px;border-radius:12px;font-size:.9rem;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:calc(100% - 32px);text-align:center}
 </style>
 
 <div class="wrap" id="app">
@@ -12311,6 +12319,104 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     if (b.getAttribute('data-go2') === 'exam') { orig('[data-go=exam]'); renderExamHome(); setTimeout(function () { var c = document.getElementById('bxCode'); if (c && window.innerWidth > 700) c.focus(); }, 50); }
     else orig('[data-go=courses]');
   });
+})();
+
+/* ===== التنقل الموحّد: زر رجوع + الرئيسية + زر الرجوع في الجوال ===== */
+(function () {
+  var hb = $('#homeBtn'), top = document.querySelector('header.top');
+  var nav = document.createElement('div'); nav.className = 'navb'; nav.innerHTML = '<button type="button" class="btn" id="navHome" aria-label="الرئيسية">⌂</button><button type="button" class="btn" id="navBack">→ رجوع</button>';
+  hb.style.display = 'none'; top.appendChild(nav);
+  var bk = $('#navBack'), hm = $('#navHome'), FROM = null, ARMED = false, IGN = 0;
+  function toast(t) {
+    var o = document.getElementById('navToast'); if (o) o.remove();
+    o = document.createElement('div'); o.id = 'navToast'; o.textContent = t; document.body.appendChild(o);
+    setTimeout(function () { if (o.parentNode) o.remove(); }, 2600);
+  }
+  function inExam() { return !!(window.EX && EX.active); }
+  function q(sel) { return document.querySelector(sel); }
+  function vis(el) { return el && !el.hidden && el.offsetParent !== null; }
+  /* أين يرجع زر «رجوع» من الصفحة الحالية */
+  function label() {
+    if (VIEW === 'lab') return FROM === 'learn' ? 'الدرس' : FROM === 'examS' || FROM === 'examT' ? 'الاختبارات' : 'التجارب';
+    if (VIEW === 'ws') return 'التدريب';
+    if (VIEW === 'courses') return CSEL ? 'المواد' : 'الرئيسية';
+    if (VIEW === 'learn') return LSEL ? 'الدروس' : 'التدريب';
+    if (VIEW === 'inter') return q('#inter [data-ixback]') ? 'الوحدات' : 'التدريب';
+    return 'الرئيسية';
+  }
+  function deep() { return VIEW === 'lab' || VIEW === 'ws' || (VIEW === 'courses' && CSEL) || VIEW === 'learn' || VIEW === 'inter'; }
+  function paint() {
+    var home = VIEW === 'home';
+    nav.hidden = home || inExam();
+    bk.textContent = '→ رجوع'; document.body.classList.toggle('v-lab', VIEW === 'lab' || VIEW === 'ws'); bk.title = 'رجوع إلى ' + label(); bk.setAttribute('aria-label', 'رجوع إلى ' + label());
+    hm.hidden = !deep();
+    arm();
+  }
+  /* نترك مدخلاً واحداً في سجل المتصفح ما دمنا خارج الرئيسية، فزر الرجوع في الجوال يرجعنا داخل الموقع */
+  function arm() {
+    var home = VIEW === 'home';
+    if (!home && !ARMED) { try { history.pushState({ tl: 1 }, '', location.href); ARMED = true; } catch (e) { } }
+    else if (home && ARMED) { ARMED = false; IGN++; try { history.back(); } catch (e) { IGN--; } }
+  }
+  function closeOverlay() {
+    var z = $('#zoom'); if (z && !z.hidden) { z.hidden = true; return true; }
+    var r = document.getElementById('rep'); if (r) { r.remove(); return true; }
+    if (document.getElementById('pcsheet')) { pcdeskClose(); return true; }
+    var qb = $('#qbar'); if (qb && qb.classList.contains('open')) { QOPEN = false; qRender(); return true; }
+    var d = CUR.dev, W = d && d.win; if (VIEW === 'lab' && W && W.g && W.g.drawer) { W.g.drawer = false; try { renderTerm(); } catch (e) { } return true; }
+    return false;
+  }
+  function leaveLab() {
+    var L = CUR.lab, n = L && L.def.tasks ? L.def.tasks.length : 0;
+    if (L && L.done && L.done.size > 0 && L.done.size < n && !confirm('تبي تطلع من التجربة؟ المهام اللي أنجزتها (' + L.done.size + ' من ' + n + ') ما تنحفظ.')) return false;
+    try { $('#cmd').blur(); } catch (e) { }
+    document.body.classList.remove('lab-kb', 'termbig', 'diagbig');
+    var f = FROM; CUR.lab = null;
+    if (f === 'learn') { renderLearn(); show('learn'); }
+    else if (f === 'examS' || f === 'examT' || f === 'examHome') { show('examHome'); try { renderExamHome(); } catch (e) { } }
+    else { renderCourses(); show('courses'); }
+    return true;
+  }
+  /* خطوة واحدة للخلف */
+  function up() {
+    if (closeOverlay()) return;
+    if (inExam()) {
+      if (VIEW === 'lab' && EX.P && EX.P.bx) { var m = document.createElement('span'); m.setAttribute('data-xq', 'menu'); m.hidden = true; document.body.appendChild(m); m.click(); m.remove(); return; }
+      toast('أنت داخل اختبار. لإنهائه استخدم زر التسليم.'); return;
+    }
+    if (VIEW === 'lab') { leaveLab(); return; }
+    if (VIEW === 'ws') { try { wsSave(); } catch (e) { } CUR.lab = null; CSEL = null; renderCourses(); show('courses'); return; }
+    if (VIEW === 'courses' && CSEL) { CSEL = null; renderCourses(); show('courses'); return; }
+    if (VIEW === 'learn' && LSEL) { LSEL = null; renderLearn(); show('learn'); return; }
+    var ib = q('#inter [data-ixback]'); if (VIEW === 'inter' && ib) { ib.click(); return; }
+    if (VIEW === 'learn' || VIEW === 'inter') { CSEL = null; renderCourses(); show('courses'); return; }
+    if (VIEW === 'examT' || VIEW === 'examS') { show('examHome'); try { renderExamHome(); } catch (e) { } clearHash(); return; }
+    goHome();
+  }
+  function clearHash() { if (location.hash) try { history.replaceState(history.state, '', location.href.split('#')[0]); } catch (e) { } }
+  function goHome() {
+    if (inExam()) return;
+    if (VIEW === 'lab' && CUR.lab) { var L = CUR.lab, n = L.def.tasks ? L.def.tasks.length : 0; if (L.done && L.done.size > 0 && L.done.size < n && !confirm('تبي تطلع من التجربة؟ المهام اللي أنجزتها ما تنحفظ.')) return; }
+    if (VIEW === 'ws') try { wsSave(); } catch (e) { }
+    try { $('#cmd').blur(); } catch (e) { }
+    document.body.classList.remove('lab-kb', 'termbig', 'diagbig');
+    CUR.lab = null; CSEL = null; LSEL = null; clearHash(); show('home');
+  }
+  bk.addEventListener('click', up);
+  hm.addEventListener('click', goHome);
+  /* زر الرجوع في الجوال / سحب الرجوع */
+  window.addEventListener('popstate', function () {
+    if (IGN > 0) { IGN--; return; }
+    ARMED = false;
+    if (VIEW === 'home') return;
+    up(); paint();
+  });
+  /* نلفّ show لنعرف من أين فُتحت التجربة ونحدّث الأزرار بعد كل تنقل */
+  var _s = show;
+  show = function (v) { if (v === 'lab' && VIEW !== 'lab') FROM = VIEW; _s.apply(this, arguments); paint(); };
+  ['#courseList', '#learnBody', '#inter'].forEach(function (s) { var el = q(s); if (el) el.addEventListener('click', function () { setTimeout(paint, 0); }); });
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-act], [data-xq], .exbar, #exbar')) setTimeout(paint, 30); });
+  paint();
 })();
 </script>
 </body>
