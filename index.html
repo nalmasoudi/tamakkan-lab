@@ -12196,6 +12196,49 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   /* رابط طويل لاختبار متعدد المعامل فُتح قبل تحميل هذا الجزء */
   try { var hx = hashExam(); if (hx && hx.P && hx.P.parts) gate(hx.P, hx.pv); } catch (e) { }
 })();
+
+/* ===================== الواجهة الرئيسية: خياران فقط (الاختبارات ثم التدريب) ===================== */
+(function () {
+  var home = document.getElementById('home'), modes = home && home.querySelector('.modes');
+  if (!home || !modes) return;
+  function orig(sel) { var b = modes.querySelector(sel); if (b) b.click(); }
+  /* نخفي الأزرار القديمة ونبقيها تعمل من الداخل */
+  Array.prototype.forEach.call(modes.children, function (b) { b.style.display = 'none'; });
+  modes.insertAdjacentHTML('afterbegin',
+    '<button class="mode" data-go2="exam" style="border-color:#B89B5E;background:#fff"><span class="mi" style="background:#F1E7CC;color:#6F5524"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="5" y="4" width="20" height="23" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 3h8v4h-8zM10 15l3 3 6-6M10 22h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b style="color:#0B1626">الاختبارات</b><span style="color:#4A5560">عندك اختبار؟ ادخل برمز الاختبار. وللمدرّب: إنشاء اختبار ومتابعة النتائج.</span></button>' +
+    '<button class="mode" data-go2="train"><span class="mi"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="4" y="3" width="22" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 11l3 3 5-6M9 20h12" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>التدريب</b><span>تجارب عملية مرتبة حسب المواد، مع الشروحات والتعلّم التفاعلي ومساحة العمل الحرة.</span></button>');
+  modes.style.gridTemplateColumns = '1fr';
+
+  /* صفحة التدريب: بطاقة حساب المتدرب + بقية الأدوات */
+  var courses = document.getElementById('courses'), list = document.getElementById('courseList');
+  if (courses && list && !document.getElementById('trainTop')) {
+    list.insertAdjacentHTML('beforebegin', '<div id="trainTop"><div class="row2" id="trainLinks" style="margin:0 0 12px;flex-wrap:wrap"><button class="btn" data-t2="learn">📘 الشروحات</button><button class="btn" data-t2="ix">🎮 التعلّم التفاعلي</button><button class="btn" data-t2="ws">🧩 مساحة عمل حرة</button></div></div>');
+    var top = document.getElementById('trainTop'), prof = document.getElementById('prof'), how = home.querySelector('.how');
+    if (prof) top.insertBefore(prof, top.firstChild);
+    if (how) top.appendChild(how);
+    document.getElementById('trainLinks').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-t2]'); if (!b) return; var t = b.getAttribute('data-t2');
+      if (t === 'learn') orig('[data-go=learn]'); else if (t === 'ws') orig('[data-go=ws]'); else orig('#ixMode');
+    });
+  }
+
+  /* صفحة الاختبارات: خانة الرمز أولاً، ثم دخول المدرّب */
+  var bx = document.getElementById('bxHome'), acct = document.getElementById('acctBar');
+  renderExamHome = function () {
+    var eh = document.getElementById('examHome');
+    eh.innerHTML = '<div class="labhead"><h2>الاختبارات</h2></div><div id="ehCode"></div>' +
+      '<div class="panel" style="margin-top:14px"><b>للمدرّب</b><p class="note" style="margin:4px 0 8px">أنشئ اختباراً من عدة معامل بالدرجات اللي تبيها، وتابع النتائج ونزّلها Excel.</p><button class="btn pri" data-act="trn">إنشاء اختبار ومتابعة النتائج</button><div id="ehAcct"></div></div>';
+    if (bx) { bx.style.margin = '0'; document.getElementById('ehCode').appendChild(bx); }
+    if (acct) document.getElementById('ehAcct').appendChild(acct);
+  };
+  renderExamHome();
+
+  home.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-go2]'); if (!b) return;
+    if (b.getAttribute('data-go2') === 'exam') { orig('[data-go=exam]'); renderExamHome(); setTimeout(function () { var c = document.getElementById('bxCode'); if (c && window.innerWidth > 700) c.focus(); }, 50); }
+    else orig('[data-go=courses]');
+  });
+})();
 </script>
 </body>
 </html>
