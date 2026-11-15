@@ -8852,9 +8852,9 @@ function qRender() {
   }
   var t = tasks[QI], done = lab.done.has(QI);
   document.getElementById('qNum').textContent = (QI + 1) + '/' + tasks.length;
-  var m = /^([A-Za-z][\w-]*):\s*/.exec(t.t), dv = m && lab.devs[m[1]] && lab.order.length > 1 ? m[1] : '', qd = document.getElementById('qDev');
+  var m = /^([A-Za-z][\w-]*):\s*/.exec(t.t), dv0 = t.dev || (t.ok && t.ok[0] && t.ok[0].d) || (m && m[1]), dv = dv0 && lab.devs[dv0] && lab.order.length > 1 ? dv0 : '', qd = document.getElementById('qDev');
   qd.hidden = !dv; if (dv) { var here = CUR.dev && CUR.dev.name === dv; qd.textContent = here ? dv : 'انتقل إلى ' + dv + ' ←'; qd.classList.toggle('go', !here); qd.setAttribute('data-go', dv); }
-  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + bd(dv ? t.t.slice(m[0].length) : t.t); bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
+  var tx = document.getElementById('qTxt'); tx.textContent = (done ? '✔ ' : '') + bd(m && m[1] === dv ? t.t.slice(m[0].length) : t.t); bar.classList.toggle('open', QOPEN); bar.classList.toggle('qdone', done);
   applyFix();
 }
 document.addEventListener('mousedown', function (e) { if (e.target.closest && e.target.closest('#qbar') && document.body.classList.contains('lab-kb')) e.preventDefault(); });
@@ -11974,7 +11974,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     '.xq{background:#fbf7ec;color:#0b1626;border-bottom:1px solid #e6dcc3;border-inline-start:4px solid #B89B5E;padding:6px 8px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.55}' +
     '.xq.done{border-inline-start-color:#1d7a4a;background:#eef7f1}' +
     '.xq-row{display:flex;align-items:center;gap:8px;min-width:0}' +
-    '.xq-nav{flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid #d9cfb5;border-radius:9px;background:#fff;color:#0b1626;font-size:1.2rem;cursor:pointer;user-select:none}' +
+    '.xq-nav{direction:ltr;unicode-bidi:isolate;flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid #d9cfb5;border-radius:9px;background:#fff;color:#0b1626;font-size:1.2rem;cursor:pointer;user-select:none}' +
     '.xq-txt{flex:1;min-width:0}.xq-txt b{color:#6F5524;margin-inline-end:6px;font-variant-numeric:tabular-nums}.xq.done .xq-txt b{color:#1d7a4a}' +
     '.xq-parts{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}' +
     '.xq-p{border:1px solid #d9cfb5;border-radius:999px;padding:2px 12px;background:#fff;color:#0b1626;cursor:pointer;white-space:nowrap}' +
@@ -12014,7 +12014,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     }
     /* سطر واحد: المهمة، و«انتقل» عند الحاجة، و💡 في التدريب. أزرار المعامل تظهر في الاختبار فقط */
     var exParts = EX.active && EX.P && EX.P.bx ? parts.replace(/<span class="xq-cnt">[^<]*<\/span>/, '') : '';
-    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔' : (QI + 1)) + '</b>' + esc(t.t) + '</div>' + go + howBtn + '<span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + how + exParts + '</div>';
+    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔' : (QI + 1)) + '</b>' + esc(bd(t.t)) + '</div>' + go + howBtn + '<span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + how + exParts + '</div>';
   };
   var XQH = false;
   document.addEventListener('click', function (e) {
