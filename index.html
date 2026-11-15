@@ -11993,12 +11993,12 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     /* الأجهزة: أزرار للتبديل، وزر واضح لما تكون المهمة على جهاز ثاني */
     var t = ts[QI], td = t.dev, cd = CUR.dev && CUR.dev.name;
     var devs = lab.order.filter(function (n) { var d = lab.devs[n]; return d && (d.win || d.type === 'pc'); });
-    var devRow = devs.length > 1 ? '<div class="xq-parts"><span class="xq-lbl">الجهاز:</span>' + devs.map(function (n) { return '<span class="xq-p' + (n === cd ? ' on' : '') + '" data-xq="dev" data-n="' + esc(n) + '">' + esc(n) + '</span>'; }).join('') +
-      (td && cd && td !== cd && lab.devs[td] ? '<span class="xq-go" data-xq="dev" data-n="' + esc(td) + '">هذي المهمة على ' + esc(td) + ' ← انتقل له</span>' : '') + '</div>' : '';
+    var go = devs.length > 1 && td && cd && td !== cd && lab.devs[td] ? '<span class="xq-go" data-xq="dev" data-n="' + esc(td) + '">انتقل لـ ' + esc(td) + '</span>' : '';
     /* «كيف؟» في التدريب فقط */
     var how = '', hs = (t.h || []).filter(Boolean);
+    var howBtn = '';
     if (!(window.EX && EX.active) && hs.length) {
-      how = '<div class="xq-parts"><span class="xq-p xq-how-b" data-xq="how">' + (XQH ? 'إخفاء الخطوات' : '💡 كيف أسوي هذي المهمة؟') + '</span></div>';
+      howBtn = '<span class="xq-nav xq-how-b" data-xq="how" aria-label="كيف أسوي هذي المهمة؟" title="كيف؟">' + (XQH ? '✕' : '💡') + '</span>';
       if (XQH) {
         var gui = hs.filter(function (h) { return /^\(/.test(h); }).map(function (h) { return h.replace(/^\([^)]*\)\s*/, ''); }), cmd = hs.filter(function (h) { return !/^\(/.test(h); });
         how += '<div class="xq-how">' + (td ? '<p>على الجهاز <b>' + esc(td) + '</b>' + (td !== cd ? ' (اضغط عليه فوق أول)' : '') + '</p>' : '') +
@@ -12006,7 +12006,9 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
           (cmd.length ? '<p><b>' + (gui.length ? 'أو اكتب في PowerShell:' : 'اكتب في PowerShell أو الطرفية:') + '</b></p><pre dir="ltr">' + cmd.map(esc).join('\n') + '</pre>' : '') + '</div>';
       }
     }
-    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔ ' : '') + 'المهمة ' + (QI + 1) + ' من ' + ts.length + '</b>' + esc(t.t) + '</div><span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + devRow + how + parts + '</div>';
+    /* سطر واحد: المهمة، و«انتقل» عند الحاجة، و💡 في التدريب. أزرار المعامل تظهر في الاختبار فقط */
+    var exParts = EX.active && EX.P && EX.P.bx ? parts.replace(/<span class="xq-cnt">[^<]*<\/span>/, '') : '';
+    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔' : (QI + 1)) + '</b>' + esc(t.t) + '</div>' + go + howBtn + '<span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + how + exParts + '</div>';
   };
   var XQH = false;
   document.addEventListener('click', function (e) {
