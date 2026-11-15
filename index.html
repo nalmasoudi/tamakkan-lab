@@ -12026,6 +12026,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
       '<div class="fld"><span>علّم المعامل، وتقدر تعدّل درجة أي معمل بنفسك</span><div id="bxL"></div></div>' +
       '<p class="note" id="bxSum"></p><button class="btn" data-bc="eq">وزّع الدرجة الكلية بالتساوي</button>' +
       '<label class="fld" style="margin-top:10px"><span>عنوان الاختبار</span><input id="bxT"></label>' +
+      '<label class="fld"><span>رمز الاختبار (اختياري، من 4 إلى 12 حرف إنجليزي أو رقم، مثل OS1MID). اتركه فاضي ويُنشأ تلقائياً</span><input id="bxCodeIn" class="ltr" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="مثال: OS1MID" style="text-transform:uppercase;font-family:var(--font-mono)"></label>' +
       '<label class="fld"><span>مدة الاختبار كاملاً (دقيقة)</span><input id="bxD" type="number" min="5" max="300" value="60" class="ltr"></label>' +
       '<p class="note" id="bxMsg2"></p><button class="btn pri" style="width:100%" data-bc="mk">ابدأ الاختبار</button>' +
       '<p class="note" style="margin-top:12px">تحتاج إعدادات أكثر؟ <a href="#" data-bc="adv">الإنشاء المتقدم</a> · <a href="#" data-bc="old">استيراد النتائج (الطريقة السابقة)</a></p></div>';
@@ -12073,12 +12074,21 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     var parts = rows.map(function (r) { return { l: r.querySelector('.bxk').value, w: r2(+r.querySelector('.bxw').value || 0) }; });
     if (!parts.some(function (p) { return p.w > 0; })) { msg.textContent = 'اكتب درجة للمعامل.'; msg.className = 'note exbad'; return; }
     if (!(d >= 5)) { msg.textContent = 'المدة غير صحيحة.'; msg.className = 'note exbad'; return; }
-    var now = Date.now(), B = { v: 1, e: rid(6), q: 'tml' + rid(18), l: parts[0].l, d: d, a: now - 120000, b: now + 14 * 3600000, t: $('#bxT').value.trim() || 'اختبار عملي', parts: parts, at: now };
-    var list = lg(BXT, []); list.push(B); ls(BXT, list.slice(-40));
+    var code = ($('#bxCodeIn').value || '').replace(/[\s​-‏‪-‮⁦-⁩﻿]/g, '').toUpperCase();
+    if (code && !/^[A-Z0-9]{4,12}$/.test(code)) { msg.textContent = 'الرمز لازم يكون من 4 إلى 12 حرف إنجليزي أو رقم، بدون مسافات أو رموز.'; msg.className = 'note exbad'; return; }
+    if (code && lg(BXT, []).some(function (x) { return x.e === code; })) { msg.textContent = 'استخدمت هذا الرمز في اختبار سابق. اختر رمز ثاني.'; msg.className = 'note exbad'; return; }
+    var now = Date.now(), B = { v: 1, e: code || rid(6), q: 'tml' + rid(18), l: parts[0].l, d: d, a: now - 120000, b: now + 14 * 3600000, t: $('#bxT').value.trim() || 'اختبار عملي', parts: parts, at: now };
+    var server = typeof TL_API === 'string' && TL_API && tok();
     btn.disabled = true; msg.className = 'note'; msg.textContent = 'جارٍ تجهيز الرمز…';
-    var done = function (short) { var L = lg(BXT, []); L.forEach(function (x) { if (x.e === B.e) x.short = short ? 1 : 0; }); ls(BXT, L); results(B.e); };
-    if (typeof TL_API === 'string' && TL_API && tok()) api('ex_save', { tok: tok(), P: B }).then(function (r) { done(!!r.ok); }).catch(function () { done(false); });
-    else done(false);
+    var fail = function (t) { btn.disabled = false; msg.textContent = t; msg.className = 'note exbad'; };
+    var done = function (short) { B.short = short ? 1 : 0; var list = lg(BXT, []); list.push(B); ls(BXT, list.slice(-40)); results(B.e); };
+    var save = function () { api('ex_save', { tok: tok(), P: B }).then(function (r) { done(!!r.ok); }).catch(function () { done(false); }); };
+    if (!server) { if (code) msg.textContent = ''; done(false); return; }
+    /* الرمز لازم يكون جديداً على الخادم، وإلا يفتح المتدرب اختباراً قديماً بنفس الرمز */
+    api('ex_get', { code: B.e }).then(function (r) {
+      if (r && r.ok) { if (code) return fail('الرمز «' + code + '» مستخدم في اختبار ثاني. اختر رمز ثاني.'); B.e = rid(6); }
+      save();
+    }).catch(function () { fail('تعذّر الاتصال بالخادم للتحقق من الرمز. تحقق من الإنترنت وحاول مرة ثانية.'); });
   }
   function linkOf(B) { return B.short ? location.href.split('#')[0] + '#xe=' + B.e : examLink(B); }
   function mine() {
@@ -12174,7 +12184,13 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   var how = document.getElementById('prof') || document.querySelector('#home .how');
   if (how && !document.getElementById('bxHome')) {
     how.insertAdjacentHTML('beforebegin', '<div class="panel" id="bxHome" style="margin:14px 2px"><b>عندك اختبار؟</b> اكتب الرمز اللي عطاك المدرّب:<div style="display:flex;gap:8px;margin-top:8px"><input id="bxCode" class="ltr" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="مثال: K7Q2MX" style="flex:1;min-width:0;text-transform:uppercase"><button class="btn pri" id="bxGo">دخول</button></div><p class="note" id="bxHMsg" style="margin:6px 0 0"></p></div>');
-    var go = function () { var v = $('#bxCode').value.trim(); if (!v) { $('#bxHMsg').textContent = 'اكتب رمز الاختبار.'; return; } $('#bxHMsg').textContent = ''; stuGo(v, $('#bxHMsg')); };
+    var go = function () {
+      var v = $('#bxCode').value.replace(/[\s​-‏‪-‮⁦-⁩﻿]/g, '');
+      if (!v) { $('#bxHMsg').textContent = 'اكتب رمز الاختبار.'; return; }
+      $('#bxHMsg').textContent = '';
+      /* رمز يكتبه المتدرب (4 إلى 12 خانة) يُجلب من الخادم مثل الرابط القصير */
+      stuGo(/^[A-Za-z0-9]{4,12}$/.test(v) ? '#xe=' + v.toUpperCase() : v, $('#bxHMsg'));
+    };
     $('#bxGo').onclick = go; $('#bxCode').onkeydown = function (e) { if (e.key === 'Enter') go(); };
   }
   /* رابط طويل لاختبار متعدد المعامل فُتح قبل تحميل هذا الجزء */
