@@ -12492,6 +12492,18 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   ensure();
   setInterval(function () { var b = document.getElementById('qHintBox'); if (b && !b.hidden) { var k = task(); if (k && b.getAttribute('data-n') !== k.n) b.hidden = true; } }, 400);
 })();
+
+/* في عرض التصميم: لمس جهاز يفتح طرفيته ويُخفي الرسم */
+(function () {
+  var p0 = null;
+  document.addEventListener('pointerdown', function (e) { p0 = [e.clientX, e.clientY]; }, true);
+  document.addEventListener('click', function (e) {
+    var nd = e.target.closest && e.target.closest('#miniTopo [data-dev]'), B = document.body;
+    if (!nd || !p0 || !B.classList.contains('simple') || !B.classList.contains('showdiag')) return;
+    if (Math.abs(e.clientX - p0[0]) > 10 || Math.abs(e.clientY - p0[1]) > 10) return;
+    setTimeout(function () { B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم'; var c = document.getElementById('cmd'); if (c) c.focus(); }, 250);
+  }, true);
+})();
 </script>
 </body>
 </html>
