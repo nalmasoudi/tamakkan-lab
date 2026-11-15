@@ -1,5 +1,25 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f3a5f"><meta name="apple-mobile-web-app-capable" content="yes"></head><body>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f3a5f"><meta name="apple-mobile-web-app-capable" content="yes"><style id="simpleCss">
+#simpleBtn{margin-inline-start:auto}
+#qHintRow{display:none;margin:8px 0}
+body.simple #lab:has(#wui[hidden]) #qHintRow{display:block}
+#qHintBox{margin-top:6px;padding:8px;border:1px dashed var(--line,#ccc);border-radius:10px;background:var(--surface,#fff)}
+#qHintBox .qcodes{display:flex;flex-direction:column;gap:4px;margin-top:8px;max-height:12vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#qHintBox code{font-size:14px;word-break:break-all;display:block;padding:4px 6px;background:rgba(0,0,0,.05);border-radius:6px}
+#qHintBox .qbtns{display:flex;gap:8px}#qHintBox #qFill{flex:1}#qHintBox #qRun{flex:0 0 28%}
+
+body.simple #lab:has(#wui[hidden]) .seg,
+body.simple #lab:has(#wui[hidden]) #miniWrap,
+body.simple #lab:has(#wui[hidden]) #devTabs,
+body.simple #lab:has(#wui[hidden]) .tip,
+body.simple #lab:has(#wui[hidden]) #guideBtn,
+body.simple #lab:has(#wui[hidden]) #repBtn{display:none!important}
+body.simple #lab:has(#wui[hidden]) .labhead h2{font-size:17px;margin:4px 0}
+body.simple #lab:has(#wui[hidden]) .qbar{position:sticky;top:0;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+body.simple #lab:has(#wui[hidden]) .qtxt{font-size:16px;line-height:1.7;max-height:none!important;-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important}
+body.simple #lab:has(#wui[hidden]) .term{min-height:26vh}
+</style>
+</head><body>
 <title>تمكّن لاب – المختبر الذكي</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Readex+Pro:wght@500;600;700&family=Alexandria:wght@500;700;800&display=swap">
@@ -837,7 +857,7 @@ body.exam #guideBtn{display:none}#guideBtn{min-height:30px;padding:2px 10px;font
     <div class="exbar" id="exbar" hidden><span class="extime" id="exTime">--:--</span><span class="exwho" id="exWho"></span><button type="button" class="btn pri" id="exSubmit">تسليم</button></div>
     <div class="labhead">
       <h2 id="labTitle"></h2>
-      <div class="prog"><button type="button" class="btn" id="guideBtn">📘 الدليل</button><button type="button" class="btn" id="repBtn">📄 تقرير الإنجاز</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
+      <div class="prog"><button type="button" class="btn" id="guideBtn">📘 الدليل</button><button type="button" class="btn" id="repBtn">📄 تقرير الإنجاز</button><button type="button" class="btn" id="simpleBtn">عرض كامل</button><span id="progTxt"></span><span class="bar"><i id="progBar"></i></span></div>
     </div>
     <div class="seg" role="tablist" id="seg">
       <button role="tab" data-v="term" aria-selected="true">الطرفية</button>
@@ -12417,6 +12437,55 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   ['#courseList', '#learnBody', '#inter'].forEach(function (s) { var el = q(s); if (el) el.addEventListener('click', function () { setTimeout(paint, 0); }); });
   document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-act], [data-xq], .exbar, #exbar')) setTimeout(paint, 30); });
   paint();
+})();
+
+/* ===== وضع مبسّط: مهمة واحدة + الطرفية ===== */
+(function () {
+  var KEY = 'netlab.simple';
+  function pref() { try { var v = localStorage.getItem(KEY); if (v === '0' || v === '1') return v === '1'; } catch (e) { } return window.innerWidth <= 700; }
+  var on = pref();
+  function apply() {
+    document.body.classList.toggle('simple', on);
+    var b = document.getElementById('simpleBtn'); if (b) b.textContent = on ? 'عرض كامل' : 'وضع مبسّط';
+    if (on) { var t = document.querySelector('#seg [data-v="term"]'); if (t && t.getAttribute('aria-selected') !== 'true') t.click(); }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('#simpleBtn'); if (!b) return;
+    on = !on; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (x) { }
+    apply();
+  });
+  new MutationObserver(function () { var l = document.getElementById('lab'); if (l && !l.hidden) apply(); }).observe(document.getElementById('lab'), { attributes: true, attributeFilter: ['hidden'] });
+  apply();
+})();
+
+/* تلميح في الوضع المبسّط: الأوامر كاملة + زر يكتب الأمر التالي في السطر */
+(function () {
+  var idx = 0, tn = '';
+  function ensure() {
+    var q = document.getElementById('qbar'); if (!q || document.getElementById('qHintRow')) return;
+    var r = document.createElement('div'); r.id = 'qHintRow';
+    r.innerHTML = '<button type="button" class="btn" id="qHintBtn">💡 أرني الأوامر</button><div id="qHintBox" hidden></div>';
+    q.parentNode.insertBefore(r, q.nextSibling);
+  }
+  function esc2(x) { return String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function task() { var n = (document.getElementById('qNum') || {}).textContent || '', m = /(\d+)/.exec(n), T = (window.CUR && CUR.lab && CUR.lab.def && CUR.lab.def.tasks) || []; return m ? { n: n, t: T[+m[1] - 1] } : null; }
+  function lines(t) { return (t && t.h || []).filter(function (x) { return x && !/^\(/.test(x); }); }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('#qHintBtn, #qFill, #qRun'); if (!b) return;
+    var k = task(), box = document.getElementById('qHintBox'); if (!k || !k.t) return;
+    var L = lines(k.t);
+    if (b.id === 'qRun') { var f2 = document.getElementById('form'); if (f2) { if (f2.requestSubmit) f2.requestSubmit(); else f2.dispatchEvent(new Event('submit', { cancelable: true })); } return; }
+    if (b.id === 'qFill') {
+      var c = document.getElementById('cmd'); if (c && L.length) { c.value = L[idx % L.length]; idx++; c.focus(); var f = document.getElementById('qFill'); if (f) f.textContent = idx >= L.length ? 'اكتب من البداية' : 'اكتب الأمر التالي (' + (idx + 1) + ' من ' + L.length + ')'; } return;
+    }
+    if (!box.hidden) { box.hidden = true; return; }
+    idx = 0; tn = k.n; box.setAttribute('data-n', k.n);
+    box.innerHTML = L.length ? '<div class="qbtns"><button type="button" class="btn pri" id="qFill">اكتب الأمر التالي (1 من ' + L.length + ')</button><button type="button" class="btn" id="qRun">↵ نفّذ</button></div><div class="qcodes">' + L.map(function (l, i) { return '<code dir="ltr">' + (i + 1) + '. ' + esc2(l) + '</code>'; }).join('') + '</div>' : '<p class="note">هذه الخطوة تُنفّذ بالضغط على الشاشة.</p>';
+    box.hidden = false;
+  });
+  new MutationObserver(function () { var l = document.getElementById('lab'); if (l && !l.hidden) ensure(); }).observe(document.getElementById('lab'), { attributes: true, attributeFilter: ['hidden'] });
+  ensure();
+  setInterval(function () { var b = document.getElementById('qHintBox'); if (b && !b.hidden) { var k = task(); if (k && b.getAttribute('data-n') !== k.n) b.hidden = true; } }, 400);
 })();
 </script>
 </body>
