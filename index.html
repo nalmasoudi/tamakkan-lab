@@ -4926,7 +4926,7 @@ function wuiRender(d) {
     '<a class="wtb2" data-wa="drawer">☰ المهام</a>' + (W.full === false ? '<a class="wtb2" data-wa="fullon">⛶</a>' : '<a class="wtb2" data-wa="fullx">✕ خروج</a>') + '</div>';
   var full = W.full !== false, tp = '';
   var zb = full ? '<div class="wtop"><b>' + (W.kind === 'ubuntu' ? 'Ubuntu 22.04 Desktop' : W.kind === 'server' ? 'Windows Server 2012 R2' : 'Windows 8.1 Pro') + '</b> <span>' + esc(W.name) + '</span><a class="wtb2" data-wa="zoom" data-arg="-">−</a><a class="wtb2" data-wa="zoom" data-arg="+">+</a><a class="wtb2" data-wa="zoom" data-arg="0">ملاءمة</a><a class="wtb2" data-wa="drawer">☰ المهام</a><a class="wtb2" data-wa="fullx">✕</a></div>' + (window.xqTask ? xqTask() : '') : '';
-  var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">لوحة اللمس · حرّك إصبعك = مؤشر · نقرة = ضغط · إصبعان = تمرير</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : '<div class="wnf">' + top + '<div class="wnfv" id="wnfv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '</div><div class="wled"></div></div></div></div>' + extra + '</div>'; };
+  var wrapMon = function (inner, extra) { return full ? '<div class="wmz">' + zb + '<div class="wmv" id="wmv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '<div class="wcur" id="wcur" style="left:' + (W.cx == null ? 320 : W.cx) + 'px;top:' + (W.cy == null ? 200 : W.cy) + 'px"><svg width="16" height="24" viewBox="0 0 16 24"><path d="M1 1v18l5-5 3.5 8 3-1.3L9 12.7h7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div></div><div class="wled"></div></div></div></div>' + '<div class="wpad" id="wpad"><span class="wpadt">👆 المس الشاشة فوق مباشرة للضغط على أي شي · أو حرّك إصبعك هنا لتحريك المؤشر</span><a class="wpadb" data-pad="L">ضغط</a></div>' + extra + '</div>' : '<div class="wnf">' + top + '<div class="wnfv" id="wnfv"><div class="wsz" id="wsz"><div class="wmon" id="wmon"><div class="wscreen">' + inner + '</div><div class="wled"></div></div></div></div>' + extra + '</div>'; };
   if (W.bootUntil && Date.now() < W.bootUntil) return wrapMon('<div class="wx0">' + tp + '<div class="wboot"><div class="wspin"></div><p>Restarting…</p></div></div>', '');
   if (W.kind === 'ubuntu') h = ubScreen(d);
   else if (W.stage === 'install') h = wuiSetup(d);
@@ -11975,6 +11975,10 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     '.xq-p.on{background:#0b1626;border-color:#0b1626;color:#fff;font-weight:600}' +
     '.xq-cnt{margin-inline-start:auto;color:#4A5560;white-space:nowrap}' +
     '.wtop{flex-wrap:wrap;row-gap:4px}.wtop>span{min-width:0;overflow:hidden;text-overflow:ellipsis}' +
+    '.xq-lbl{color:#4A5560}.xq-go{background:#B89B5E;color:#fff;border-radius:999px;padding:3px 12px;font-weight:600;cursor:pointer;animation:xqp 1.6s ease-in-out infinite}' +
+    '@keyframes xqp{50%{box-shadow:0 0 0 4px rgba(184,155,94,.35)}}@media (prefers-reduced-motion:reduce){.xq-go{animation:none}}' +
+    '.xq-how-b{background:#fff7df;border-color:#B89B5E}.xq-how{background:#fff;border:1px solid #e6dcc3;border-radius:10px;padding:8px 10px;font-size:13.5px}.xq-how p{margin:2px 0}' +
+    '.xq-how pre{margin:4px 0 0;background:#0f1b26;color:#d9e6f2;border-radius:8px;padding:8px;font-size:12px;overflow-x:auto;white-space:pre}' +
     '</style>');
   window.xqTask = function () {
     var lab = CUR.lab, ts = lab && lab.def.tasks || []; if (!ts.length) return '';
@@ -11986,14 +11990,33 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
       if (B && cur) parts = '<div class="xq-parts">' + B.parts.map(function (p, i) { var L = labOf(p.l); return '<span class="xq-p' + (i === cur.k ? ' on' : '') + '" data-xq="p" data-i="' + i + '" title="' + esc(L ? L.title : p.l) + '">معمل ' + (i + 1) + '</span>'; }).join('') + '<span class="xq-p" data-xq="menu">القائمة</span><span class="xq-cnt">منجز ' + lab.done.size + ' من ' + ts.length + '</span></div>';
     }
     if (!parts) parts = '<div class="xq-parts"><span class="xq-cnt">منجز ' + lab.done.size + ' من ' + ts.length + '</span></div>';
-    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔ ' : '') + 'المهمة ' + (QI + 1) + ' من ' + ts.length + '</b>' + esc(ts[QI].t) + '</div><span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + parts + '</div>';
+    /* الأجهزة: أزرار للتبديل، وزر واضح لما تكون المهمة على جهاز ثاني */
+    var t = ts[QI], td = t.dev, cd = CUR.dev && CUR.dev.name;
+    var devs = lab.order.filter(function (n) { var d = lab.devs[n]; return d && (d.win || d.type === 'pc'); });
+    var devRow = devs.length > 1 ? '<div class="xq-parts"><span class="xq-lbl">الجهاز:</span>' + devs.map(function (n) { return '<span class="xq-p' + (n === cd ? ' on' : '') + '" data-xq="dev" data-n="' + esc(n) + '">' + esc(n) + '</span>'; }).join('') +
+      (td && cd && td !== cd && lab.devs[td] ? '<span class="xq-go" data-xq="dev" data-n="' + esc(td) + '">هذي المهمة على ' + esc(td) + ' ← انتقل له</span>' : '') + '</div>' : '';
+    /* «كيف؟» في التدريب فقط */
+    var how = '', hs = (t.h || []).filter(Boolean);
+    if (!(window.EX && EX.active) && hs.length) {
+      how = '<div class="xq-parts"><span class="xq-p xq-how-b" data-xq="how">' + (XQH ? 'إخفاء الخطوات' : '💡 كيف أسوي هذي المهمة؟') + '</span></div>';
+      if (XQH) {
+        var gui = hs.filter(function (h) { return /^\(/.test(h); }).map(function (h) { return h.replace(/^\([^)]*\)\s*/, ''); }), cmd = hs.filter(function (h) { return !/^\(/.test(h); });
+        how += '<div class="xq-how">' + (td ? '<p>على الجهاز <b>' + esc(td) + '</b>' + (td !== cd ? ' (اضغط عليه فوق أول)' : '') + '</p>' : '') +
+          (gui.length ? '<p><b>بالواجهة:</b> ' + gui.map(esc).join('، ثم ') + '</p>' : '') +
+          (cmd.length ? '<p><b>' + (gui.length ? 'أو اكتب في PowerShell:' : 'اكتب في PowerShell أو الطرفية:') + '</b></p><pre dir="ltr">' + cmd.map(esc).join('\n') + '</pre>' : '') + '</div>';
+      }
+    }
+    return '<div class="xq' + (dn ? ' done' : '') + '" dir="rtl"><div class="xq-row"><span class="xq-nav" data-xq="prev" aria-label="المهمة السابقة">›</span><div class="xq-txt"><b>' + (dn ? '✔ ' : '') + 'المهمة ' + (QI + 1) + ' من ' + ts.length + '</b>' + esc(t.t) + '</div><span class="xq-nav" data-xq="next" aria-label="المهمة التالية">‹</span></div>' + devRow + how + parts + '</div>';
   };
+  var XQH = false;
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('[data-xq]'); if (!a) return;
     e.preventDefault(); e.stopPropagation();
     var q = a.getAttribute('data-xq'), n = CUR.lab ? CUR.lab.def.tasks.length : 0;
-    if (q === 'prev' && n) { QI = (QI - 1 + n) % n; QMAN = true; }
-    else if (q === 'next' && n) { QI = (QI + 1) % n; QMAN = true; }
+    if (q === 'prev' && n) { QI = (QI - 1 + n) % n; QMAN = true; XQH = false; }
+    else if (q === 'next' && n) { QI = (QI + 1) % n; QMAN = true; XQH = false; }
+    else if (q === 'how') { XQH = !XQH; }
+    else if (q === 'dev') { var db = document.querySelector('#devTabs [data-d="' + a.getAttribute('data-n') + '"]'); if (db) db.click(); return; }
     else if (q === 'p' || q === 'menu') { var B = EX.P && lg(BXP + EX.P.bx, null); if (!B) return; if (q === 'menu') { leavePart(); menu(B); } else startPart(B, +a.getAttribute('data-i')); return; }
     try { refresh(); } catch (x) { }
   }, true);
@@ -12237,8 +12260,27 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   if (courses && list && !document.getElementById('trainTop')) {
     list.insertAdjacentHTML('beforebegin', '<div id="trainTop"><div class="row2" id="trainLinks" style="margin:0 0 12px;flex-wrap:wrap"><button class="btn" data-t2="learn">📘 الشروحات</button><button class="btn" data-t2="ix">🎮 التعلّم التفاعلي</button><button class="btn" data-t2="ws">🧩 مساحة عمل حرة</button></div></div>');
     var top = document.getElementById('trainTop'), prof = document.getElementById('prof'), how = home.querySelector('.how');
-    if (prof) top.insertBefore(prof, top.firstChild);
-    if (how) top.appendChild(how);
+    /* المواد أولاً؛ بطاقة الحساب ونصيحة الكتابة تحتها */
+    var bottom = document.createElement('div'); bottom.id = 'trainBottom'; bottom.style.marginTop = '16px'; list.parentNode.insertBefore(bottom, list.nextSibling);
+    if (prof) bottom.appendChild(prof);
+    if (how) bottom.appendChild(how);
+    /* المتدرب المسجّل: مواد شعبته أولاً مع علامة «مادتك» */
+    var _rc = renderCourses;
+    renderCourses = function () {
+      var r = _rc.apply(this, arguments);
+      try {
+        if (CSEL) return r;
+        var me = JSON.parse(localStorage.getItem('tl.me') || 'null'), mine = {};
+        (me && me.sections || []).forEach(function (s) { (s.courses || []).forEach(function (c) { mine[c] = 1; }); });
+        var wrap = list.querySelector('.labs'); if (!wrap || !Object.keys(mine).length) return r;
+        Array.prototype.slice.call(wrap.children).reverse().forEach(function (card) {
+          var b = card.querySelector('[data-course]'); if (!b || !mine[b.getAttribute('data-course')]) return;
+          var m = card.querySelector('.meta'); if (m && !card.querySelector('.chip.mine')) m.insertAdjacentHTML('afterbegin', '<span class="chip mine" style="background:#F1E7CC;color:#6F5524">مادتك</span>');
+          wrap.insertBefore(card, wrap.firstChild);
+        });
+      } catch (e) { }
+      return r;
+    };
     document.getElementById('trainLinks').addEventListener('click', function (e) {
       var b = e.target.closest('[data-t2]'); if (!b) return; var t = b.getAttribute('data-t2');
       if (t === 'learn') orig('[data-go=learn]'); else if (t === 'ws') orig('[data-go=ws]'); else orig('#ixMode');
