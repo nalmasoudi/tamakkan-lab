@@ -12504,6 +12504,14 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
     setTimeout(function () { B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم'; var c = document.getElementById('cmd'); if (c) c.focus(); }, 250);
   }, true);
 })();
+
+/* عند فتح لوحة المفاتيح أثناء عرض التصميم: أخفِ الرسم ليظهر سطر الأوامر */
+document.addEventListener('focusin', function (e) {
+  var B = document.body;
+  if (e.target && e.target.id === 'cmd' && B.classList.contains('simple') && B.classList.contains('showdiag')) {
+    B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم';
+  }
+});
 </script>
 </body>
 </html>
