@@ -3,6 +3,7 @@
 #simpleBtn{margin-inline-start:auto}
 #qHintRow .qrow2{display:flex;gap:8px;flex-wrap:wrap}
 body.simple.showdiag #lab:has(#wui[hidden]) #miniWrap{display:block!important}
+body.simple.showdiag #lab:has(#wui[hidden]) #qbar{display:none!important}
 body.simple.showdiag #lab:has(#wui[hidden]) #miniTopo{height:30vh!important;max-height:30vh!important}
 #qHintRow{display:none;margin:8px 0}
 body.simple #lab:has(#wui[hidden]) #qHintRow{display:block}
@@ -12475,7 +12476,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   function lines(t) { return (t && t.h || []).filter(function (x) { return x && !/^\(/.test(x); }); }
   document.addEventListener('click', function (e) {
     var d = e.target.closest && e.target.closest('#qDiagBtn');
-    if (d) { var on2 = document.body.classList.toggle('showdiag'); d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f) f.click(); }, 80); return; }
+    if (d) { var on2 = document.body.classList.toggle('showdiag'); d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) [60, 250, 500].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
     var b = e.target.closest && e.target.closest('#qHintBtn, #qFill, #qRun'); if (!b) return;
     var k = task(), box = document.getElementById('qHintBox'); if (!k || !k.t) return;
     var L = lines(k.t);
