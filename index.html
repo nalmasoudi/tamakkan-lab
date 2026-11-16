@@ -1,10 +1,27 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f3a5f"><meta name="apple-mobile-web-app-capable" content="yes"><style id="simpleCss">
 #simpleBtn{margin-inline-start:auto}
+/* ترتيب مضغوط يوفّر مساحة في الأعلى */
+body.simple.v-lab:has(#lab #wui[hidden]) header.top .brand{display:none!important}
+body.simple.v-lab:has(#lab #wui[hidden]) header.top{padding-block:2px!important;min-height:0!important}
+body.simple #lab:has(#wui[hidden]) .zctl{display:none!important}
+body.simple #lab:has(#wui[hidden]) .labhead{flex-wrap:nowrap!important;gap:8px!important;padding-block:0 4px!important;margin:0!important}
+body.simple #lab:has(#wui[hidden]) .labhead h2{font-size:14px!important;margin:0!important;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.simple #lab:has(#wui[hidden]) .prog{flex:none!important;gap:6px!important;margin:0!important;display:flex!important;align-items:center}
+body.simple #lab:has(#wui[hidden]) .prog .bar{width:46px!important}
+body.simple #lab:has(#wui[hidden]) #simpleBtn{min-height:32px!important;padding:2px 10px!important;font-size:13px!important}
+body.simple #lab:has(#wui[hidden]) #qHintRow{margin:4px 0!important}
+body.simple #lab:has(#wui[hidden]) #qHintRow .btn{min-height:36px!important;padding:2px 12px!important;font-size:14px!important}
+body.simple #lab:has(#wui[hidden]) #qHintRow .qrow2{flex-wrap:nowrap!important}
+body.simple #lab:has(#wui[hidden]) #qHintRow .qrow2 .btn{flex:1 1 0}
+body.simple #lab:has(#wui[hidden]) .qbar{margin-bottom:4px!important}
+body.simple #lab:has(#wui[hidden]) .term{flex:1 1 auto!important;min-height:0!important}
+
 #qHintRow .qrow2{display:flex;gap:8px;flex-wrap:wrap}
 body.simple.showdiag #lab:has(#wui[hidden]) #miniWrap{display:block!important}
 body.simple.showdiag #lab:has(#wui[hidden]) #qbar{display:none!important}
-body.simple.showdiag #lab:has(#wui[hidden]) #miniTopo{height:30vh!important;max-height:30vh!important}
+body.simple.showdiag #lab:has(#wui[hidden]) #miniTopo{height:clamp(150px,28vh,250px)!important;max-height:none!important}
+body.simple.showdiag #lab:has(#wui[hidden]) #miniWrap{flex:none!important;height:auto!important;margin:0 0 6px!important}
 #qHintRow{display:none;margin:8px 0}
 body.simple #lab:has(#wui[hidden]) #qHintRow{display:block}
 #qHintBox{margin-top:6px;padding:8px;border:1px dashed var(--line,#ccc);border-radius:10px;background:var(--surface,#fff)}
@@ -18,7 +35,6 @@ body.simple #lab:has(#wui[hidden]) #devTabs,
 body.simple #lab:has(#wui[hidden]) .tip,
 body.simple #lab:has(#wui[hidden]) #guideBtn,
 body.simple #lab:has(#wui[hidden]) #repBtn{display:none!important}
-body.simple #lab:has(#wui[hidden]) .labhead h2{font-size:17px;margin:4px 0}
 body.simple #lab:has(#wui[hidden]) .qbar{position:sticky;top:0;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 body.simple #lab:has(#wui[hidden]) .qtxt{font-size:16px;line-height:1.7;max-height:none!important;-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important}
 body.simple #lab:has(#wui[hidden]) .term{min-height:26vh}
@@ -12476,7 +12492,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   function lines(t) { return (t && t.h || []).filter(function (x) { return x && !/^\(/.test(x); }); }
   document.addEventListener('click', function (e) {
     var d = e.target.closest && e.target.closest('#qDiagBtn');
-    if (d) { var on2 = document.body.classList.toggle('showdiag'); d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) [60, 250, 500].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
+    if (d) { var on2 = document.body.classList.toggle('showdiag'); if (on2) { var hb0 = document.getElementById('qHintBox'); if (hb0) hb0.hidden = true; } d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) { var ae = document.activeElement; if (ae && ae.blur && /INPUT|TEXTAREA/.test(ae.tagName)) ae.blur(); } if (on2) [100, 400, 800].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
     var b = e.target.closest && e.target.closest('#qHintBtn, #qFill, #qRun'); if (!b) return;
     var k = task(), box = document.getElementById('qHintBox'); if (!k || !k.t) return;
     var L = lines(k.t);
@@ -12485,6 +12501,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
       var c = document.getElementById('cmd'); if (c && L.length) { c.value = L[idx % L.length]; idx++; c.focus(); var f = document.getElementById('qFill'); if (f) f.textContent = idx >= L.length ? 'اكتب من البداية' : 'اكتب الأمر التالي (' + (idx + 1) + ' من ' + L.length + ')'; } return;
     }
     if (!box.hidden) { box.hidden = true; return; }
+    document.body.classList.remove('showdiag'); var db0 = document.getElementById('qDiagBtn'); if (db0) db0.textContent = '🗺 أرني التصميم';
     idx = 0; tn = k.n; box.setAttribute('data-n', k.n);
     box.innerHTML = L.length ? '<div class="qbtns"><button type="button" class="btn pri" id="qFill">اكتب الأمر التالي (1 من ' + L.length + ')</button><button type="button" class="btn" id="qRun">↵ نفّذ</button></div><div class="qcodes">' + L.map(function (l, i) { return '<code dir="ltr">' + (i + 1) + '. ' + esc2(l) + '</code>'; }).join('') + '</div>' : '<p class="note">هذه الخطوة تُنفّذ بالضغط على الشاشة.</p>';
     box.hidden = false;
