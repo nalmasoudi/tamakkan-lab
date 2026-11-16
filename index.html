@@ -17,6 +17,7 @@ body.simple #lab:has(#wui[hidden]) #qHintRow .qrow2 .btn{flex:1 1 0}
 body.simple #lab:has(#wui[hidden]) .qbar{margin-bottom:4px!important}
 body.simple #lab:has(#wui[hidden]) .term{flex:1 1 auto!important;min-height:0!important}
 
+body.simple.showdiag.lab-kb #lab:has(#wui[hidden]) #miniTopo{height:clamp(110px,22dvh,170px)!important}
 #qHintRow .qrow2{display:flex;gap:8px;flex-wrap:wrap}
 body.simple.showdiag #lab:has(#wui[hidden]) #miniWrap{display:block!important}
 body.simple.showdiag #lab:has(#wui[hidden]) #qbar{display:none!important}
@@ -12492,7 +12493,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   function lines(t) { return (t && t.h || []).filter(function (x) { return x && !/^\(/.test(x); }); }
   document.addEventListener('click', function (e) {
     var d = e.target.closest && e.target.closest('#qDiagBtn');
-    if (d) { var on2 = document.body.classList.toggle('showdiag'); if (on2) { var hb0 = document.getElementById('qHintBox'); if (hb0) hb0.hidden = true; } d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) { var ae = document.activeElement; if (ae && ae.blur && /INPUT|TEXTAREA/.test(ae.tagName)) ae.blur(); } if (on2) [100, 400, 800].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
+    if (d) { var on2 = document.body.classList.toggle('showdiag'); if (on2) { var hb0 = document.getElementById('qHintBox'); if (hb0) hb0.hidden = true; } d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) [100, 400, 800].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
     var b = e.target.closest && e.target.closest('#qHintBtn, #qFill, #qRun'); if (!b) return;
     var k = task(), box = document.getElementById('qHintBox'); if (!k || !k.t) return;
     var L = lines(k.t);
@@ -12531,6 +12532,17 @@ document.addEventListener('pointerdown', function (e) {
     B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم';
   }
 }, true);
+
+/* إبقاء لوحة المفاتيح مفتوحة عند لمس أزرار الوضع المبسّط (بدل إغلاقها وقفز الشاشة) */
+(function () {
+  function keep() { var c = document.getElementById('cmd'); if (document.body.classList.contains('lab-kb') && document.activeElement !== c) { try { c.focus({ preventScroll: true }); } catch (x) { c.focus(); } } }
+  document.addEventListener('mousedown', function (e) {
+    if (e.target.closest && e.target.closest('#qHintRow') && document.body.classList.contains('lab-kb')) e.preventDefault();
+  }, true);
+  ['touchend', 'pointerup', 'click'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest('#qHintRow')) { keep(); setTimeout(keep, 60); setTimeout(function () { window.scrollTo(0, 0); }, 120); } }, { passive: true, capture: true });
+  });
+})();
 </script>
 </body>
 </html>
