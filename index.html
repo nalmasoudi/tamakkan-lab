@@ -12505,13 +12505,14 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   }, true);
 })();
 
-/* عند فتح لوحة المفاتيح أثناء عرض التصميم: أخفِ الرسم ليظهر سطر الأوامر */
-document.addEventListener('focusin', function (e) {
+/* لمس الطرفية أثناء عرض التصميم: أخفِ الرسم ليظهر سطر الأوامر فوق لوحة المفاتيح */
+document.addEventListener('pointerdown', function (e) {
   var B = document.body;
-  if (e.target && e.target.id === 'cmd' && B.classList.contains('simple') && B.classList.contains('showdiag')) {
+  if (!B.classList.contains('simple') || !B.classList.contains('showdiag')) return;
+  if (e.target && e.target.closest && e.target.closest('#term, #chips, #form')) {
     B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم';
   }
-});
+}, true);
 </script>
 </body>
 </html>
