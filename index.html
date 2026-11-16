@@ -39,6 +39,18 @@ body.simple #lab:has(#wui[hidden]) #repBtn{display:none!important}
 body.simple #lab:has(#wui[hidden]) .qbar{position:sticky;top:0;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 body.simple #lab:has(#wui[hidden]) .qtxt{font-size:16px;line-height:1.7;max-height:none!important;-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important}
 body.simple #lab:has(#wui[hidden]) .term{min-height:26vh}
+
+/* الوضع المبسّط: مساحة أقل للمهمة وأكثر للطرفية */
+body.simple #lab:has(#wui[hidden]) .qtxt{font-size:15px!important;line-height:1.5!important}
+body.simple.lab-kb #lab:has(#wui[hidden]) .qbar:not(.open) .qtxt{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical;overflow:hidden!important}
+body.simple.lab-kb #lab:has(#wui[hidden]) .qbar button{width:30px;height:30px}
+body.simple:not(.lab-kb) #lab:has(#wui[hidden]) #termOut{margin-top:0}
+#qHintBox .qcodes{max-height:min(22vh,190px)!important}
+body.simple.lab-kb #qHintBox .qcodes{max-height:13vh!important}
+body.simple.lab-kb #qHintBox{padding:6px;margin-top:4px}
+body.simple.lab-kb #lab:has(#wui[hidden]) #qHintRow .btn{min-height:32px!important;font-size:13px!important}
+body.simple.showdiag.lab-kb #lab:has(#wui[hidden]) #miniTopo{height:clamp(110px,19vh,170px)!important}
+body.simple.showdiag.lab-kb #lab:has(#wui[hidden]) .term{height:clamp(110px,17vh,170px)!important;flex:none!important}
 </style>
 </head><body>
 <title>تمكّن لاب – المختبر الذكي</title>
@@ -12493,7 +12505,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
   function lines(t) { return (t && t.h || []).filter(function (x) { return x && !/^\(/.test(x); }); }
   document.addEventListener('click', function (e) {
     var d = e.target.closest && e.target.closest('#qDiagBtn');
-    if (d) { var on2 = document.body.classList.toggle('showdiag'); if (on2) { var hb0 = document.getElementById('qHintBox'); if (hb0) hb0.hidden = true; } d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (on2) [100, 400, 800].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
+    if (d) { var on2 = document.body.classList.toggle('showdiag'); if (on2) { var hb0 = document.getElementById('qHintBox'); if (hb0) hb0.hidden = true; } d.textContent = on2 ? '🗺 أخفِ التصميم' : '🗺 أرني التصميم'; if (document.body.classList.contains('lab-kb')) { var c0 = document.getElementById('cmd'); if (c0 && document.activeElement !== c0) try { c0.focus({ preventScroll: true }); } catch (x) { c0.focus(); } } if (on2) [100, 400, 800].forEach(function (ms) { setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f && document.body.classList.contains('showdiag')) f.click(); }, ms); }); return; }
     var b = e.target.closest && e.target.closest('#qHintBtn, #qFill, #qRun'); if (!b) return;
     var k = task(), box = document.getElementById('qHintBox'); if (!k || !k.t) return;
     var L = lines(k.t);
@@ -12528,7 +12540,7 @@ var TL_API = 'https://script.google.com/macros/s/AKfycbwSNpzVxWHqwxyaedaAcBZ6YcZ
 document.addEventListener('pointerdown', function (e) {
   var B = document.body;
   if (!B.classList.contains('simple') || !B.classList.contains('showdiag')) return;
-  if (e.target && e.target.closest && e.target.closest('#term, #chips, #form')) {
+  if (false) {
     B.classList.remove('showdiag'); var bt = document.getElementById('qDiagBtn'); if (bt) bt.textContent = '🗺 أرني التصميم';
   }
 }, true);
@@ -12542,6 +12554,17 @@ document.addEventListener('pointerdown', function (e) {
   ['touchend', 'pointerup', 'click'].forEach(function (ev) {
     document.addEventListener(ev, function (e) { if (e.target.closest && e.target.closest('#qHintRow')) { keep(); setTimeout(keep, 60); setTimeout(function () { window.scrollTo(0, 0); }, 120); } }, { passive: true, capture: true });
   });
+})();
+/* أزرار الوضع المبسّط لا تسرق التركيز من سطر الأوامر، فتبقى لوحة المفاتيح مفتوحة */
+(function () {
+  function hold(e) { if (!document.body.classList.contains('lab-kb')) return; var b = e.target.closest && e.target.closest('#qHintRow button, #qbar button, #qbar .qmid'); if (b && e.cancelable) e.preventDefault(); }
+  document.addEventListener('mousedown', hold, true); document.addEventListener('pointerdown', hold, true);
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('#qHintRow button'); if (!b || !document.body.classList.contains('lab-kb')) return;
+    setTimeout(function () { var c = document.getElementById('cmd'); if (c && document.activeElement !== c) try { c.focus({ preventScroll: true }); } catch (x) { c.focus(); } }, 0);
+  });
+  /* الرسم يتلاءم من جديد عند فتح/إغلاق لوحة المفاتيح */
+  new MutationObserver(function () { if (document.body.classList.contains('showdiag')) setTimeout(function () { var f = document.querySelector('[data-zt="mini"][data-zoom="fit"]'); if (f) f.click(); }, 150); }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 })();
 </script>
 </body>
